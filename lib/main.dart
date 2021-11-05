@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:music_player/pages/home_page.dart';
-import 'package:music_player/pages/library_page.dart';
-import 'package:music_player/pages/search_page.dart';
+import './pages/home_page.dart';
+import './pages/library_page.dart';
+import './pages/search_page.dart';
 
 void main() {
   runApp(
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         iconSize: 25,
         fixedColor: Colors.white,
         unselectedItemColor: Colors.white,
-        selectedFontSize: 15,
+        selectedLabelStyle: GoogleFonts.poppins(fontSize: 14),
         backgroundColor: Colors.black,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
@@ -52,17 +52,26 @@ class _MyAppState extends State<MyApp> {
         ),
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: ImageIcon(
+              AssetImage("assets/icons/home.png"),
+              size: 25,
+            ),
             label: 'Home',
             // backgroundColor: Color(_black),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: ImageIcon(
+              AssetImage("assets/icons/search.png"),
+              size: 25,
+            ),
             label: 'Search',
             // backgroundColor: Color(_black),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.my_library_music_sharp),
+            icon: ImageIcon(
+              AssetImage("assets/icons/library.png"),
+              size: 25,
+            ),
             label: 'Library',
             // backgroundColor: Color(_black),
           ),

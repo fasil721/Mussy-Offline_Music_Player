@@ -14,11 +14,11 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        toolbarHeight: 60,
+        toolbarHeight: 80,
         elevation: 0,
         backgroundColor: Colors.black,
         title: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(15.0),
           child: Text(
             "Search",
             style: GoogleFonts.rubik(
@@ -28,14 +28,23 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ),
-      body: Container(
-        child: Center(
-          child: Text(
-            "Search",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 30,
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: 30,
+          right: 30,
+        ),
+        child: TextField(
+          decoration: InputDecoration(
+            fillColor: Colors.white70,
+            filled: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
+            hintText: 'Search a song',
+          ),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 15,
           ),
         ),
       ),
