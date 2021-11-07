@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './pages/home_page.dart';
 import './pages/library_page.dart';
@@ -19,6 +20,32 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final OnAudioQuery _audioQuery = OnAudioQuery();
+  @override
+  void initState() {
+    super.initState();
+    requestPermission();
+    getSongs();
+  }
+
+  requestPermission() async {
+    bool permissionStatus = await _audioQuery.permissionsStatus();
+    if (!permissionStatus) {
+      await _audioQuery.permissionsRequest();
+    }
+    setState(() {});
+  }
+
+  List<SongModel> songs = [];
+  Future getSongs() async {
+    songs = await _audioQuery.querySongs(
+      sortType: null,
+      orderType: OrderType.ASC_OR_SMALLER,
+      uriType: UriType.EXTERNAL,
+      ignoreCase: true,
+    );
+  }
+
   int currentIndex = 0;
 
   final screens = [
