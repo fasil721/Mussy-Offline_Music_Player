@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:music_player/pages/settins_page.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
-
   @override
-  _HomepageState createState() => _HomepageState();
+  State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
@@ -31,8 +32,12 @@ class _HomepageState extends State<Homepage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsPage(),
+                ),
+              );
             },
             icon: Icon(Icons.settings),
           ),
@@ -41,16 +46,39 @@ class _HomepageState extends State<Homepage> {
           ),
         ],
       ),
-      body: Container(
-        child: Center(
-          child: Text(
-            "Home",
-            style: GoogleFonts.rubik(
-              color: Colors.white,
-              fontSize: 35,
-            ),
-          ),
-        ),
+      body: Builder(
+        builder: (context) {
+          var music = Hive.box("songs");
+          var box = music.get("tracks");
+          print(box[0].title);
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: ScrollPhysics(),
+            itemCount: box.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                tileColor: Colors.white,
+                leading: QueryArtworkWidget(
+                  id: box[index].id,
+                  type: ArtworkType.AUDIO,
+                ),
+                title: Text(box[index].title),
+                subtitle: Text(box[index].artist!),
+                trailing: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.more_horiz,
+                  ),
+                ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(
+                height: 10,
+              );
+            },
+          );
+        },
       ),
     );
   }
