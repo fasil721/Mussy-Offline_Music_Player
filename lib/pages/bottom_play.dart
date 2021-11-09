@@ -51,18 +51,24 @@ class _bottomPlatingState extends State<bottomPlating> {
     }
   }
 
+  var btnIcn = Icons.pause;
   bool isplaying = true;
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
+        decoration: BoxDecoration(
+          color: Colors.blue[300],
+          borderRadius: BorderRadius.all(
+            Radius.circular(5),
+          ),
+        ),
         margin: const EdgeInsets.only(
           left: 10,
           right: 10,
           bottom: 5,
         ),
-        color: Colors.blue,
         child: _assetsAudioPlayer.builderCurrent(
           builder: (BuildContext context, Playing? playing) {
             final myAudio = find(audio1, playing!.audio.assetAudioPath);
@@ -84,31 +90,28 @@ class _bottomPlatingState extends State<bottomPlating> {
                     color: Colors.grey,
                   ),
                 ),
-                child: IconButton(
-                  onPressed: () {
-                    // _assetsAudioPlayer.playOrPause();
-                    if (_assetsAudioPlayer.isPlaying.value) {
-                      setState(() {
-                        isplaying = false;
-                        _assetsAudioPlayer.pause();
-                      });
-                    } else {
-                      setState(() {
-                        isplaying = true;
-                        _assetsAudioPlayer.play();
-                      });
-                    }
-                    // var a=PlayerBuilder.isPlaying(
-                    //   player: _assetsAudioPlayer,
-                    //   builder: (context, isPlaying) {
-                    //     print(isPlaying);
-                    //     if (isPlaying) {
+                child: _assetsAudioPlayer.builderIsPlaying(
+                  builder: (context, isPlaying) {
+                    return (isPlaying
+                        ? IconButton(
+                            onPressed: () {
+                              _assetsAudioPlayer.playOrPause();
+                            },
+                            icon: Icon(
+                              Icons.pause,
+                              size: 23,
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              _assetsAudioPlayer.playOrPause();
+                            },
+                            icon: Icon(
+                              Icons.play_arrow,
+                              size: 23,
+                            ),
+                          ));
                   },
-                  icon: Icon(
-                    isplaying ? Icons.pause : Icons.play_arrow,
-                    size: 23,
-                    color: Colors.white,
-                  ),
                 ),
               ),
             );
