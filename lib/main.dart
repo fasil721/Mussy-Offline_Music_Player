@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:music_player/pages/bottom_play.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import './pages/home_page.dart';
 import './pages/library_page.dart';
 import './pages/search_page.dart';
 import 'databases/songs_adapter.dart';
+import 'pages/bottom_play.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -29,7 +29,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
+ 
   int currentIndex = 0;
 
   final screens = [
@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
             children: screens,
             index: currentIndex,
           ),
-          // bottomPlating(audio: audio),
+          bottomPlating(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

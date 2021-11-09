@@ -8,15 +8,12 @@ import 'package:music_player/pages/settins_page.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
-  Homepage({Key? key, this.box}) : super(key: key);
-  final box;
   @override
   State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-  bool isPlaying = false;
   IconData btnIcon = Icons.play_arrow;
   final OnAudioQuery _audioQuery = OnAudioQuery();
 
@@ -28,8 +25,8 @@ class _HomepageState extends State<Homepage> {
 
   var musics = Hive.box('songs');
 
-  List<Songs> audio = [];
   List<SongModel> tracks = [];
+  List<Songs> audio = [];
 
   requesrpermisson() async {
     bool permissionStatus = await _audioQuery.permissionsStatus();
@@ -53,32 +50,27 @@ class _HomepageState extends State<Homepage> {
     setState(() {});
   }
 
-  playingMusic(songs, index) {
-    if (isPlaying) {
-      final audio = Audio.file(
-        songs[index].uri.toString(),
-        metas: Metas(
-          title: songs[index].title,
-          artist: songs[index].artist,
-        ),
-      );
+  playingMusic(List<Songs> songs, index) {
+    final _audio = Audio.file(
+      songs[index].uri.toString(),
+      metas: Metas(
+        title: songs[index].title,
+        artist: songs[index].artist,
+      ),
+    );
+    if (_assetsAudioPlayer.isPlaying.value) {
       _assetsAudioPlayer.pause();
       _assetsAudioPlayer.open(
-        audio,
+        _audio,
         showNotification: true,
+        playInBackground: PlayInBackground.enabled,
       );
     } else {
       _assetsAudioPlayer.open(
-        Audio.file(
-          songs[index].uri.toString(),
-        ),
+        _audio,
         showNotification: true,
+        playInBackground: PlayInBackground.enabled,
       );
-
-      // setState(() {
-      //   isPlaying = true;
-      //   btnIcon = Icons.pause;
-      // });
     }
   }
 

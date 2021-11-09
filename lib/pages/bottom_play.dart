@@ -4,29 +4,54 @@ import 'package:music_player/databases/songs_adapter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class bottomPlating extends StatefulWidget {
-  const bottomPlating({
-    required this.audio,
-    Key? key,
-  }) : super(key: key);
-  final List<Songs> audio;
+  // const bottomPlating({
+  //   required this.audio,
+  //   Key? key,
+  // }) : super(key: key);
+  // final List<Songs> audio;
 
   @override
   _bottomPlatingState createState() => _bottomPlatingState();
 }
 
 class _bottomPlatingState extends State<bottomPlating> {
-  dynamic currentTitle = "";
-  dynamic currentArtist = "";
-  int currentCover = 0;
-  dynamic currentSong = "";
-  IconData btnIcon = Icons.play_arrow;
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+
   Songs find(List<Songs> source, String fromPath) {
     return source.firstWhere((element) => element.uri == fromPath);
   }
 
-  var isplaying = true;
+  final OnAudioQuery _audioQuery = OnAudioQuery();
 
+  @override
+  void initState() {
+    getsongs();
+    super.initState();
+  }
+
+  List<SongModel> tracks1 = [];
+  List<Songs> audio1 = [];
+
+  getsongs() async {
+    bool permissionStatus = await _audioQuery.permissionsStatus();
+    if (permissionStatus) {
+      tracks1 = await _audioQuery.querySongs();
+      audio1 = tracks1
+          .map(
+            (e) => Songs(
+              title: e.title,
+              artist: e.artist,
+              uri: e.uri,
+              duration: e.duration,
+              id: e.id,
+            ),
+          )
+          .toList();
+      setState(() {});
+    }
+  }
+
+  bool isplaying = true;
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -40,7 +65,7 @@ class _bottomPlatingState extends State<bottomPlating> {
         color: Colors.blue,
         child: _assetsAudioPlayer.builderCurrent(
           builder: (BuildContext context, Playing? playing) {
-            final myAudio = find(widget.audio, playing!.audio.assetAudioPath);
+            final myAudio = find(audio1, playing!.audio.assetAudioPath);
 
             return ListTile(
               leading: QueryArtworkWidget(
@@ -78,27 +103,6 @@ class _bottomPlatingState extends State<bottomPlating> {
                     //   builder: (context, isPlaying) {
                     //     print(isPlaying);
                     //     if (isPlaying) {
-
-                    //       setState(() {
-                    //         isPlaying = false;
-                    //       });
-                    //     }
-                    //     return Icon(Icons.play_arrow);
-                    //   },
-                    // );
-
-                    // if (Playing == true) {
-                    //   setState(() {
-                    //     Playing == false;
-                    //     btnIcon = Icons.pause;
-                    //   });
-                    // } else {
-                    //   _assetsAudioPlayer.play();
-                    //   setState(() {
-                    //     Playing == false;
-                    //     btnIcon = Icons.play_arrow;
-                    //   });
-                    // }
                   },
                   icon: Icon(
                     isplaying ? Icons.pause : Icons.play_arrow,
