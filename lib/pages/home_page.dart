@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:music_player/databases/songs_adapter.dart';
 import 'package:music_player/pages/settins_page.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
+  Homepage({Key? key, this.box}) : super(key: key);
+  final box;
   @override
   State<Homepage> createState() => _HomepageState();
 }
@@ -15,6 +18,40 @@ class _HomepageState extends State<Homepage> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   bool isPlaying = false;
   IconData btnIcon = Icons.play_arrow;
+  final OnAudioQuery _audioQuery = OnAudioQuery();
+
+  @override
+  void initState() {
+    requesrpermisson();
+    super.initState();
+  }
+
+  var musics = Hive.box('songs');
+
+  List<Songs> audio = [];
+  List<SongModel> tracks = [];
+
+  requesrpermisson() async {
+    bool permissionStatus = await _audioQuery.permissionsStatus();
+    if (!permissionStatus) {
+      await _audioQuery.permissionsRequest();
+    }
+    tracks = await _audioQuery.querySongs();
+    audio = tracks
+        .map(
+          (e) => Songs(
+            title: e.title,
+            artist: e.artist,
+            uri: e.uri,
+            duration: e.duration,
+            id: e.id,
+          ),
+        )
+        .toList();
+
+    musics.put("tracks", audio);
+    setState(() {});
+  }
 
   playingMusic(songs, index) {
     if (isPlaying) {
@@ -82,8 +119,7 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Builder(
         builder: (context) {
-          var music = Hive.box("songs");
-          var box = music.get("tracks");
+          var box = musics.get("tracks");
           return box != null
               ? ListView.separated(
                   shrinkWrap: true,

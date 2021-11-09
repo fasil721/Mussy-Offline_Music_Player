@@ -29,38 +29,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final OnAudioQuery _audioQuery = OnAudioQuery();
-
-  @override
-  void initState() {
-    requesrpermisson();
-    super.initState();
-  }
-
-  List<Songs> audio = [];
-  List<SongModel> tracks = [];
-  var musics;
-  requesrpermisson() async {
-    bool permissionStatus = await _audioQuery.permissionsStatus();
-    if (!permissionStatus) {
-      await _audioQuery.permissionsRequest();
-    }
-    tracks = await _audioQuery.querySongs();
-    audio = tracks
-        .map(
-          (e) => Songs(
-            title: e.title,
-            artist: e.artist,
-            uri: e.uri,
-            duration: e.duration,
-            id: e.id,
-          ),
-        )
-        .toList();
-    musics = Hive.box('songs');
-    musics.put("tracks", audio);
-    setState(() {});
-  }
 
   int currentIndex = 0;
 
@@ -80,7 +48,7 @@ class _MyAppState extends State<MyApp> {
             children: screens,
             index: currentIndex,
           ),
-          bottomPlating(audio: audio),
+          // bottomPlating(audio: audio),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
