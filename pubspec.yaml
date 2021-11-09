@@ -38,6 +38,7 @@ dependencies:
   on_audio_query: ^2.5.2
   hive: ^2.0.4
   hive_flutter: ^1.1.0
+  assets_audio_player: ^3.0.3+6
 
 dev_dependencies:
   flutter_test:

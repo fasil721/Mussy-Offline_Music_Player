@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:music_player/pages/bottom_play.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './pages/home_page.dart';
@@ -32,29 +33,19 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    requesrpermisson();
     super.initState();
-    requestPermission();
-    getSongs();
   }
 
-  requestPermission() async {
+  List<Songs> audio = [];
+  List<SongModel> tracks = [];
+  var musics;
+  requesrpermisson() async {
     bool permissionStatus = await _audioQuery.permissionsStatus();
     if (!permissionStatus) {
       await _audioQuery.permissionsRequest();
     }
-    setState(() {});
-  }
-
-  List<Songs> audio = [];
-
-  List<SongModel> tracks = [];
-  Future getSongs() async {
-    tracks = await _audioQuery.querySongs(
-      sortType: null,
-      orderType: OrderType.ASC_OR_SMALLER,
-      uriType: UriType.EXTERNAL,
-      ignoreCase: true,
-    );
+    tracks = await _audioQuery.querySongs();
     audio = tracks
         .map(
           (e) => Songs(
@@ -66,8 +57,9 @@ class _MyAppState extends State<MyApp> {
           ),
         )
         .toList();
-    var musics = Hive.box('songs');
+    musics = Hive.box('songs');
     musics.put("tracks", audio);
+    setState(() {});
   }
 
   int currentIndex = 0;
@@ -82,9 +74,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: IndexedStack(
-        children: screens,
-        index: currentIndex,
+      body: Stack(
+        children: [
+          IndexedStack(
+            children: screens,
+            index: currentIndex,
+          ),
+          bottomPlating(audio: audio),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 25,
