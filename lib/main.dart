@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
             children: screens,
             index: currentIndex,
           ),
-          bottomPlating(),
+          bottomPlaying(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

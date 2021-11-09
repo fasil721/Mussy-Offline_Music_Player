@@ -1,4 +1,4 @@
-name: music_player
+name: Musify
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -39,6 +39,7 @@ dependencies:
   hive: ^2.0.4
   hive_flutter: ^1.1.0
   assets_audio_player: ^3.0.3+6
+  audio_video_progress_bar: ^0.9.0
 
 dev_dependencies:
   flutter_test:

@@ -1,10 +1,10 @@
+import 'package:Musify/databases/songs_adapter.dart';
+import 'package:Musify/pages/settins_page.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:music_player/databases/songs_adapter.dart';
-import 'package:music_player/pages/settins_page.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {

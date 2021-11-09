@@ -1,6 +1,7 @@
+import 'package:Musify/databases/songs_adapter.dart';
+import 'package:Musify/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/databases/songs_adapter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class bottomPlating extends StatefulWidget {
@@ -11,10 +12,10 @@ class bottomPlating extends StatefulWidget {
   // final List<Songs> audio;
 
   @override
-  _bottomPlatingState createState() => _bottomPlatingState();
+  _bottomPlayingState createState() => _bottomPlayingState();
 }
 
-class _bottomPlatingState extends State<bottomPlating> {
+class _bottomPlayingState extends State<bottomPlating> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
   Songs find(List<Songs> source, String fromPath) {
@@ -47,8 +48,8 @@ class _bottomPlatingState extends State<bottomPlating> {
             ),
           )
           .toList();
-      setState(() {});
     }
+    setState(() {});
   }
 
   var btnIcn = Icons.pause;
@@ -65,15 +66,22 @@ class _bottomPlatingState extends State<bottomPlating> {
           ),
         ),
         margin: const EdgeInsets.only(
-          left: 10,
-          right: 10,
-          bottom: 5,
+          left: 5,
+          right: 5,
         ),
         child: _assetsAudioPlayer.builderCurrent(
           builder: (BuildContext context, Playing? playing) {
             final myAudio = find(audio1, playing!.audio.assetAudioPath);
 
             return ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MusicView(),
+                  ),
+                );
+              },
               leading: QueryArtworkWidget(
                 id: myAudio.id,
                 type: ArtworkType.AUDIO,
