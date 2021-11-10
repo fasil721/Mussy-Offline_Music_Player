@@ -8,47 +8,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
+  Homepage(this.audio);
+  final List<Songs> audio;
   @override
   State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-  IconData btnIcon = Icons.play_arrow;
-  final OnAudioQuery _audioQuery = OnAudioQuery();
-
-  @override
-  void initState() {
-    requesrpermisson();
-    super.initState();
-  }
-
-  var musics = Hive.box('songs');
-
-  List<SongModel> tracks = [];
-  List<Songs> audio = [];
-
-  requesrpermisson() async {
-    bool permissionStatus = await _audioQuery.permissionsStatus();
-    if (!permissionStatus) {
-      await _audioQuery.permissionsRequest();
-    }
-    tracks = await _audioQuery.querySongs();
-    audio = tracks
-        .map(
-          (e) => Songs(
-            title: e.title,
-            artist: e.artist,
-            uri: e.uri,
-            duration: e.duration,
-            id: e.id,
-          ),
-        )
-        .toList();
-
-    musics.put("tracks", audio);
-    setState(() {});
-  }
 
   playingMusic(List<Songs> songs, index) {
     final _audio = Audio.file(
@@ -111,12 +78,12 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Builder(
         builder: (context) {
-          var box = musics.get("tracks");
-          return box != null
+          
+          return widget.audio != null
               ? ListView.separated(
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
-                  itemCount: box.length,
+                  itemCount: widget.audio.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(
@@ -125,7 +92,7 @@ class _HomepageState extends State<Homepage> {
                       ),
                       child: ListTile(
                         onTap: () {
-                          playingMusic(box, index);
+                          playingMusic(widget.audio, index);
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
@@ -134,7 +101,7 @@ class _HomepageState extends State<Homepage> {
                         ),
                         tileColor: Color(0xffC4C4C4),
                         leading: QueryArtworkWidget(
-                          id: box[index].id,
+                          id: widget.audio[index].id,
                           type: ArtworkType.AUDIO,
                           nullArtworkWidget: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
@@ -144,8 +111,8 @@ class _HomepageState extends State<Homepage> {
                             ),
                           ),
                         ),
-                        title: Text(box[index].title),
-                        subtitle: Text(box[index].artist!),
+                        title: Text(widget.audio[index].title),
+                        subtitle: Text(widget.audio[index].artist!),
                         trailing: IconButton(
                           onPressed: () {},
                           icon: Icon(

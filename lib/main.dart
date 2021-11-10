@@ -29,17 +29,51 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
- 
-  int currentIndex = 0;
+  final OnAudioQuery _audioQuery = OnAudioQuery();
 
-  final screens = [
-    Homepage(),
-    SearchPage(),
-    LibraryPage(),
-  ];
+  @override
+  void initState() {
+    requesrpermisson();
+    super.initState();
+  }
+
+  var musics = Hive.box('songs');
+
+  List<SongModel> tracks = [];
+  List<Songs> audio = [];
+
+  requesrpermisson() async {
+    bool permissionStatus = await _audioQuery.permissionsStatus();
+    if (await !permissionStatus) {
+      await _audioQuery.permissionsRequest();
+    }
+    tracks = await _audioQuery.querySongs();
+    audio = tracks
+        .map(
+          (e) => Songs(
+            title: e.title,
+            artist: e.artist,
+            uri: e.uri,
+            duration: e.duration,
+            id: e.id,
+          ),
+        )
+        .toList();
+
+    await musics.put("tracks", audio);
+    setState(() {});
+  }
+
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final screens = [
+      Homepage(audio),
+      SearchPage(),
+      LibraryPage(),
+    ];
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -48,7 +82,7 @@ class _MyAppState extends State<MyApp> {
             children: screens,
             index: currentIndex,
           ),
-          bottomPlating(),
+          bottomPlating(audio: audio),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

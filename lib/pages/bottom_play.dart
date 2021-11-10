@@ -2,14 +2,15 @@ import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class bottomPlating extends StatefulWidget {
-  // const bottomPlating({
-  //   required this.audio,
-  //   Key? key,
-  // }) : super(key: key);
-  // final List<Songs> audio;
+  const bottomPlating({
+    required this.audio,
+    Key? key,
+  }) : super(key: key);
+  final List<Songs> audio;
 
   @override
   _bottomPlayingState createState() => _bottomPlayingState();
@@ -22,37 +23,30 @@ class _bottomPlayingState extends State<bottomPlating> {
     return source.firstWhere((element) => element.uri == fromPath);
   }
 
-  final OnAudioQuery _audioQuery = OnAudioQuery();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getsongs();
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    getsongs();
-  }
+  // List<Songs> playlists = [];
 
-  List<SongModel> tracks1 = [];
-  List<Songs> audio1 = [];
+  // getsongs() async {
+  //   var musicBox = await Hive.box<dynamic>("songs");
+  //   List<Songs> music = musicBox.get('tracks').cast<Songs>();
+  //   playlists = music
+  //       .map(
+  //         (e) => Songs(
+  //             title: e.title,
+  //             artist: e.artist,
+  //             uri: e.uri,
+  //             duration: e.duration,
+  //             id: e.id),
+  //       )
+  //       .toList();
+  //   setState(() {});
+  // }
 
-  getsongs() async {
-    // bool permissionStatus = await _audioQuery.permissionsStatus();
-    // if (permissionStatus) {
-    tracks1 = await _audioQuery.querySongs();
-    audio1 = tracks1
-        .map(
-          (e) => Songs(
-            title: e.title,
-            artist: e.artist,
-            uri: e.uri,
-            duration: e.duration,
-            id: e.id,
-          ),
-        )
-        .toList();
-    setState(() {});
-  }
-
-  var btnIcn = Icons.pause;
-  bool isplaying = true;
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -70,7 +64,7 @@ class _bottomPlayingState extends State<bottomPlating> {
         ),
         child: _assetsAudioPlayer.builderCurrent(
           builder: (BuildContext context, Playing? playing) {
-            final myAudio = find(audio1, playing!.audio.assetAudioPath);
+            final myAudio = find(widget.audio, playing!.audio.assetAudioPath);
 
             return ListTile(
               onTap: () {
