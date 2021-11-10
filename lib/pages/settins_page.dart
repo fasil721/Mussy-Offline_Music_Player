@@ -2,7 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   var val = true;
 
   @override
@@ -44,7 +49,17 @@ class SettingsPage extends StatelessWidget {
               ),
               trailing: Switch(
                 value: val,
-                onChanged: (bool) {},
+                onChanged: (bool) {
+                  if (val) {
+                    setState(() {
+                      val = false;
+                    });
+                  } else {
+                    setState(() {
+                      val = true;
+                    });
+                  }
+                },
               ),
               title: Text(
                 "Notification",
@@ -53,7 +68,6 @@ class SettingsPage extends StatelessWidget {
                   fontSize: 20,
                 ),
               ),
-              onTap: () {},
             ),
           ),
           Padding(
@@ -63,25 +77,67 @@ class SettingsPage extends StatelessWidget {
               right: 0,
             ),
             child: ListTile(
-              title: Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                  "About",
-                  style: GoogleFonts.rubik(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
+              leading: Icon(
+                Icons.share,
+                color: Colors.white,
+              ),
+              title: Text(
+                "Share",
+                style: GoogleFonts.rubik(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              top: 5,
+              right: 0,
+            ),
+            child: ListTile(
+              leading: Icon(
+                Icons.privacy_tip_rounded,
+                color: Colors.white,
+              ),
+              title: Text(
+                "Privacy and policy",
+                style: GoogleFonts.rubik(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              top: 5,
+              right: 0,
+            ),
+            child: ListTile(
+              leading: Icon(
+                Icons.menu,
+                color: Colors.white,
+              ),
+              title: Text(
+                "About",
+                style: GoogleFonts.rubik(
+                  color: Colors.white,
+                  fontSize: 20,
                 ),
               ),
               onTap: () {
                 showAboutDialog(
-                    context: context,
-                    applicationName: 'Flutter',
-                    applicationIcon: FlutterLogo(),
-                    applicationVersion: '1.0.0',
-                    children: [
-                      Text('dakhdsadhjdfklhgfd'),
-                    ]);
+                  context: context,
+                  applicationName: 'Flutter',
+                  applicationIcon: FlutterLogo(),
+                  applicationVersion: '1.0.0',
+                  children: [
+                    Text('dakhdsadhjdfklhgfd'),
+                  ],
+                );
               },
             ),
           ),

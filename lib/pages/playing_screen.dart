@@ -60,7 +60,14 @@ class _MusicViewState extends State<MusicView> {
               child: QueryArtworkWidget(
                 artworkHeight: 300,
                 artworkWidth: 300,
-                id: 100,
+                id: 0,
+                nullArtworkWidget: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image(
+                    height: 300,
+                    image: AssetImage("assets/icons/default.jpg"),
+                  ),
+                ),
                 type: ArtworkType.AUDIO,
               ),
             ),

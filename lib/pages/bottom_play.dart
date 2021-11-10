@@ -26,29 +26,28 @@ class _bottomPlayingState extends State<bottomPlating> {
 
   @override
   void initState() {
-    getsongs();
     super.initState();
+    getsongs();
   }
 
   List<SongModel> tracks1 = [];
   List<Songs> audio1 = [];
 
   getsongs() async {
-    bool permissionStatus = await _audioQuery.permissionsStatus();
-    if (permissionStatus) {
-      tracks1 = await _audioQuery.querySongs();
-      audio1 = tracks1
-          .map(
-            (e) => Songs(
-              title: e.title,
-              artist: e.artist,
-              uri: e.uri,
-              duration: e.duration,
-              id: e.id,
-            ),
-          )
-          .toList();
-    }
+    // bool permissionStatus = await _audioQuery.permissionsStatus();
+    // if (permissionStatus) {
+    tracks1 = await _audioQuery.querySongs();
+    audio1 = tracks1
+        .map(
+          (e) => Songs(
+            title: e.title,
+            artist: e.artist,
+            uri: e.uri,
+            duration: e.duration,
+            id: e.id,
+          ),
+        )
+        .toList();
     setState(() {});
   }
 
@@ -85,6 +84,13 @@ class _bottomPlayingState extends State<bottomPlating> {
               leading: QueryArtworkWidget(
                 id: myAudio.id,
                 type: ArtworkType.AUDIO,
+                nullArtworkWidget: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image(
+                    height: 50,
+                    image: AssetImage("assets/icons/default.jpg"),
+                  ),
+                ),
               ),
               title: Text(myAudio.title),
               subtitle: Text(myAudio.artist),
@@ -116,7 +122,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                             },
                             icon: Icon(
                               Icons.play_arrow,
-                              size: 23,
+                              size: 22,
                             ),
                           ));
                   },

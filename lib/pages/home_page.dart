@@ -136,6 +136,13 @@ class _HomepageState extends State<Homepage> {
                         leading: QueryArtworkWidget(
                           id: box[index].id,
                           type: ArtworkType.AUDIO,
+                          nullArtworkWidget: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image(
+                              height: 50,
+                              image: AssetImage("assets/icons/default.jpg"),
+                            ),
+                          ),
                         ),
                         title: Text(box[index].title),
                         subtitle: Text(box[index].artist!),
