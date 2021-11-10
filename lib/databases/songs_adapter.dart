@@ -11,15 +11,12 @@ class Songs extends HiveObject {
   @HiveField(2)
   dynamic uri;
   @HiveField(3)
-  dynamic duration;
-  @HiveField(4)
   dynamic id;
 
   Songs({
     required this.title,
     required this.artist,
     required this.uri,
-    required this.duration,
     required this.id,
   });
 }

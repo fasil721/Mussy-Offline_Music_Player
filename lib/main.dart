@@ -54,7 +54,6 @@ class _MyAppState extends State<MyApp> {
             title: e.title,
             artist: e.artist,
             uri: e.uri,
-            duration: e.duration,
             id: e.id,
           ),
         )

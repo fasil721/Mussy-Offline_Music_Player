@@ -18,14 +18,13 @@ class MusicView extends StatefulWidget {
 }
 
 class _MusicViewState extends State<MusicView> {
-  Duration musicDuration = Duration();
-  Duration musicPosition = Duration();
   final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
   Songs find(List<Songs> source, String fromPath) {
     return source.firstWhere((element) => element.uri == fromPath);
   }
 
+  var currentPosition;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +68,7 @@ class _MusicViewState extends State<MusicView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                flex: 4,
+                flex: 5,
                 child: Center(
                   child: QueryArtworkWidget(
                     artworkHeight: 300,
@@ -87,6 +86,7 @@ class _MusicViewState extends State<MusicView> {
                 ),
               ),
               Expanded(
+                flex: 1,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 23,
@@ -124,23 +124,34 @@ class _MusicViewState extends State<MusicView> {
                   ),
                 ),
               ),
-              Container(
-                height: 30,
-                padding: const EdgeInsets.only(
-                  right: 40,
-                  left: 40,
-                ),
-                child: ProgressBar(
-                  timeLabelPadding: 8,
-                  progressBarColor: Colors.white,
-                  thumbColor: Colors.white,
-                  baseBarColor: Colors.grey,
-                  progress: Duration(milliseconds: 120000),
-                  total: Duration(milliseconds: 500000),
-                  timeLabelTextStyle: TextStyle(color: Colors.white),
-                  onSeek: (duration) {
-                    _assetsAudioPlayer.seek(duration);
-                  },
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.only(
+                    right: 40,
+                    left: 40,
+                  ),
+                  child: _assetsAudioPlayer.builderRealtimePlayingInfos(
+                    builder: (context, RealtimePlayingInfos? infos) {
+                      if (infos == null) {
+                        return SizedBox();
+                      }
+                      return Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ProgressBar(
+                          timeLabelPadding: 8,
+                          progressBarColor: Colors.white,
+                          thumbColor: Colors.white,
+                          baseBarColor: Colors.grey,
+                          progress: infos.currentPosition,
+                          total: infos.duration,
+                          timeLabelTextStyle: TextStyle(color: Colors.white),
+                          onSeek: (duration) {
+                            _assetsAudioPlayer.seek(duration);
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               Expanded(
