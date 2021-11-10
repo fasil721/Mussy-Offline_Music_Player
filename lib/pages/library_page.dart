@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/create_playlist.dart';
+import 'favorite_page.dart';
 
 class LibraryPage extends StatefulWidget {
   const LibraryPage({Key? key}) : super(key: key);
@@ -54,7 +55,14 @@ class _LibraryPageState extends State<LibraryPage> {
         ),
         child: ListTile(
           tileColor: Color(0xff4D3C3C),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FavoritePage(),
+              ),
+            );
+          },
           contentPadding: EdgeInsets.symmetric(
             vertical: 3.0,
             horizontal: 16.0,

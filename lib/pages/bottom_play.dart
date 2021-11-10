@@ -2,7 +2,6 @@ import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class bottomPlating extends StatefulWidget {
@@ -10,6 +9,7 @@ class bottomPlating extends StatefulWidget {
     required this.audio,
     Key? key,
   }) : super(key: key);
+
   final List<Songs> audio;
 
   @override
@@ -22,30 +22,6 @@ class _bottomPlayingState extends State<bottomPlating> {
   Songs find(List<Songs> source, String fromPath) {
     return source.firstWhere((element) => element.uri == fromPath);
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getsongs();
-  // }
-
-  // List<Songs> playlists = [];
-
-  // getsongs() async {
-  //   var musicBox = await Hive.box<dynamic>("songs");
-  //   List<Songs> music = musicBox.get('tracks').cast<Songs>();
-  //   playlists = music
-  //       .map(
-  //         (e) => Songs(
-  //             title: e.title,
-  //             artist: e.artist,
-  //             uri: e.uri,
-  //             duration: e.duration,
-  //             id: e.id),
-  //       )
-  //       .toList();
-  //   setState(() {});
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -64,14 +40,16 @@ class _bottomPlayingState extends State<bottomPlating> {
         ),
         child: _assetsAudioPlayer.builderCurrent(
           builder: (BuildContext context, Playing? playing) {
-            final myAudio = find(widget.audio, playing!.audio.assetAudioPath);
-
+            final myAudio = find(
+              widget.audio,
+              playing!.audio.assetAudioPath,
+            );
             return ListTile(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MusicView(),
+                    builder: (context) => MusicView(audio: widget.audio),
                   ),
                 );
               },
