@@ -10,7 +10,7 @@ class bottomPlating extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final List<Songs> audio;
+  final List<Audio> audio;
 
   @override
   _bottomPlayingState createState() => _bottomPlayingState();
@@ -19,8 +19,8 @@ class bottomPlating extends StatefulWidget {
 class _bottomPlayingState extends State<bottomPlating> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
-  Songs find(List<Songs> source, String fromPath) {
-    return source.firstWhere((element) => element.uri == fromPath);
+  Audio find(List<Audio> source, String fromPath) {
+    return source.firstWhere((element) => element.path == fromPath);
   }
 
   @override
@@ -54,7 +54,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                 );
               },
               leading: QueryArtworkWidget(
-                id: myAudio.id,
+                id: int.parse(myAudio.metas.id!),
                 type: ArtworkType.AUDIO,
                 nullArtworkWidget: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
@@ -64,8 +64,14 @@ class _bottomPlayingState extends State<bottomPlating> {
                   ),
                 ),
               ),
-              title: Text(myAudio.title),
-              subtitle: Text(myAudio.artist),
+              title: Text(
+                myAudio.metas.title!,
+                maxLines: 2,
+              ),
+              subtitle: Text(
+                myAudio.metas.artist!,
+                maxLines: 1,
+              ),
               trailing: Container(
                 height: 40.0,
                 width: 40.0,

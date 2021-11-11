@@ -1,3 +1,4 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -41,7 +42,7 @@ class _MyAppState extends State<MyApp> {
 
   List<SongModel> tracks = [];
   List<Songs> audio = [];
-
+  List<Audio> songModels = [];
   requesrpermisson() async {
     bool permissionStatus = await _audioQuery.permissionsStatus();
     if (await !permissionStatus) {
@@ -58,8 +59,21 @@ class _MyAppState extends State<MyApp> {
           ),
         )
         .toList();
-
+    tracks.forEach(
+      (element) {
+        songModels.add(
+          Audio.file(
+            element.uri.toString(),
+            metas: Metas(
+                title: element.title,
+                artist: element.artist,
+                id: element.id.toString()),
+          ),
+        );
+      },
+    );
     await musics.put("tracks", audio);
+
     setState(() {});
   }
 
@@ -68,7 +82,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final screens = [
-      Homepage(audio),
+      Homepage(songModels),
       SearchPage(),
       LibraryPage(),
     ];
@@ -81,7 +95,7 @@ class _MyAppState extends State<MyApp> {
             children: screens,
             index: currentIndex,
           ),
-          bottomPlating(audio: audio),
+          bottomPlating(audio: songModels),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

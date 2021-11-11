@@ -1,15 +1,13 @@
-import 'package:Musify/databases/songs_adapter.dart';
+
 import 'package:Musify/pages/settins_page.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
   Homepage(this.audio);
-  final List<Songs> audio;
+  final List<Audio> audio;
   @override
   State<Homepage> createState() => _HomepageState();
 }
@@ -17,28 +15,14 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
-  playingMusic(List<Songs> songs, index) {
-    final _audio = Audio.file(
-      songs[index].uri.toString(),
-      metas: Metas(
-        title: songs[index].title,
-        artist: songs[index].artist,
-      ),
+  openPlayer(int index) async {
+    await _assetsAudioPlayer.open(
+      Playlist(audios: widget.audio, startIndex: index),
+      showNotification: true,
+      autoStart: true,
+      playInBackground: PlayInBackground.enabled,
+      loopMode: LoopMode.playlist,
     );
-    if (_assetsAudioPlayer.isPlaying.value) {
-      _assetsAudioPlayer.pause();
-      _assetsAudioPlayer.open(
-        _audio,
-        showNotification: true,
-        playInBackground: PlayInBackground.enabled,
-      );
-    } else {
-      _assetsAudioPlayer.open(
-        _audio,
-        showNotification: true,
-        playInBackground: PlayInBackground.enabled,
-      );
-    }
   }
 
   @override
@@ -78,8 +62,7 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Builder(
         builder: (context) {
-          
-          return widget.audio != null
+          return widget.audio.isNotEmpty
               ? ListView.separated(
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
@@ -92,7 +75,7 @@ class _HomepageState extends State<Homepage> {
                       ),
                       child: ListTile(
                         onTap: () {
-                          playingMusic(widget.audio, index);
+                          openPlayer(index);
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
@@ -101,7 +84,7 @@ class _HomepageState extends State<Homepage> {
                         ),
                         tileColor: Color(0xffC4C4C4),
                         leading: QueryArtworkWidget(
-                          id: widget.audio[index].id,
+                          id: int.parse(widget.audio[index].metas.id!),
                           type: ArtworkType.AUDIO,
                           nullArtworkWidget: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
@@ -111,8 +94,14 @@ class _HomepageState extends State<Homepage> {
                             ),
                           ),
                         ),
-                        title: Text(widget.audio[index].title),
-                        subtitle: Text(widget.audio[index].artist!),
+                        title: Text(
+                          widget.audio[index].metas.title!,
+                          maxLines: 2,
+                        ),
+                        subtitle: Text(
+                          widget.audio[index].metas.artist!,
+                          maxLines: 1,
+                        ),
                         trailing: IconButton(
                           onPressed: () {},
                           icon: Icon(

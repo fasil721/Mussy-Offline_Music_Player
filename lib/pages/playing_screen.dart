@@ -2,6 +2,7 @@ import 'package:Musify/databases/songs_adapter.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
@@ -11,7 +12,7 @@ class MusicView extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final List<Songs> audio;
+  final List<Audio> audio;
 
   @override
   _MusicViewState createState() => _MusicViewState();
@@ -20,11 +21,13 @@ class MusicView extends StatefulWidget {
 class _MusicViewState extends State<MusicView> {
   final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
-  Songs find(List<Songs> source, String fromPath) {
-    return source.firstWhere((element) => element.uri == fromPath);
+  Audio find(List<Audio> source, String fromPath) {
+    return source.firstWhere((element) => element.path == fromPath);
   }
 
-  var currentPosition;
+  var musics = Hive.box('songs');
+  String repeatIcon = "assets/icons/repeat.png";
+  bool isLooping = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +76,7 @@ class _MusicViewState extends State<MusicView> {
                   child: QueryArtworkWidget(
                     artworkHeight: 300,
                     artworkWidth: 300,
-                    id: myAudio.id,
+                    id: int.parse(myAudio.metas.id!),
                     nullArtworkWidget: ClipRRect(
                       borderRadius: BorderRadius.circular(50),
                       child: Image(
@@ -97,16 +100,18 @@ class _MusicViewState extends State<MusicView> {
                       horizontal: 16.0,
                     ),
                     title: Text(
-                      myAudio.title,
+                      myAudio.metas.title!,
+                      maxLines: 2,
                       style: GoogleFonts.rubik(
                         color: Colors.white,
-                        fontSize: 22,
+                        fontSize: 20,
                       ),
                     ),
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        myAudio.artist,
+                        myAudio.metas.artist!,
+                        maxLines: 1,
                         style: GoogleFonts.rubik(
                           color: Colors.white,
                           fontSize: 14,
@@ -126,6 +131,7 @@ class _MusicViewState extends State<MusicView> {
               Container(
                 height: 30,
                 padding: const EdgeInsets.only(
+                  top: 10,
                   right: 40,
                   left: 40,
                 ),
@@ -158,17 +164,37 @@ class _MusicViewState extends State<MusicView> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Image(
-                              height: 25,
-                              image: AssetImage("assets/icons/ishuffle.png"),
-                            ),
-                          ),
+                          child: _assetsAudioPlayer.isShuffling.value
+                              ? IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _assetsAudioPlayer.toggleShuffle();
+                                    });
+                                  },
+                                  icon: Image(
+                                    height: 25,
+                                    image: AssetImage(
+                                        "assets/icons/shuffling.png"),
+                                  ),
+                                )
+                              : IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _assetsAudioPlayer.toggleShuffle();
+                                    });
+                                  },
+                                  icon: Image(
+                                    height: 25,
+                                    image:
+                                        AssetImage("assets/icons/ishuffle.png"),
+                                  ),
+                                ),
                         ),
                         Expanded(
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _assetsAudioPlayer.previous();
+                            },
                             icon: Image(
                               image: AssetImage("assets/icons/start.png"),
                             ),
@@ -205,7 +231,9 @@ class _MusicViewState extends State<MusicView> {
                         ),
                         Expanded(
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _assetsAudioPlayer.next();
+                            },
                             icon: Image(
                               image: AssetImage("assets/icons/end.png"),
                             ),
@@ -213,13 +241,28 @@ class _MusicViewState extends State<MusicView> {
                         ),
                         Expanded(
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (!isLooping) {
+                                setState(() {
+                                  isLooping = true;
+                                  _assetsAudioPlayer
+                                      .setLoopMode(LoopMode.single);
+                                  repeatIcon = "assets/icons/repeat1.png";
+                                });
+                              } else {
+                                setState(() {
+                                  isLooping = false;
+                                  _assetsAudioPlayer.setLoopMode(LoopMode.none);
+                                  repeatIcon = "assets/icons/repeat.png";
+                                });
+                              }
+                            },
                             icon: Image(
                               height: 25,
-                              image: AssetImage("assets/icons/repeat.png"),
+                              image: AssetImage(repeatIcon),
                             ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
