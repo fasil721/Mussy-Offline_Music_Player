@@ -1,96 +1,133 @@
+import 'package:Musify/databases/songs_adapter.dart';
+import 'package:Musify/pages/library_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 
-Widget createPlaylist() {
-  return Builder(builder: (context) {
-    return AlertDialog(
-      shape: Border.all(
-        width: 1,
-        color: Colors.white,
-      ),
-      backgroundColor: Colors.black,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 20,
-              left: 20,
-              top: 20,
-            ),
-            child: Text(
-              "Give your playlist a name.",
-              style: GoogleFonts.rubik(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
+import '../main.dart';
+
+var musics = Hive.box('songs');
+String? _title;
+final formkey = GlobalKey<FormState>();
+
+class CreatePlaylist extends StatefulWidget {
+  const CreatePlaylist({Key? key}) : super(key: key);
+
+  @override
+  _CreatePlaylistState createState() => _CreatePlaylistState();
+}
+
+class _CreatePlaylistState extends State<CreatePlaylist> {
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        return AlertDialog(
+          shape: Border.all(
+            width: 1,
+            color: Colors.white,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-            child: TextFormField(
-              decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-              ),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Row(
+          backgroundColor: Colors.black,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 15.0,
-                    right: 15,
-                    top: 5,
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Center(
-                      child: Text(
-                        "Cancel",
-                        style: GoogleFonts.rubik(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 20,
+                  left: 20,
+                  top: 20,
+                ),
+                child: Text(
+                  "Give your playlist a name.",
+                  style: GoogleFonts.rubik(
+                    color: Colors.white,
+                    fontSize: 18,
                   ),
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 15.0,
-                    right: 15,
-                    top: 5,
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                child: Form(
+                  key: formkey,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                    onChanged: (value) {
+                      _title = value;
+                    },
+                    validator: (value) {
+                      if (value == "") {
+                        return "Name required";
+                      }
+                    },
                   ),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Center(
-                      child: Text(
-                        "Create",
-                        style: GoogleFonts.rubik(
-                          color: Colors.red,
-                          fontSize: 15,
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 15.0,
+                        right: 15,
+                        top: 5,
+                      ),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Center(
+                          child: Text(
+                            "Cancel",
+                            style: GoogleFonts.rubik(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 15.0,
+                        right: 15,
+                        top: 5,
+                      ),
+                      child: TextButton(
+                        onPressed: () {
+                          if (formkey.currentState!.validate()) {
+                            musics.put(_title, "");
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Center(
+                          child: Text(
+                            "Create",
+                            style: GoogleFonts.rubik(
+                              color: Colors.red,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
-  });
+  }
 }

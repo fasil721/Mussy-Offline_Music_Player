@@ -1,6 +1,8 @@
+import 'package:Musify/databases/songs_adapter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 
 class FavoritePage extends StatefulWidget {
   @override
@@ -10,8 +12,10 @@ class FavoritePage extends StatefulWidget {
 class _FavoritePageState extends State<FavoritePage> {
   var val = true;
 
+   var box = Hive.box<List<dynamic>>('songs');
   @override
   Widget build(BuildContext context) {
+    List<Songs> favs = box.get("favorites")!.cast<Songs>();
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -36,6 +40,18 @@ class _FavoritePageState extends State<FavoritePage> {
               ),
             ),
           ),
+          favs.isNotEmpty
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  physics: ScrollPhysics(),
+                  itemCount: favs.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      trailing: Icon(Icons.ac_unit),
+                    );
+                  },
+                )
+              : Center(child: Text("data")),
         ],
       ),
     );

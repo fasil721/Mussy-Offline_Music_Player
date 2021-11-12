@@ -39,7 +39,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   var musics = Hive.box('songs');
-
   List<SongModel> tracks = [];
   List<Songs> audio = [];
   List<Audio> songModels = [];

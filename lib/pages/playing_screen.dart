@@ -2,7 +2,6 @@ import 'package:Musify/databases/songs_adapter.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
@@ -20,12 +19,28 @@ class MusicView extends StatefulWidget {
 
 class _MusicViewState extends State<MusicView> {
   final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Audio find(List<Audio> source, String fromPath) {
     return source.firstWhere((element) => element.path == fromPath);
   }
 
-  var musics = Hive.box('songs');
+  // addFav(Audio myAudio) {
+  //   var favs = Hive.box('songs');
+  //   favs.put("favorite",
+  //     Songs(
+  //       title: myAudio.metas.title,
+  //       artist: myAudio.metas.artist,
+  //       uri: myAudio.path,
+  //       id: myAudio.metas.id,
+  //     ),
+  //   );
+  // }
+
+  List<Songs> isFav = [];
   String repeatIcon = "assets/icons/repeat.png";
   bool isLooping = false;
   @override
@@ -119,7 +134,10 @@ class _MusicViewState extends State<MusicView> {
                       ),
                     ),
                     trailing: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        print(myAudio.metas.title! + "Added to playlist");
+                        // addFav(myAudio);
+                      },
                       icon: Image(
                         height: 25,
                         image: AssetImage("assets/icons/heart.png"),
@@ -252,7 +270,8 @@ class _MusicViewState extends State<MusicView> {
                               } else {
                                 setState(() {
                                   isLooping = false;
-                                  _assetsAudioPlayer.setLoopMode(LoopMode.none);
+                                  _assetsAudioPlayer
+                                      .setLoopMode(LoopMode.playlist);
                                   repeatIcon = "assets/icons/repeat.png";
                                 });
                               }
