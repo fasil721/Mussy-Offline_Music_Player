@@ -116,7 +116,7 @@ class _MusicViewState extends State<MusicView> {
                     ),
                     title: Text(
                       myAudio.metas.title!,
-                      maxLines: 2,
+                      maxLines: 1,
                       style: GoogleFonts.rubik(
                         color: Colors.white,
                         fontSize: 20,
@@ -149,7 +149,6 @@ class _MusicViewState extends State<MusicView> {
               Container(
                 height: 30,
                 padding: const EdgeInsets.only(
-                  top: 10,
                   right: 40,
                   left: 40,
                 ),

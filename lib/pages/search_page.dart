@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:on_audio_query/on_audio_query.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
 
@@ -14,7 +16,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        toolbarHeight: 80,
+        toolbarHeight: 60,
         elevation: 0,
         backgroundColor: Colors.black,
         title: Padding(
@@ -28,25 +30,193 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: 30,
-          right: 30,
-        ),
-        child: TextField(
-          decoration: InputDecoration(
-            fillColor: Colors.white70,
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
             ),
-            hintText: 'Search a song',
+            child: TextField(
+              decoration: InputDecoration(
+                fillColor: Colors.white70,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                hintText: 'Search a song',
+              ),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+              ),
+            ),
           ),
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 15,
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 10,
+            ),
+            child: ListTile(
+              onTap: () {},
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              tileColor: Color(0xffC4C4C4),
+              leading: QueryArtworkWidget(
+                id: 0,
+                type: ArtworkType.AUDIO,
+                nullArtworkWidget: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image(
+                    height: 50,
+                    image: AssetImage("assets/icons/default.jpg"),
+                  ),
+                ),
+              ),
+              title: Text(
+                "Darshana",
+                maxLines: 1,
+              ),
+              subtitle: Text(
+                "unknown",
+                maxLines: 1,
+              ),
+              trailing: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.more_horiz,
+                ),
+              ),
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 10,
+            ),
+            child: ListTile(
+              onTap: () {},
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              tileColor: Color(0xffC4C4C4),
+              leading: QueryArtworkWidget(
+                id: 0,
+                type: ArtworkType.AUDIO,
+                nullArtworkWidget: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image(
+                    height: 50,
+                    image: AssetImage("assets/icons/default.jpg"),
+                  ),
+                ),
+              ),
+              title: Text(
+                "Thattum muttum thalam",
+                maxLines: 1,
+              ),
+              subtitle: Text(
+                "unknown",
+                maxLines: 1,
+              ),
+              trailing: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.more_horiz,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 10,
+            ),
+            child: ListTile(
+              onTap: () {},
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              tileColor: Color(0xffC4C4C4),
+              leading: QueryArtworkWidget(
+                id: 0,
+                type: ArtworkType.AUDIO,
+                nullArtworkWidget: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image(
+                    height: 50,
+                    image: AssetImage("assets/icons/default.jpg"),
+                  ),
+                ),
+              ),
+              title: Text(
+                "Uyire",
+                maxLines: 1,
+              ),
+              subtitle: Text(
+                "unknown",
+                maxLines: 1,
+              ),
+              trailing: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.more_horiz,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 10,
+            ),
+            child: ListTile(
+              onTap: () {},
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              tileColor: Color(0xffC4C4C4),
+              leading: QueryArtworkWidget(
+                id: 0,
+                type: ArtworkType.AUDIO,
+                nullArtworkWidget: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image(
+                    height: 50,
+                    image: AssetImage("assets/icons/default.jpg"),
+                  ),
+                ),
+              ),
+              title: Text(
+                "Mazhamegham",
+                maxLines: 1,
+              ),
+              subtitle: Text(
+                "unknown",
+                maxLines: 1,
+              ),
+              trailing: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.more_horiz,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

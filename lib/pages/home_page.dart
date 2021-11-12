@@ -1,4 +1,3 @@
-
 import 'package:Musify/pages/settins_page.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +21,7 @@ class _HomepageState extends State<Homepage> {
       autoStart: true,
       playInBackground: PlayInBackground.enabled,
       loopMode: LoopMode.playlist,
+      notificationSettings: NotificationSettings(stopEnabled: false),
     );
   }
 
@@ -96,7 +96,7 @@ class _HomepageState extends State<Homepage> {
                         ),
                         title: Text(
                           widget.audio[index].metas.title!,
-                          maxLines: 2,
+                          maxLines: 1,
                         ),
                         subtitle: Text(
                           widget.audio[index].metas.artist!,

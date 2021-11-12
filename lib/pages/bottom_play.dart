@@ -41,7 +41,7 @@ class _bottomPlayingState extends State<bottomPlating> {
         child: _assetsAudioPlayer.builderCurrent(
           builder: (BuildContext context, Playing? playing) {
             final myAudio = find(
-              widget.audio,
+              widget.audio, 
               playing!.audio.assetAudioPath,
             );
             return ListTile(
@@ -66,7 +66,7 @@ class _bottomPlayingState extends State<bottomPlating> {
               ),
               title: Text(
                 myAudio.metas.title!,
-                maxLines: 2,
+                maxLines: 1,
               ),
               subtitle: Text(
                 myAudio.metas.artist!,

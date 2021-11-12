@@ -98,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             child: ListTile(
               leading: Icon(
-                Icons.privacy_tip_rounded,
+                Icons.lock,
                 color: Colors.white,
               ),
               title: Text(
@@ -118,7 +118,27 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             child: ListTile(
               leading: Icon(
-                Icons.menu,
+                Icons.share,
+                color: Colors.white,
+              ),
+              title: Text(
+                "Terms and conditions",
+                style: GoogleFonts.rubik(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              top: 5,
+              right: 0,
+            ),
+            child: ListTile(
+              leading: Icon(
+                Icons.info,
                 color: Colors.white,
               ),
               title: Text(
@@ -139,6 +159,37 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                 );
               },
+            ),
+          ), // margin: EdgeInsets.only(top: 250),
+          Padding(
+            padding: EdgeInsets.only(),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    bottom: 5,
+                    top: 230,
+                  ),
+                  child: Text(
+                    "version",
+                    style: GoogleFonts.rubik(
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                Text(
+                  "1..0.0",
+                  style: GoogleFonts.rubik(
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                )
+              ],
             ),
           ),
         ],

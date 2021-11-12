@@ -1,11 +1,7 @@
-import 'package:Musify/databases/songs_adapter.dart';
-import 'package:Musify/pages/library_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-
-import '../main.dart';
 
 var musics = Hive.box('songs');
 String? _title;
@@ -19,6 +15,7 @@ class CreatePlaylist extends StatefulWidget {
 }
 
 class _CreatePlaylistState extends State<CreatePlaylist> {
+  var playlists = [];
   @override
   Widget build(BuildContext context) {
     return Builder(
@@ -47,7 +44,11 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  bottom: 10,
+                ),
                 child: Form(
                   key: formkey,
                   child: TextFormField(
@@ -106,8 +107,10 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                       child: TextButton(
                         onPressed: () {
                           if (formkey.currentState!.validate()) {
-                            musics.put(_title, "");
-                            Navigator.pop(context);
+                            setState(() {
+                              musics.put(_title, playlists);
+                              Navigator.pop(context);
+                            });
                           }
                         },
                         child: Center(

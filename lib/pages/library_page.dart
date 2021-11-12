@@ -1,4 +1,5 @@
 import 'package:Musify/databases/songs_adapter.dart';
+import 'package:Musify/pages/playlist_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,15 +15,13 @@ class LibraryPage extends StatefulWidget {
   _LibraryPageState createState() => _LibraryPageState();
 }
 
-class _LibraryPageState extends State<LibraryPage> {
-  var musics = Hive.box('songs');
-  List<dynamic> allKeys = [];
-  List<dynamic> playlists = [];
+List<dynamic> allKeys = [];
+List<dynamic> playlists = [];
 
+
+class _LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
-    allKeys = musics.keys.toList();
-    allKeys.remove("tracks");
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -57,78 +56,163 @@ class _LibraryPageState extends State<LibraryPage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 25,
-              left: 25,
-              bottom: 15,
-            ),
-            child: ListTile(
-              tileColor: Color(0xff4D3C3C),
-              onTap: () {
-                musics.clear();
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => FavoritePage(),
-                //   ),
-                // );
-              },
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 3.0,
-                horizontal: 16.0,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 25,
+                left: 25,
+                bottom: 15,
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5),
+              child: ListTile(
+                tileColor: Color(0xff4D3C3C),
+                onTap: () {
+                  // musics.clear();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FavoritePage(),
+                    ),
+                  );
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 3.0,
+                  horizontal: 16.0,
                 ),
-              ),
-              leading: Icon(
-                Icons.favorite,
-                color: Colors.white,
-              ),
-              title: Text(
-                "Favorites",
-                textAlign: TextAlign.justify,
-                style: GoogleFonts.rubik(
-                  fontSize: 20,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
+                ),
+                leading: Icon(
+                  Icons.favorite,
                   color: Colors.white,
                 ),
+                title: Text(
+                  "Favorites",
+                  textAlign: TextAlign.justify,
+                  style: GoogleFonts.rubik(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
-          ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: ScrollPhysics(),
-            itemCount: allKeys.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(
-                  left: 25,
-                  right: 25,
-                ),
-                child: ListTile(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                  ),
-                  onTap: () {
-                    print(allKeys);
+            // Padding(
+            //   padding: const EdgeInsets.only(
+            //     right: 25,
+            //     left: 25,
+            //     bottom: 15,
+            //   ),
+            //   child: ListTile(
+            //     tileColor: Color(0xff4D3C3C),
+            //     onTap: () {
+            //       musics.clear();
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => Plalists(),
+            //         ),
+            //       );
+            //     },
+            //     contentPadding: EdgeInsets.symmetric(
+            //       vertical: 3.0,
+            //       horizontal: 16.0,
+            //     ),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.all(
+            //         Radius.circular(5),
+            //       ),
+            //     ),
+            //     leading: Icon(
+            //       Icons.queue_music_rounded,
+            //       color: Colors.white,
+            //       size: 28,
+            //     ),
+            //     title: Text(
+            //       "Playlists",
+            //       textAlign: TextAlign.justify,
+            //       style: GoogleFonts.rubik(
+            //         fontSize: 20,
+            //         color: Colors.white,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            ValueListenableBuilder(
+              valueListenable: Hive.box('songs').listenable(),
+              builder: (context, Box box, _) {
+                allKeys = box.keys.toList();
+                allKeys.remove("tracks");
+                playlists = allKeys.toList();
+                return ListView.separated(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  physics: ScrollPhysics(),
+                  itemCount: playlists.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        left: 25,
+                        right: 25,
+                      ),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 3.0,
+                          horizontal: 16.0,
+                        ),
+                        tileColor: Color(0xff4D3C3C),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlalistView(
+                                playlistName: playlists[index],
+                              ),
+                            ),
+                          );
+                          print(playlists);
+                        },
+                        trailing: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.more_horiz,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                        leading: Icon(
+                          Icons.queue_music_rounded,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        title: Text(
+                          playlists[index],
+                          textAlign: TextAlign.justify,
+                          style: GoogleFonts.rubik(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
                   },
-                  tileColor: Colors.white,
-                  title: Text(allKeys[index]),
-                  trailing: Icon(Icons.ac_unit),
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) => SizedBox(
-              height: 15,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      SizedBox(
+                    height: 15,
+                  ),
+                );
+              },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
