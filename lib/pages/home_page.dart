@@ -70,8 +70,8 @@ class _HomepageState extends State<Homepage> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(
-                        left: 15,
-                        right: 15,
+                        left: 5,
+                        right: 0,
                       ),
                       child: ListTile(
                         onTap: () {
@@ -82,7 +82,7 @@ class _HomepageState extends State<Homepage> {
                             Radius.circular(5),
                           ),
                         ),
-                        tileColor: Color(0xffC4C4C4),
+                        // tileColor: Color(0xffC4C4C4),
                         leading: QueryArtworkWidget(
                           id: int.parse(widget.audio[index].metas.id!),
                           type: ArtworkType.AUDIO,
@@ -96,16 +96,25 @@ class _HomepageState extends State<Homepage> {
                         ),
                         title: Text(
                           widget.audio[index].metas.title!,
+                          style: GoogleFonts.rubik(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                           maxLines: 1,
                         ),
                         subtitle: Text(
                           widget.audio[index].metas.artist!,
+                          style: GoogleFonts.rubik(
+                            fontSize: 13,
+                            color: Colors.grey,
+                          ),
                           maxLines: 1,
                         ),
                         trailing: IconButton(
                           onPressed: () {},
                           icon: Icon(
                             Icons.more_horiz,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -113,7 +122,7 @@ class _HomepageState extends State<Homepage> {
                   },
                   separatorBuilder: (BuildContext context, int index) {
                     return SizedBox(
-                      height: 10,
+                      height: 0,
                     );
                   },
                 )

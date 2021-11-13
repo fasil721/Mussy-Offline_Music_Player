@@ -1,6 +1,7 @@
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class bottomPlating extends StatefulWidget {
@@ -28,7 +29,7 @@ class _bottomPlayingState extends State<bottomPlating> {
       alignment: Alignment.bottomCenter,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.blue[300],
+          color: Color(0xff4D3C3C),
           borderRadius: BorderRadius.all(
             Radius.circular(5),
           ),
@@ -65,10 +66,18 @@ class _bottomPlayingState extends State<bottomPlating> {
               ),
               title: Text(
                 myAudio.metas.title!,
+                style: GoogleFonts.rubik(
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
                 maxLines: 1,
               ),
               subtitle: Text(
                 myAudio.metas.artist!,
+                style: GoogleFonts.rubik(
+                  fontSize: 13,
+                  color: Colors.grey,
+                ),
                 maxLines: 1,
               ),
               trailing: Container(
@@ -78,7 +87,8 @@ class _bottomPlayingState extends State<bottomPlating> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.grey,
+                    width: 1,
+                    color: Colors.white,
                   ),
                 ),
                 child: _assetsAudioPlayer.builderIsPlaying(
@@ -90,7 +100,8 @@ class _bottomPlayingState extends State<bottomPlating> {
                             },
                             icon: Icon(
                               Icons.pause,
-                              size: 23,
+                              color: Colors.white,
+                              size: 22,
                             ),
                           )
                         : IconButton(
@@ -99,6 +110,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                             },
                             icon: Icon(
                               Icons.play_arrow,
+                              color: Colors.white,
                               size: 22,
                             ),
                           ));
