@@ -118,7 +118,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             child: ListTile(
               leading: Icon(
-                Icons.share,
+                Icons.receipt,
                 color: Colors.white,
               ),
               title: Text(
@@ -151,11 +151,17 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap: () {
                 showAboutDialog(
                   context: context,
-                  applicationName: 'Flutter',
-                  applicationIcon: FlutterLogo(),
+                  applicationName: 'Musify',
+                  applicationIcon: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image(
+                      height: 50,
+                      image: AssetImage("assets/icons/default.jpg"),
+                    ),
+                  ),
                   applicationVersion: '1.0.0',
                   children: [
-                    Text('dakhdsadhjdfklhgfd'),
+                    Text('Offline music player'),
                   ],
                 );
               },

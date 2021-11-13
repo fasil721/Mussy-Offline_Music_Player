@@ -1,4 +1,3 @@
-import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +40,7 @@ class _bottomPlayingState extends State<bottomPlating> {
         child: _assetsAudioPlayer.builderCurrent(
           builder: (BuildContext context, Playing? playing) {
             final myAudio = find(
-              widget.audio, 
+              widget.audio,
               playing!.audio.assetAudioPath,
             );
             return ListTile(
