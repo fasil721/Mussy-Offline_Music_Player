@@ -18,16 +18,35 @@ class _PlalistViewState extends State<PlalistView> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   List<dynamic> playlists = [];
   List<Audio> audios = [];
-  List<Audio> audios1 = [];
+  // List<Audio> audios1 = [];
   openPlayer(int index) async {
     await _assetsAudioPlayer.open(
       Playlist(audios: audios, startIndex: index),
       showNotification: true,
       autoStart: true,
       playInBackground: PlayInBackground.enabled,
-      loopMode: LoopMode.playlist,
+      loopMode: LoopMode.none,
       notificationSettings: NotificationSettings(stopEnabled: false),
     );
+  }
+
+  playPlaylist(Box box, int length) {
+    playlists = box.get(widget.playlistName);
+    playlists.forEach(
+      (element) {
+        audios.add(
+          Audio.file(
+            element.uri.toString(),
+            metas: Metas(
+              title: element.title,
+              artist: element.artist,
+              id: element.id.toString(),
+            ),
+          ),
+        );
+      },
+    );
+    audios.toSet().toList();
   }
 
   @override
@@ -81,21 +100,7 @@ class _PlalistViewState extends State<PlalistView> {
       body: ValueListenableBuilder(
         valueListenable: Hive.box('songs').listenable(),
         builder: (context, Box box, _) {
-          playlists = box.get(widget.playlistName);
-          playlists.forEach(
-            (element) {
-              audios.add(
-                Audio.file(
-                  element.uri.toString(),
-                  metas: Metas(
-                    title: element.title,
-                    artist: element.artist,
-                    id: element.id.toString(),
-                  ),
-                ),
-              );
-            },
-          );
+          playPlaylist(box, playlists.length);
           return playlists.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,
@@ -173,7 +178,7 @@ class _PlalistViewState extends State<PlalistView> {
                         ),
                         onTap: () {
                           // playlists.clear();
-                          // openPlayer(index);
+                          openPlayer(index);
                           print(audios.length.toString() +
                               "-------------------------------");
                         },
