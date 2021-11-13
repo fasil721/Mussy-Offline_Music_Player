@@ -18,7 +18,6 @@ class LibraryPage extends StatefulWidget {
 List<dynamic> allKeys = [];
 List<dynamic> playlists = [];
 
-
 class _LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
@@ -181,9 +180,11 @@ class _LibraryPageState extends State<LibraryPage> {
                           print(playlists);
                         },
                         trailing: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            box.delete(playlists[index]);
+                          },
                           icon: Icon(
-                            Icons.more_horiz,
+                            Icons.delete,
                             color: Colors.white,
                             size: 20,
                           ),

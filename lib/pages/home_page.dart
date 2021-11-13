@@ -110,8 +110,28 @@ class _HomepageState extends State<Homepage> {
                           ),
                           maxLines: 1,
                         ),
-                        trailing: IconButton(
-                          onPressed: () {},
+                        trailing: PopupMenuButton(
+                          itemBuilder: (BuildContext bc) => [
+                            PopupMenuItem(
+                              child: GestureDetector(
+                                child: Text("Add to favorite"),
+                                onTap: () {
+                                  print("object");
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            PopupMenuItem(
+                              child: GestureDetector(
+                                child: Text("Add to playlist"),
+                                onTap: () {
+                                  print("object");
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                          ],
+                          onSelected: (value) {},
                           icon: Icon(
                             Icons.more_horiz,
                             color: Colors.white,

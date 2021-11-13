@@ -31,7 +31,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
- 
+
   @override
   void initState() {
     requesrpermisson();
@@ -64,15 +64,16 @@ class _MyAppState extends State<MyApp> {
           Audio.file(
             element.uri.toString(),
             metas: Metas(
-                title: element.title,
-                artist: element.artist,
-                id: element.id.toString()),
+              title: element.title,
+              artist: element.artist,
+              id: element.id.toString(),
+            ),
           ),
         );
       },
     );
+    print(tracks[0].fileExtension+"-------------------------------------------------");
     await musics.put("tracks", audio);
-
     setState(() {});
   }
 

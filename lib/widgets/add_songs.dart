@@ -4,11 +4,10 @@ import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class AddSongsInPlaylist extends StatefulWidget {
-  const AddSongsInPlaylist(
-      {Key? key, required this.playlistName, required this.playlists})
+  const AddSongsInPlaylist({Key? key, required this.playlistName})
       : super(key: key);
   final String playlistName;
-  final List<dynamic> playlists;
+  // final List<dynamic> playlists;
   @override
   _AddSongsInPlaylistState createState() => _AddSongsInPlaylistState();
 }
@@ -18,7 +17,7 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
   Widget build(BuildContext context) {
     var box = Hive.box("songs");
     List<Songs> allsongs = box.get("tracks");
-
+    List<dynamic> playlists = box.get(widget.playlistName);
     return Container(
       color: Colors.grey,
       child: ListView.separated(
@@ -33,7 +32,7 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
             ),
             trailing: Builder(
               builder: (context) {
-                var song = widget.playlists
+                var song = playlists
                     .where(
                       (element) => element.id
                           .toString()
@@ -42,9 +41,9 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                     .toList();
                 return song.isEmpty
                     ? IconButton(
-                        onPressed: () {
-                          widget.playlists.add(allsongs[index]);
-                          box.put(widget.playlistName, widget.playlists);
+                        onPressed: () async {
+                          playlists.add(allsongs[index]);
+                          await box.put(widget.playlistName, playlists);
                           setState(() {});
                         },
                         icon: const Icon(
@@ -52,15 +51,16 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                         ),
                       )
                     : IconButton(
-                        onPressed: () {
-                          widget.playlists.remove(allsongs[index]);
-                          box.put(widget.playlistName, widget.playlists);
+                        onPressed: () async {
+                          playlists.removeWhere((element) =>
+                              element.title == allsongs[index].title);
+                          await box.put(widget.playlistName, playlists);
                           print(
                             allsongs[index].title + "------------------------",
                           );
                           setState(() {});
                         },
-                        icon:const Icon(
+                        icon: const Icon(
                           Icons.check_box,
                         ),
                       );

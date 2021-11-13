@@ -18,7 +18,7 @@ class _PlalistViewState extends State<PlalistView> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   List<dynamic> playlists = [];
   List<Audio> audios = [];
-
+  List<Audio> audios1 = [];
   openPlayer(int index) async {
     await _assetsAudioPlayer.open(
       Playlist(audios: audios, startIndex: index),
@@ -65,7 +65,6 @@ class _PlalistViewState extends State<PlalistView> {
                 context: context,
                 builder: (Context) => AddSongsInPlaylist(
                   playlistName: widget.playlistName,
-                  playlists: playlists,
                 ),
               );
             },
@@ -133,6 +132,34 @@ class _PlalistViewState extends State<PlalistView> {
                           ),
                           maxLines: 1,
                         ),
+                        trailing: PopupMenuButton(
+                          itemBuilder: (BuildContext bc) => [
+                            PopupMenuItem(
+                              value: "0",
+                              child: Text(
+                                "Add to favorite",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: "1",
+                              child: Text(
+                                "Delete song",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                          ],
+                          onSelected: (value) {
+                            if (value == "1") {
+                              playlists.removeAt(index);
+                              setState(() {});
+                            }
+                          },
+                          icon: Icon(
+                            Icons.more_horiz,
+                            color: Colors.white,
+                          ),
+                        ),
                         leading: QueryArtworkWidget(
                           id: playlists[index].id!,
                           type: ArtworkType.AUDIO,
@@ -146,7 +173,9 @@ class _PlalistViewState extends State<PlalistView> {
                         ),
                         onTap: () {
                           // playlists.clear();
-                          openPlayer(index);
+                          // openPlayer(index);
+                          print(audios.length.toString() +
+                              "-------------------------------");
                         },
                       ),
                     );
