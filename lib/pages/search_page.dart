@@ -38,13 +38,19 @@ class _SearchPageState extends State<SearchPage> {
               right: 20,
             ),
             child: TextField(
+              cursorColor: Colors.black,
               decoration: InputDecoration(
                 fillColor: Colors.white70,
                 filled: true,
                 border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 hintText: 'Search a song',
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Colors.black,
+                ),
               ),
               style: TextStyle(
                 color: Colors.black,

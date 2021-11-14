@@ -179,8 +179,8 @@ class _PlalistViewState extends State<PlalistView> {
                         onTap: () {
                           // playlists.clear();
                           openPlayer(index);
-                          print(audios.length.toString() +
-                              "-------------------------------");
+                          // print(audios.length.toString() +
+                              // "-------------------------------");
                         },
                       ),
                     );
