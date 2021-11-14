@@ -47,6 +47,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
               scrollDirection: Axis.vertical,
               itemCount: playlistNames.length,
               itemBuilder: (context, index) {
+                List<dynamic> songofPlaylist = box.get(playlistNames[index]);
                 return Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
@@ -74,7 +75,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                         color: Colors.white,
                       ),
                     ),
-                    trailing: playlistNames
+                    trailing: songofPlaylist
                             .where((element) => element == widget.song)
                             .isEmpty
                         ? ElevatedButton(
@@ -84,18 +85,28 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                               songofPlaylist.add(widget.song);
                               await box.put(
                                   playlistNames[index], songofPlaylist);
-                              setState(() {});
+                            
                               Navigator.pop(context);
+
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Song added"),
+                                SnackBar(
+                                  content: Text(
+                                    widget.song.title +
+                                        " added to Playlist " +
+                                        playlistNames[index],
+                                  ),
                                 ),
                               );
                             },
                             child: Text("Add here"),
                           )
                         : ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              songofPlaylist.remove(widget.song);
+                              await box.put(
+                                  playlistNames[index], songofPlaylist);
+                              setState(() {});
+                            },
                             child: Text("Remove here"),
                           ),
                     contentPadding: EdgeInsets.symmetric(
