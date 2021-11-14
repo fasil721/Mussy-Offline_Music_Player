@@ -32,14 +32,10 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
             ),
             trailing: Builder(
               builder: (context) {
-                var song = playlists
-                    .where(
-                      (element) => element.id
-                          .toString()
-                          .contains(allsongs[index].id.toString()),
-                    )
-                    .toList();
-                return song.isEmpty
+                return playlists
+                        .where(
+                            (element) => element.id.toString() == allsongs[index].id.toString())
+                        .isEmpty
                     ? IconButton(
                         onPressed: () async {
                           playlists.add(allsongs[index]);

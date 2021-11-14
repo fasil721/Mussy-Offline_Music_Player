@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:Musify/pages/settins_page.dart';
+import 'package:Musify/widgets/add_to_playlist.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
@@ -22,7 +24,7 @@ class _HomepageState extends State<Homepage> {
       showNotification: true,
       autoStart: true,
       playInBackground: PlayInBackground.enabled,
-      loopMode: LoopMode.playlist,
+      // loopMode: LoopMode.playlist,
       notificationSettings: NotificationSettings(stopEnabled: false),
     );
   }
@@ -121,25 +123,39 @@ class _HomepageState extends State<Homepage> {
                       trailing: PopupMenuButton(
                         itemBuilder: (BuildContext bc) => [
                           PopupMenuItem(
-                            child: GestureDetector(
-                              child: Text("Add to favorite"),
-                              onTap: () {
-                                print("object");
-                                Navigator.pop(context);
-                              },
-                            ),
+                            child: Text("Add to favorite"),
+                            value: "0",
                           ),
                           PopupMenuItem(
-                            child: GestureDetector(
-                              child: Text("Add to playlist"),
-                              onTap: () {
-                                print("object");
-                                Navigator.pop(context);
-                              },
-                            ),
+                            child: Text("Add to playlist"),
+                            value: "1",
                           ),
                         ],
-                        onSelected: (value) {},
+                        onSelected: (value) async {
+                          if (value == "1") {
+                            Box box = Hive.box("songs");
+                            List<dynamic> song = await box.get("tracks");
+                            List a = song
+                                .where(
+                                  (element) => element.id
+                                      .toString()
+                                      .contains(widget.audio[index].metas.id!),
+                                )
+                                .toList();
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) =>
+                                  AddToPlaylist(song: a.first),
+                            );
+                          }
+                          if (value == "0") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('A SnackBar has be'),
+                              ),
+                            );
+                          }
+                        },
                         icon: Icon(
                           Icons.more_horiz,
                           color: Colors.white,

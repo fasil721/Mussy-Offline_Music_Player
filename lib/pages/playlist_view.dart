@@ -18,20 +18,21 @@ class _PlalistViewState extends State<PlalistView> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   List<dynamic> playlists = [];
   List<Audio> audios = [];
-  // List<Audio> audios1 = [];
+  List<Audio> audios1 = [];
   openPlayer(int index) async {
     await _assetsAudioPlayer.open(
-      Playlist(audios: audios, startIndex: index),
+      Playlist(audios: audios1, startIndex: index),
       showNotification: true,
       autoStart: true,
       playInBackground: PlayInBackground.enabled,
-      loopMode: LoopMode.none,
+      // loopMode: LoopMode.playlist,
       notificationSettings: NotificationSettings(stopEnabled: false),
     );
   }
 
-  playPlaylist(Box box, int length) {
+  playPlaylist(Box box, int length) async {
     playlists = box.get(widget.playlistName);
+
     playlists.forEach(
       (element) {
         audios.add(
@@ -46,7 +47,7 @@ class _PlalistViewState extends State<PlalistView> {
         );
       },
     );
-    audios.toSet().toList();
+    audios1 = audios.toSet().toList();
   }
 
   @override
@@ -178,9 +179,9 @@ class _PlalistViewState extends State<PlalistView> {
                         ),
                         onTap: () {
                           // playlists.clear();
-                          openPlayer(index);
-                          // print(audios.length.toString() +
-                              // "-------------------------------");
+                          // openPlayer(index);
+                          print(audios1.length.toString() +
+                              "-------------------------------");
                         },
                       ),
                     );
