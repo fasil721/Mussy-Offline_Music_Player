@@ -79,12 +79,19 @@ class _MusicViewState extends State<MusicView> {
       backgroundColor: Colors.black,
       body: _assetsAudioPlayer.builderCurrent(
         builder: (BuildContext context, Playing? playing) {
-          Box box = Hive.box("songs");
-          List<dynamic> favorites = box.get("favorites");
           final myAudio = find(
             widget.audio,
             playing!.audio.assetAudioPath,
           );
+          Box box = Hive.box("songs");
+          List<dynamic> favorites = box.get("favorites");
+          List<Songs> song = box.get("tracks");
+          List<Songs> a = song
+              .where(
+                (element) =>
+                    element.id.toString().contains(myAudio.metas.id.toString()),
+              )
+              .toList();
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -142,8 +149,10 @@ class _MusicViewState extends State<MusicView> {
                                 myAudio.metas.id.toString())
                             .isEmpty
                         ? IconButton(
-                            onPressed: () {
-                              print(myAudio.metas.title! + "Added to playlist");
+                            onPressed: () async {
+                              favorites.add(a.first);
+                              await box.put("favorites", favorites);
+                              setState(() {});
                             },
                             icon: Image(
                               height: 25,
@@ -151,8 +160,12 @@ class _MusicViewState extends State<MusicView> {
                             ),
                           )
                         : IconButton(
-                            onPressed: () {
-                              print(myAudio.metas.title! + "Added to playlist");
+                            onPressed: () async {
+                              favorites.removeWhere((element) =>
+                                  element.id.toString() ==
+                                  a.first.id.toString());
+                              await box.put("favorites", favorites);
+                              setState(() {});
                             },
                             icon: Image(
                               height: 25,

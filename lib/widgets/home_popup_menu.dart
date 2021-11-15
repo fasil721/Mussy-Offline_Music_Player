@@ -2,7 +2,21 @@ import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/widgets/add_to_playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+class AddAndDeletePlaylist extends StatefulWidget {
+  const AddAndDeletePlaylist({ Key? key }) : super(key: key);
 
+  @override
+  _AddAndDeletePlaylistState createState() => _AddAndDeletePlaylistState();
+}
+
+class _AddAndDeletePlaylistState extends State<AddAndDeletePlaylist> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      
+    );
+  }
+}
 class homepopup extends StatefulWidget {
   const homepopup({Key? key, required this.audioId}) : super(key: key);
   final String audioId;
