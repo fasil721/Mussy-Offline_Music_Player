@@ -1,4 +1,4 @@
-import 'package:Musify/databases/songs_adapter.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,7 +12,39 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-  var val = true;
+  AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  List<dynamic> favorites = [];
+  List<Audio> audios = [];
+  openPlayer(int index) async {
+    await _assetsAudioPlayer.open(
+      Playlist(audios: audios, startIndex: index),
+      showNotification: true,
+      autoStart: true,
+      playInBackground: PlayInBackground.enabled,
+      loopMode: LoopMode.playlist,
+      notificationSettings: NotificationSettings(stopEnabled: false),
+    );
+  }
+
+  playFavorites(Box box) async {
+    favorites = box.get("favorites");
+    audios = [];
+    favorites.forEach(
+      (element) {
+        audios.add(
+          Audio.file(
+            element.uri.toString(),
+            metas: Metas(
+              title: element.title,
+              artist: element.artist,
+              id: element.id.toString(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +69,7 @@ class _FavoritePageState extends State<FavoritePage> {
       body: ValueListenableBuilder(
         valueListenable: Hive.box('songs').listenable(),
         builder: (context, Box box, _) {
-          List<dynamic> favorites = box.get("favorites");
+          playFavorites(box);
           return favorites.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,
@@ -88,16 +120,9 @@ class _FavoritePageState extends State<FavoritePage> {
                         trailing: PopupMenuButton(
                           itemBuilder: (BuildContext bc) => [
                             PopupMenuItem(
-                              value: "0",
-                              child: Text(
-                                "Add to favorite",
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ),
-                            PopupMenuItem(
                               value: "1",
                               child: Text(
-                                "Delete song",
+                                "Remove Song",
                                 style: TextStyle(fontSize: 15),
                               ),
                             ),
@@ -105,9 +130,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           onSelected: (value) {
                             if (value == "1") {
                               favorites.removeAt(index);
-                              setState(() {
-                                favorites.clear();
-                              });
+                              setState(() {});
                             }
                           },
                           icon: Icon(
@@ -117,10 +140,7 @@ class _FavoritePageState extends State<FavoritePage> {
                         ),
 
                         onTap: () {
-                          // playlists.clear();
-                          // openPlayer(index);
-                          // print(audios1.length.toString() +
-                          //     "-------------------------------");
+                          openPlayer(index);
                         },
                       ),
                     );

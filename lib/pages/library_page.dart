@@ -21,7 +21,6 @@ List<dynamic> playlists = [];
 class _LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -68,8 +67,7 @@ class _LibraryPageState extends State<LibraryPage> {
               ),
               child: ListTile(
                 tileColor: Color(0xff4D3C3C),
-                onLongPress: () {
-                },
+                onLongPress: () {},
                 onTap: () {
                   Navigator.push(
                     context,
@@ -182,34 +180,31 @@ class _LibraryPageState extends State<LibraryPage> {
                           );
                           print(playlists);
                         },
-                        trailing: IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Cancel"),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      box.delete(playlists[index]);
-                                    },
-                                    child: Text("Ok"),
-                                  ),
-                                ],
-                                content: Text("Are you sure to delete"),
+                        trailing: PopupMenuButton(
+                          itemBuilder: (BuildContext bc) => [
+                            // PopupMenuItem(
+                            //   value: "0",
+                            //   child: Text(
+                            //     "Add to favorite",
+                            //     style: TextStyle(fontSize: 15),
+                            //   ),
+                            // ),
+                            PopupMenuItem(
+                              value: "1",
+                              child: Text(
+                                "Delete playlist",
+                                style: TextStyle(fontSize: 15),
                               ),
-                            );
+                            ),
+                          ],
+                          onSelected: (value) {
+                            if (value == "1") {
+                              box.delete(playlists[index]);
+                            }
                           },
                           icon: Icon(
-                            Icons.delete,
+                            Icons.more_horiz,
                             color: Colors.white,
-                            size: 20,
                           ),
                         ),
                         leading: Icon(

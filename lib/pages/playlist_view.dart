@@ -138,13 +138,13 @@ class _PlalistViewState extends State<PlalistView> {
                         ),
                         trailing: PopupMenuButton(
                           itemBuilder: (BuildContext bc) => [
-                            PopupMenuItem(
-                              value: "0",
-                              child: Text(
-                                "Add to favorite",
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ),
+                            // PopupMenuItem(
+                            //   value: "0",
+                            //   child: Text(
+                            //     "Add to favorite",
+                            //     style: TextStyle(fontSize: 15),
+                            //   ),
+                            // ),
                             PopupMenuItem(
                               value: "1",
                               child: Text(
