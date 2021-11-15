@@ -2,6 +2,7 @@ import 'package:Musify/databases/songs_adapter.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
@@ -78,6 +79,8 @@ class _MusicViewState extends State<MusicView> {
       backgroundColor: Colors.black,
       body: _assetsAudioPlayer.builderCurrent(
         builder: (BuildContext context, Playing? playing) {
+          Box box = Hive.box("songs");
+          List<dynamic> favorites = box.get("favorites");
           final myAudio = find(
             widget.audio,
             playing!.audio.assetAudioPath,
@@ -133,16 +136,29 @@ class _MusicViewState extends State<MusicView> {
                         ),
                       ),
                     ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        print(myAudio.metas.title! + "Added to playlist");
-                        // addFav(myAudio);
-                      },
-                      icon: Image(
-                        height: 25,
-                        image: AssetImage("assets/icons/heart.png"),
-                      ),
-                    ),
+                    // trailing: favorites
+                    //         .where((element) =>
+                    //             element.id.toString() ==
+                    //             myAudio.metas.id.toString())
+                    //         .isEmpty
+                    //     ? IconButton(
+                    //         onPressed: () {
+                    //           print(myAudio.metas.title! + "Added to playlist");
+                    //         },
+                    //         icon: Image(
+                    //           height: 25,
+                    //           image: AssetImage("assets/icons/heart.png"),
+                    //         ),
+                    //       )
+                    //     : IconButton(
+                    //         onPressed: () {
+                    //           print(myAudio.metas.title! + "Added to playlist");
+                    //         },
+                    //         icon: Image(
+                    //           height: 25,
+                    //           image: AssetImage("assets/icons/heartfill.png"),
+                    //         ),
+                    //       ),
                   ),
                 ),
               ),

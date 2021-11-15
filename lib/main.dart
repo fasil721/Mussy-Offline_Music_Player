@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
     );
     // print(tracks[0].fileExtension+"-------------------------------------------------");
     await musics.put("tracks", audio);
-    // await musics.put("favorites", playlists);
+    await musics.put("favorites", playlists);
     setState(() {});
   }
 

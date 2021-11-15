@@ -77,18 +77,18 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                       ),
                     ),
                     trailing: songofPlaylist
-                            .where((element) => element == widget.song)
+                            .where((element) =>
+                                element.id.toString() ==
+                                widget.song.id.toString())
                             .isEmpty
                         ? ElevatedButton(
                             onPressed: () async {
-                              var songofPlaylist =
+                              List<dynamic> songofPlaylist =
                                   box.get(playlistNames[index]);
                               songofPlaylist.add(widget.song);
                               await box.put(
                                   playlistNames[index], songofPlaylist);
-
                               Navigator.pop(context);
-
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -103,7 +103,9 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                           )
                         : ElevatedButton(
                             onPressed: () async {
-                              songofPlaylist.remove(widget.song);
+                              songofPlaylist.removeWhere((element) =>
+                                  element.id.toString() ==
+                                  widget.song.id.toString());
                               await box.put(
                                   playlistNames[index], songofPlaylist);
                               setState(() {});

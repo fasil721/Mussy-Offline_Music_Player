@@ -18,21 +18,20 @@ class _PlalistViewState extends State<PlalistView> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   List<dynamic> playlists = [];
   List<Audio> audios = [];
-  List<Audio> audios1 = [];
   openPlayer(int index) async {
     await _assetsAudioPlayer.open(
-      Playlist(audios: audios1, startIndex: index),
+      Playlist(audios: audios, startIndex: index),
       showNotification: true,
       autoStart: true,
       playInBackground: PlayInBackground.enabled,
-      // loopMode: LoopMode.playlist,
+      loopMode: LoopMode.playlist,
       notificationSettings: NotificationSettings(stopEnabled: false),
     );
   }
 
-  playPlaylist(Box box, int length) async {
+  playPlaylist(Box box) async {
     playlists = box.get(widget.playlistName);
-
+    audios = [];
     playlists.forEach(
       (element) {
         audios.add(
@@ -47,7 +46,6 @@ class _PlalistViewState extends State<PlalistView> {
         );
       },
     );
-    audios1 = audios.toSet().toList();
   }
 
   @override
@@ -101,7 +99,7 @@ class _PlalistViewState extends State<PlalistView> {
       body: ValueListenableBuilder(
         valueListenable: Hive.box('songs').listenable(),
         builder: (context, Box box, _) {
-          playPlaylist(box, playlists.length);
+          playPlaylist(box);
           return playlists.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,
@@ -180,7 +178,7 @@ class _PlalistViewState extends State<PlalistView> {
                         onTap: () {
                           // playlists.clear();
                           openPlayer(index);
-                          print(audios1.length.toString() +
+                          print(audios.length.toString() +
                               "-------------------------------");
                         },
                       ),

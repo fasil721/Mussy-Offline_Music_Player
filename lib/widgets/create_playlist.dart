@@ -60,7 +60,7 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                     ),
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 25,
                     ),
                     onChanged: (value) {
                       _title = value;
