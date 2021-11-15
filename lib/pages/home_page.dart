@@ -1,12 +1,8 @@
-import 'dart:ui';
-import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/pages/settins_page.dart';
-import 'package:Musify/widgets/add_to_playlist.dart';
 import 'package:Musify/widgets/home_popup_menu.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
@@ -27,68 +23,6 @@ class _HomepageState extends State<Homepage> {
       playInBackground: PlayInBackground.enabled,
       loopMode: LoopMode.playlist,
       notificationSettings: NotificationSettings(stopEnabled: false),
-    );
-  }
-
-  Widget popup(int index) {
-    Box box = Hive.box("songs");
-    List<dynamic> favorites = box.get("favorites");
-    List<Songs> song = box.get("tracks");
-    List<Songs> a = song
-        .where(
-          (element) =>
-              element.id.toString().contains(widget.audio[index].metas.id!),
-        )
-        .toList();
-    return PopupMenuButton(
-      itemBuilder: (BuildContext bc) => [
-        favorites
-                .where(
-                    (element) => element.id.toString() == a.first.id.toString())
-                .isEmpty
-            ? PopupMenuItem(
-                onTap: () async {
-                  favorites.add(a.first);
-                  await box.put("favorites", favorites);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(a.first.title + " Added to Favorites"),
-                    ),
-                  );
-                },
-                child: Text("Add to favorite"),
-              )
-            : PopupMenuItem(
-                onTap: () async {
-                  favorites.removeWhere((element) =>
-                      element.id.toString() == a.first.id.toString());
-                  await box.put("favorites", favorites);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(a.first.title + " Removed from Favorites"),
-                    ),
-                  );
-                },
-                child: Text("Remove from favorite"),
-              ),
-        PopupMenuItem(
-          child: Text("Add to playlist"),
-          value: "1",
-        ),
-      ],
-      onSelected: (value) async {
-        if (value == "1") {
-          favorites.clear();
-          showModalBottomSheet(
-            context: context,
-            builder: (context) => AddToPlaylist(song: a.first),
-          );
-        }
-      },
-      icon: Icon(
-        Icons.more_horiz,
-        color: Colors.white,
-      ),
     );
   }
 
@@ -147,53 +81,50 @@ class _HomepageState extends State<Homepage> {
                       right: 0,
                     ),
                     child: ListTile(
-                        onTap: () {
-                          openPlayer(index);
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
+                      onTap: () {
+                        openPlayer(index);
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                      // tileColor: Color(0xffC4C4C4),
+                      leading: QueryArtworkWidget(
+                        id: int.parse(widget.audio[index].metas.id!),
+                        type: ArtworkType.AUDIO,
+                        nullArtworkWidget: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image(
+                            height: 50,
+                            image: AssetImage("assets/icons/default.jpg"),
                           ),
                         ),
-                        // tileColor: Color(0xffC4C4C4),
-                        leading: QueryArtworkWidget(
-                          id: int.parse(widget.audio[index].metas.id!),
-                          type: ArtworkType.AUDIO,
-                          nullArtworkWidget: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: Image(
-                              height: 50,
-                              image: AssetImage("assets/icons/default.jpg"),
-                            ),
-                          ),
+                      ),
+                      title: Text(
+                        widget.audio[index].metas.title!,
+                        style: GoogleFonts.rubik(
+                          fontSize: 16,
+                          color: Colors.white,
                         ),
-                        title: Text(
-                          widget.audio[index].metas.title!,
-                          style: GoogleFonts.rubik(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                          maxLines: 1,
+                        maxLines: 1,
+                      ),
+                      subtitle: Text(
+                        widget.audio[index].metas.artist!,
+                        style: GoogleFonts.rubik(
+                          fontSize: 13,
+                          color: Colors.grey,
                         ),
-                        subtitle: Text(
-                          widget.audio[index].metas.artist!,
-                          style: GoogleFonts.rubik(
-                            fontSize: 13,
-                            color: Colors.grey,
-                          ),
-                          maxLines: 1,
-                        ),
-                        trailing:
-                            homepopup(audioId: widget.audio[index].metas.id!)
-                        // popup(index),
-                        ),
+                        maxLines: 1,
+                      ),
+                      trailing:
+                          homepopup(audioId: widget.audio[index].metas.id!),
+                    ),
                   );
                 },
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                    height: 0,
-                  );
-                },
+                separatorBuilder: (BuildContext context, int index) => SizedBox(
+                  height: 0,
+                ),
               )
             : Center(
                 child: Text(

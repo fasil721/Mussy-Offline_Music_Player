@@ -13,7 +13,6 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
   var val = true;
-  List<dynamic> favorites = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

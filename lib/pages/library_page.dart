@@ -21,6 +21,7 @@ List<dynamic> playlists = [];
 class _LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -67,8 +68,9 @@ class _LibraryPageState extends State<LibraryPage> {
               ),
               child: ListTile(
                 tileColor: Color(0xff4D3C3C),
+                onLongPress: () {
+                },
                 onTap: () {
-                  // musics.clear();
                   Navigator.push(
                     context,
                     MaterialPageRoute(

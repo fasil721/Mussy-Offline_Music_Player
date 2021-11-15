@@ -136,29 +136,29 @@ class _MusicViewState extends State<MusicView> {
                         ),
                       ),
                     ),
-                    // trailing: favorites
-                    //         .where((element) =>
-                    //             element.id.toString() ==
-                    //             myAudio.metas.id.toString())
-                    //         .isEmpty
-                    //     ? IconButton(
-                    //         onPressed: () {
-                    //           print(myAudio.metas.title! + "Added to playlist");
-                    //         },
-                    //         icon: Image(
-                    //           height: 25,
-                    //           image: AssetImage("assets/icons/heart.png"),
-                    //         ),
-                    //       )
-                    //     : IconButton(
-                    //         onPressed: () {
-                    //           print(myAudio.metas.title! + "Added to playlist");
-                    //         },
-                    //         icon: Image(
-                    //           height: 25,
-                    //           image: AssetImage("assets/icons/heartfill.png"),
-                    //         ),
-                    //       ),
+                    trailing: favorites
+                            .where((element) =>
+                                element.id.toString() ==
+                                myAudio.metas.id.toString())
+                            .isEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              print(myAudio.metas.title! + "Added to playlist");
+                            },
+                            icon: Image(
+                              height: 25,
+                              image: AssetImage("assets/icons/heart.png"),
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              print(myAudio.metas.title! + "Added to playlist");
+                            },
+                            icon: Image(
+                              height: 25,
+                              image: AssetImage("assets/icons/heartfill.png"),
+                            ),
+                          ),
                   ),
                 ),
               ),
