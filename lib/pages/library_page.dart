@@ -145,6 +145,7 @@ class _LibraryPageState extends State<LibraryPage> {
               builder: (context, Box box, _) {
                 allKeys = box.keys.toList();
                 allKeys.remove("tracks");
+                allKeys.remove("favorites");
                 playlists = allKeys.toList();
                 return ListView.separated(
                   shrinkWrap: true,
@@ -181,7 +182,27 @@ class _LibraryPageState extends State<LibraryPage> {
                         },
                         trailing: IconButton(
                           onPressed: () {
-                            box.delete(playlists[index]);
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Cancel"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      box.delete(playlists[index]);
+                                    },
+                                    child: Text("Ok"),
+                                  ),
+                                ],
+                                content: Text("Are you sure to delete"),
+                              ),
+                            );
                           },
                           icon: Icon(
                             Icons.delete,

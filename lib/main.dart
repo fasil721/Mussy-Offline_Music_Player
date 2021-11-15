@@ -42,6 +42,7 @@ class _MyAppState extends State<MyApp> {
   List<SongModel> tracks = [];
   List<Songs> audio = [];
   List<Audio> songModels = [];
+  // List<dynamic> favorites = [];
   requesrpermisson() async {
     bool permissionStatus = await _audioQuery.permissionsStatus();
     if (await !permissionStatus) {
@@ -74,6 +75,7 @@ class _MyAppState extends State<MyApp> {
     );
     // print(tracks[0].fileExtension+"-------------------------------------------------");
     await musics.put("tracks", audio);
+    // await musics.put("favorites", playlists);
     setState(() {});
   }
 

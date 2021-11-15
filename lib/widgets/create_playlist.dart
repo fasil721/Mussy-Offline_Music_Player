@@ -15,7 +15,7 @@ class CreatePlaylist extends StatefulWidget {
 }
 
 class _CreatePlaylistState extends State<CreatePlaylist> {
-  var playlists = [];
+  List<dynamic> playlists = [];
   @override
   Widget build(BuildContext context) {
     return Builder(
@@ -52,6 +52,7 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                 child: Form(
                   key: formkey,
                   child: TextFormField(
+                    cursorHeight: 25,
                     decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
@@ -59,7 +60,7 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                     ),
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 15,
+                      fontSize: 20,
                     ),
                     onChanged: (value) {
                       _title = value;

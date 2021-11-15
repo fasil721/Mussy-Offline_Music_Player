@@ -17,6 +17,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
     Box box = Hive.box("songs");
     List<dynamic> playlistNames = box.keys.toList();
     playlistNames.remove("tracks");
+    playlistNames.remove("favorites");
 
     return Container(
       color: Colors.grey,
@@ -85,7 +86,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                               songofPlaylist.add(widget.song);
                               await box.put(
                                   playlistNames[index], songofPlaylist);
-                            
+
                               Navigator.pop(context);
 
                               ScaffoldMessenger.of(context).showSnackBar(

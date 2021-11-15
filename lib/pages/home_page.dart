@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/pages/settins_page.dart';
 import 'package:Musify/widgets/add_to_playlist.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -120,46 +120,75 @@ class _HomepageState extends State<Homepage> {
                         ),
                         maxLines: 1,
                       ),
-                      trailing: PopupMenuButton(
-                        itemBuilder: (BuildContext bc) => [
-                          PopupMenuItem(
-                            child: Text("Add to favorite"),
-                            value: "0",
-                          ),
-                          PopupMenuItem(
-                            child: Text("Add to playlist"),
-                            value: "1",
-                          ),
-                        ],
-                        onSelected: (value) async {
-                          if (value == "1") {
-                            Box box = Hive.box("songs");
-                            List<dynamic> song = await box.get("tracks");
-                            List a = song
-                                .where(
-                                  (element) => element.id
-                                      .toString()
-                                      .contains(widget.audio[index].metas.id!),
-                                )
-                                .toList();
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) =>
-                                  AddToPlaylist(song: a.first),
-                            );
-                          }
-                          if (value == "0") {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('A SnackBar has be'),
+                      trailing: Builder(
+                        builder: (context) {
+                          Box box = Hive.box("songs");
+                          List<dynamic> favorites = box.get("favorites");
+                          List<Songs> song = box.get("tracks");
+                          List<Songs> a = song
+                              .where(
+                                (element) => element.id
+                                    .toString()
+                                    .contains(widget.audio[index].metas.id!),
+                              )
+                              .toList();
+                          return PopupMenuButton(
+                            itemBuilder: (BuildContext bc) => [
+                              favorites
+                                      .where((element) =>
+                                          element.id.toString() ==
+                                          a.first.id.toString())
+                                      .isEmpty
+                                  ? PopupMenuItem(
+                                      onTap: () async {
+                                        favorites.add(a.first);
+                                        await box.put("favorites", favorites);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(a.first.title +
+                                                " Added to Favorites"),
+                                          ),
+                                        );
+                                      },
+                                      child: Text("Add to favorite"),
+                                    )
+                                  : PopupMenuItem(
+                                      onTap: () async {
+                                        favorites.removeWhere((element) =>
+                                            element.id.toString() ==
+                                            a.first.id.toString());
+                                        await box.put("favorites", favorites);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(a.first.title +
+                                                " Removed from Favorites"),
+                                          ),
+                                        );
+                                      },
+                                      child: Text("Remove from favorite"),
+                                    ),
+                              PopupMenuItem(
+                                child: Text("Add to playlist"),
+                                value: "1",
                               ),
-                            );
-                          }
+                            ],
+                            onSelected: (value) async {
+                              if (value == "1") {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) =>
+                                      AddToPlaylist(song: a.first),
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              Icons.more_horiz,
+                              color: Colors.white,
+                            ),
+                          );
                         },
-                        icon: Icon(
-                          Icons.more_horiz,
-                          color: Colors.white,
-                        ),
                       ),
                     ),
                   );
