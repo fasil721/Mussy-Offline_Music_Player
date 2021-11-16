@@ -94,7 +94,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                 ),
                 child: _assetsAudioPlayer.builderIsPlaying(
                   builder: (context, isPlaying) {
-                    return (isPlaying
+                    return isPlaying
                         ? IconButton(
                             onPressed: () {
                               _assetsAudioPlayer.playOrPause();
@@ -114,7 +114,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                               color: Colors.white,
                               size: 22,
                             ),
-                          ));
+                          );
                   },
                 ),
               ),

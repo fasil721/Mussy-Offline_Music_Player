@@ -88,8 +88,6 @@ class _SearchPageState extends State<SearchPage> {
                 setState(() {
                   searchText = value;
                 });
-
-                print(searchText);
               },
             ),
           ),

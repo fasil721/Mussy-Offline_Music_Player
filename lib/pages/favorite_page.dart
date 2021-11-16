@@ -1,3 +1,4 @@
+import 'package:Musify/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -140,6 +141,12 @@ class _FavoritePageState extends State<FavoritePage> {
 
                         onTap: () {
                           openPlayer(index);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MusicView(audio: audios),
+                            ),
+                          );
                         },
                       ),
                     );

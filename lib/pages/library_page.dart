@@ -1,10 +1,10 @@
 import 'package:Musify/pages/playlist_view.dart';
+import 'package:Musify/widgets/create_playlist.dart';
 import 'package:Musify/widgets/edit_playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../widgets/create_playlist.dart';
 import 'favorite_page.dart';
 
 class LibraryPage extends StatefulWidget {
@@ -98,47 +98,6 @@ class _LibraryPageState extends State<LibraryPage> {
                 ),
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(
-            //     right: 25,
-            //     left: 25,
-            //     bottom: 15,
-            //   ),
-            //   child: ListTile(
-            //     tileColor: Color(0xff4D3C3C),
-            //     onTap: () {
-            //       musics.clear();
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => Plalists(),
-            //         ),
-            //       );
-            //     },
-            //     contentPadding: EdgeInsets.symmetric(
-            //       vertical: 3.0,
-            //       horizontal: 16.0,
-            //     ),
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.all(
-            //         Radius.circular(5),
-            //       ),
-            //     ),
-            //     leading: Icon(
-            //       Icons.queue_music_rounded,
-            //       color: Colors.white,
-            //       size: 28,
-            //     ),
-            //     title: Text(
-            //       "Playlists",
-            //       textAlign: TextAlign.justify,
-            //       style: GoogleFonts.rubik(
-            //         fontSize: 20,
-            //         color: Colors.white,
-            //       ),
-            //     ),
-            //   ),
-            // ),
             ValueListenableBuilder(
               valueListenable: Hive.box('songs').listenable(),
               builder: (context, Box box, _) {

@@ -1,4 +1,5 @@
 import 'package:Musify/databases/songs_adapter.dart';
+import 'package:Musify/widgets/add_to_playlist.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,20 +21,41 @@ class MusicView extends StatefulWidget {
 
 class _MusicViewState extends State<MusicView> {
   final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Audio find(List<Audio> source, String fromPath) {
-    return source.firstWhere((element) => element.path == fromPath);
-  }
-
   List<Songs> isFav = [];
   String repeatIcon = "assets/icons/repeat.png";
   bool isLooping = false;
   bool nextDone = true;
   bool prevDone = true;
+  Box box = Hive.box("songs");
+  dynamic temp;
+
+  Audio find(List<Audio> source, String fromPath) {
+    return source.firstWhere((element) => element.path == fromPath);
+  }
+
+  Widget popupMenu() {
+    return PopupMenuButton(
+      itemBuilder: (BuildContext bc) => [
+        PopupMenuItem(
+          child: Text("Add to playlist"),
+          value: "1",
+        ),
+      ],
+      onSelected: (value) async {
+        if (value == "1") {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => AddToPlaylist(song: temp),
+          );
+        }
+      },
+      icon: Icon(
+        Icons.more_vert_outlined,
+        color: Colors.white,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,15 +73,9 @@ class _MusicViewState extends State<MusicView> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image(
-              height: 22,
-              image: AssetImage("assets/icons/menu.png"),
-            ),
-          ),
+          popupMenu(),
           SizedBox(
-            width: 12,
+            width: 15,
           )
         ],
         backgroundColor: Colors.black,
@@ -73,14 +89,12 @@ class _MusicViewState extends State<MusicView> {
             widget.audio,
             playing!.audio.assetAudioPath,
           );
-          Box box = Hive.box("songs");
           List<dynamic> favorites = box.get("favorites");
           List<Songs> song = box.get("tracks");
-         final temp = song
-              .firstWhere(
-                (element) =>
-                    element.id.toString().contains(myAudio.metas.id.toString()),
-              );
+          temp = song.firstWhere(
+            (element) =>
+                element.id.toString().contains(myAudio.metas.id.toString()),
+          );
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -151,8 +165,7 @@ class _MusicViewState extends State<MusicView> {
                         : IconButton(
                             onPressed: () async {
                               favorites.removeWhere((element) =>
-                                  element.id.toString() ==
-                                  temp.id.toString());
+                                  element.id.toString() == temp.id.toString());
                               await box.put("favorites", favorites);
                               setState(() {});
                             },

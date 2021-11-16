@@ -5,9 +5,9 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import './pages/home_page.dart';
-import './pages/library_page.dart';
-import './pages/search_page.dart';
+import 'pages/home_page.dart';
+import 'pages/library_page.dart';
+import 'pages/search_page.dart';
 import 'databases/songs_adapter.dart';
 import 'pages/bottom_play.dart';
 
@@ -31,17 +31,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
+  int currentIndex = 0;
+  Box musics = Hive.box('songs');
+  List<SongModel> tracks = [];
+  List<Songs> audio = [];
+  List<Audio> songModels = [];
 
   @override
   void initState() {
     requesrpermisson();
     super.initState();
   }
-
-  var musics = Hive.box('songs');
-  List<SongModel> tracks = [];
-  List<Songs> audio = [];
-  List<Audio> songModels = [];
 
   requesrpermisson() async {
     bool permissionStatus = await _audioQuery.permissionsStatus();
@@ -75,18 +75,8 @@ class _MyAppState extends State<MyApp> {
         );
       },
     );
-    // print(tracks[0].fileExtension+"-------------------------------------------------");
     await musics.put("tracks", audio);
     setState(() {});
-  }
-
-  int currentIndex = 0;
-  change(int index) {
-    setState(
-      () {
-        currentIndex = index;
-      },
-    );
   }
 
   @override
@@ -96,7 +86,6 @@ class _MyAppState extends State<MyApp> {
       SearchPage(songModels),
       LibraryPage(),
     ];
-
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -118,7 +107,11 @@ class _MyAppState extends State<MyApp> {
         type: BottomNavigationBarType.fixed,
         elevation: 0,
         currentIndex: currentIndex,
-        onTap: (index) => change(index),
+        onTap: (index) => setState(
+          () {
+            currentIndex = index;
+          },
+        ),
         items: [
           BottomNavigationBarItem(
             icon: ImageIcon(

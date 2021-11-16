@@ -1,4 +1,5 @@
 
+import 'package:Musify/pages/playing_screen.dart';
 import 'package:Musify/widgets/add_songs.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -170,8 +171,13 @@ class _PlalistViewState extends State<PlalistView> {
                         ),
                         onTap: () {
                           openPlayer(index);
-                          print(audios.length.toString() +
-                              "-------------------------------");
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MusicView(audio: audios),
+                            ),
+                          );
+                          
                         },
                       ),
                     );
