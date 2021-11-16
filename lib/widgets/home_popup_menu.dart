@@ -16,24 +16,23 @@ class _homepopupState extends State<homepopup> {
     Box box = Hive.box("songs");
     List<dynamic> favorites = box.get("favorites");
     List<Songs> song = box.get("tracks");
-    List<Songs> a = song
-        .where(
-          (element) => element.id.toString().contains(widget.audioId),
-        )
-        .toList();
+    final temp = song.firstWhere(
+      (element) => element.id.toString().contains(widget.audioId),
+    );
+
     return PopupMenuButton(
       itemBuilder: (BuildContext bc) => [
         favorites
-                .where(
-                    (element) => element.id.toString() == a.first.id.toString())
+                .where((element) =>
+                    element.id.toString() == temp.id.toString())
                 .isEmpty
             ? PopupMenuItem(
                 onTap: () async {
-                  favorites.add(a.first);
+                  favorites.add(temp);
                   await box.put("favorites", favorites);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(a.first.title + " Added to Favorites"),
+                      content: Text(temp.title + " Added to Favorites"),
                     ),
                   );
                 },
@@ -42,11 +41,12 @@ class _homepopupState extends State<homepopup> {
             : PopupMenuItem(
                 onTap: () async {
                   favorites.removeWhere((element) =>
-                      element.id.toString() == a.first.id.toString());
+                      element.id.toString() == temp.id.toString());
                   await box.put("favorites", favorites);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(a.first.title + " Removed from Favorites"),
+                      content:
+                          Text(temp.title + " Removed from Favorites"),
                     ),
                   );
                 },
@@ -59,10 +59,9 @@ class _homepopupState extends State<homepopup> {
       ],
       onSelected: (value) async {
         if (value == "1") {
-          favorites.clear();
           showModalBottomSheet(
             context: context,
-            builder: (context) => AddToPlaylist(song: a.first),
+            builder: (context) => AddToPlaylist(song: temp),
           );
         }
       },

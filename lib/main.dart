@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
 
   requesrpermisson() async {
     bool permissionStatus = await _audioQuery.permissionsStatus();
-    if (await !permissionStatus) {
+    if (!permissionStatus) {
       await _audioQuery.permissionsRequest();
       List<dynamic> favorites = [];
       await musics.put("favorites", favorites);
@@ -77,17 +77,23 @@ class _MyAppState extends State<MyApp> {
     );
     // print(tracks[0].fileExtension+"-------------------------------------------------");
     await musics.put("tracks", audio);
-
     setState(() {});
   }
 
   int currentIndex = 0;
+  change(int index) {
+    setState(
+      () {
+        currentIndex = index;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final screens = [
       Homepage(songModels),
-      SearchPage(),
+      SearchPage(songModels),
       LibraryPage(),
     ];
 
@@ -112,14 +118,7 @@ class _MyAppState extends State<MyApp> {
         type: BottomNavigationBarType.fixed,
         elevation: 0,
         currentIndex: currentIndex,
-        onTap: (index) => setState(
-          () {
-            // var music = Hive.box("songs");
-            // List<Songs> a = music.get("tracks");
-            // print(a[0].title);
-            currentIndex = index;
-          },
-        ),
+        onTap: (index) => change(index),
         items: [
           BottomNavigationBarItem(
             icon: ImageIcon(
@@ -127,7 +126,6 @@ class _MyAppState extends State<MyApp> {
               size: 25,
             ),
             label: 'Home',
-            // backgroundColor: Color(_black),
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
@@ -135,7 +133,6 @@ class _MyAppState extends State<MyApp> {
               size: 25,
             ),
             label: 'Search',
-            // backgroundColor: Color(_black),
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
@@ -143,7 +140,6 @@ class _MyAppState extends State<MyApp> {
               size: 25,
             ),
             label: 'Library',
-            // backgroundColor: Color(_black),
           ),
         ],
       ),

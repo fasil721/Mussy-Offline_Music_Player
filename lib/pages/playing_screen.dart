@@ -29,21 +29,11 @@ class _MusicViewState extends State<MusicView> {
     return source.firstWhere((element) => element.path == fromPath);
   }
 
-  // addFav(Audio myAudio) {
-  //   var favs = Hive.box('songs');
-  //   favs.put("favorite",
-  //     Songs(
-  //       title: myAudio.metas.title,
-  //       artist: myAudio.metas.artist,
-  //       uri: myAudio.path,
-  //       id: myAudio.metas.id,
-  //     ),
-  //   );
-  // }
-
   List<Songs> isFav = [];
   String repeatIcon = "assets/icons/repeat.png";
   bool isLooping = false;
+  bool nextDone = true;
+  bool prevDone = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,12 +76,11 @@ class _MusicViewState extends State<MusicView> {
           Box box = Hive.box("songs");
           List<dynamic> favorites = box.get("favorites");
           List<Songs> song = box.get("tracks");
-          List<Songs> a = song
-              .where(
+         final temp = song
+              .firstWhere(
                 (element) =>
                     element.id.toString().contains(myAudio.metas.id.toString()),
-              )
-              .toList();
+              );
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -150,7 +139,7 @@ class _MusicViewState extends State<MusicView> {
                             .isEmpty
                         ? IconButton(
                             onPressed: () async {
-                              favorites.add(a.first);
+                              favorites.add(temp);
                               await box.put("favorites", favorites);
                               setState(() {});
                             },
@@ -163,7 +152,7 @@ class _MusicViewState extends State<MusicView> {
                             onPressed: () async {
                               favorites.removeWhere((element) =>
                                   element.id.toString() ==
-                                  a.first.id.toString());
+                                  temp.id.toString());
                               await box.put("favorites", favorites);
                               setState(() {});
                             },
@@ -238,8 +227,12 @@ class _MusicViewState extends State<MusicView> {
                         ),
                         Expanded(
                           child: IconButton(
-                            onPressed: () {
-                              _assetsAudioPlayer.previous();
+                            onPressed: () async {
+                              if (prevDone) {
+                                prevDone = false;
+                                await _assetsAudioPlayer.previous();
+                                nextDone = true;
+                              }
                             },
                             icon: Image(
                               image: AssetImage("assets/icons/start.png"),
@@ -277,8 +270,12 @@ class _MusicViewState extends State<MusicView> {
                         ),
                         Expanded(
                           child: IconButton(
-                            onPressed: () {
-                              _assetsAudioPlayer.next();
+                            onPressed: () async {
+                              if (nextDone) {
+                                nextDone = false;
+                                await _assetsAudioPlayer.next();
+                                nextDone = true;
+                              }
                             },
                             icon: Image(
                               image: AssetImage("assets/icons/end.png"),

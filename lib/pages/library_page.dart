@@ -1,7 +1,6 @@
-import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/pages/playlist_view.dart';
+import 'package:Musify/widgets/edit_playlist.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -182,13 +181,13 @@ class _LibraryPageState extends State<LibraryPage> {
                         },
                         trailing: PopupMenuButton(
                           itemBuilder: (BuildContext bc) => [
-                            // PopupMenuItem(
-                            //   value: "0",
-                            //   child: Text(
-                            //     "Add to favorite",
-                            //     style: TextStyle(fontSize: 15),
-                            //   ),
-                            // ),
+                            PopupMenuItem(
+                              value: "0",
+                              child: Text(
+                                "Edit playlist",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
                             PopupMenuItem(
                               value: "1",
                               child: Text(
@@ -200,6 +199,14 @@ class _LibraryPageState extends State<LibraryPage> {
                           onSelected: (value) {
                             if (value == "1") {
                               box.delete(playlists[index]);
+                            }
+                            if (value == "0") {
+                              showDialog(
+                                context: context,
+                                builder: (Context) => EditPlaylist(
+                                  PlaylistName: playlists[index],
+                                ),
+                              );
                             }
                           },
                           icon: Icon(

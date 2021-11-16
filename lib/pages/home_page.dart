@@ -70,7 +70,7 @@ class _HomepageState extends State<Homepage> {
           ],
         ),
         body: widget.audio.isNotEmpty
-            ? ListView.separated(
+            ? ListView.builder(
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 itemCount: widget.audio.length,
@@ -122,9 +122,6 @@ class _HomepageState extends State<Homepage> {
                     ),
                   );
                 },
-                separatorBuilder: (BuildContext context, int index) => SizedBox(
-                  height: 0,
-                ),
               )
             : Center(
                 child: Text(

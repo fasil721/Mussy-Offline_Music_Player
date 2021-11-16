@@ -1,4 +1,4 @@
-import 'package:Musify/databases/songs_adapter.dart';
+
 import 'package:Musify/widgets/add_songs.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -138,13 +138,6 @@ class _PlalistViewState extends State<PlalistView> {
                         ),
                         trailing: PopupMenuButton(
                           itemBuilder: (BuildContext bc) => [
-                            // PopupMenuItem(
-                            //   value: "0",
-                            //   child: Text(
-                            //     "Add to favorite",
-                            //     style: TextStyle(fontSize: 15),
-                            //   ),
-                            // ),
                             PopupMenuItem(
                               value: "1",
                               child: Text(
@@ -176,7 +169,6 @@ class _PlalistViewState extends State<PlalistView> {
                           ),
                         ),
                         onTap: () {
-                          // playlists.clear();
                           openPlayer(index);
                           print(audios.length.toString() +
                               "-------------------------------");

@@ -1,17 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 
-class CreatePlaylist extends StatefulWidget {
-  const CreatePlaylist({Key? key}) : super(key: key);
-
+class EditPlaylist extends StatefulWidget {
+  const EditPlaylist({Key? key, required this.PlaylistName}) : super(key: key);
+  final PlaylistName;
   @override
-  _CreatePlaylistState createState() => _CreatePlaylistState();
+  _EditPlaylistState createState() => _EditPlaylistState();
 }
 
-class _CreatePlaylistState extends State<CreatePlaylist> {
-  List<dynamic> playlists = [];
+class _EditPlaylistState extends State<EditPlaylist> {
   Box musics = Hive.box('songs');
   String? _title;
   final formkey = GlobalKey<FormState>();
@@ -35,7 +33,7 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                   top: 20,
                 ),
                 child: Text(
-                  "Give your playlist a name.",
+                  "Edit your playlist name.",
                   style: GoogleFonts.rubik(
                     color: Colors.white,
                     fontSize: 18,
@@ -51,6 +49,7 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                 child: Form(
                   key: formkey,
                   child: TextFormField(
+                    initialValue: widget.PlaylistName,
                     cursorHeight: 25,
                     decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
@@ -113,15 +112,18 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                       child: TextButton(
                         onPressed: () {
                           if (formkey.currentState!.validate()) {
+                            List<dynamic> playlists =
+                                musics.get(widget.PlaylistName);
                             setState(() {
                               musics.put(_title, playlists);
+                              musics.delete(widget.PlaylistName);
                               Navigator.pop(context);
                             });
                           }
                         },
                         child: Center(
                           child: Text(
-                            "Create",
+                            "Save",
                             style: GoogleFonts.rubik(
                               color: Colors.red,
                               fontSize: 15,
