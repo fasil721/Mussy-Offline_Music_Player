@@ -1,3 +1,4 @@
+import 'package:Musify/databases/box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,7 +13,7 @@ class CreatePlaylist extends StatefulWidget {
 
 class _CreatePlaylistState extends State<CreatePlaylist> {
   List<dynamic> playlists = [];
-  Box musics = Hive.box('songs');
+  Box _box = Boxes.getInstance();
   String? _title;
   final formkey = GlobalKey<FormState>();
   @override
@@ -65,7 +66,7 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                       _title = value;
                     },
                     validator: (value) {
-                      List<dynamic> keys = musics.keys.toList();
+                      List<dynamic> keys = _box.keys.toList();
                       if (value == "") {
                         return "Name required";
                       }
@@ -114,7 +115,7 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                         onPressed: () {
                           if (formkey.currentState!.validate()) {
                             setState(() {
-                              musics.put(_title, playlists);
+                              _box.put(_title, playlists);
                               Navigator.pop(context);
                             });
                           }

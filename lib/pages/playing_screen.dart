@@ -1,3 +1,4 @@
+import 'package:Musify/databases/box.dart';
 import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/widgets/add_to_playlist.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -21,12 +22,13 @@ class MusicView extends StatefulWidget {
 
 class _MusicViewState extends State<MusicView> {
   final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  Box _box = Boxes.getInstance();
   List<Songs> isFav = [];
   String repeatIcon = "assets/icons/repeat.png";
   bool isLooping = false;
   bool nextDone = true;
   bool prevDone = true;
-  Box box = Hive.box("songs");
+
   dynamic temp;
 
   Audio find(List<Audio> source, String fromPath) {
@@ -54,6 +56,32 @@ class _MusicViewState extends State<MusicView> {
         color: Colors.white,
       ),
     );
+  }
+
+  Widget shuffle() {
+    return _assetsAudioPlayer.isShuffling.value
+        ? IconButton(
+            onPressed: () {
+              setState(() {
+                _assetsAudioPlayer.toggleShuffle();
+              });
+            },
+            icon: Image(
+              height: 25,
+              image: AssetImage("assets/icons/shuffling.png"),
+            ),
+          )
+        : IconButton(
+            onPressed: () {
+              setState(() {
+                _assetsAudioPlayer.toggleShuffle();
+              });
+            },
+            icon: Image(
+              height: 25,
+              image: AssetImage("assets/icons/ishuffle.png"),
+            ),
+          );
   }
 
   @override
@@ -89,12 +117,13 @@ class _MusicViewState extends State<MusicView> {
             widget.audio,
             playing!.audio.assetAudioPath,
           );
-          List<dynamic> favorites = box.get("favorites");
-          List<Songs> song = box.get("tracks");
+          List<dynamic> favorites = _box.get("favorites");
+          List<Songs> song = _box.get("tracks");
           temp = song.firstWhere(
             (element) =>
                 element.id.toString().contains(myAudio.metas.id.toString()),
           );
+
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -154,7 +183,7 @@ class _MusicViewState extends State<MusicView> {
                         ? IconButton(
                             onPressed: () async {
                               favorites.add(temp);
-                              await box.put("favorites", favorites);
+                              await _box.put("favorites", favorites);
                               setState(() {});
                             },
                             icon: Image(
@@ -166,7 +195,7 @@ class _MusicViewState extends State<MusicView> {
                             onPressed: () async {
                               favorites.removeWhere((element) =>
                                   element.id.toString() == temp.id.toString());
-                              await box.put("favorites", favorites);
+                              await _box.put("favorites", favorites);
                               setState(() {});
                             },
                             icon: Image(
@@ -212,31 +241,7 @@ class _MusicViewState extends State<MusicView> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: _assetsAudioPlayer.isShuffling.value
-                              ? IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _assetsAudioPlayer.toggleShuffle();
-                                    });
-                                  },
-                                  icon: Image(
-                                    height: 25,
-                                    image: AssetImage(
-                                        "assets/icons/shuffling.png"),
-                                  ),
-                                )
-                              : IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _assetsAudioPlayer.toggleShuffle();
-                                    });
-                                  },
-                                  icon: Image(
-                                    height: 25,
-                                    image:
-                                        AssetImage("assets/icons/ishuffle.png"),
-                                  ),
-                                ),
+                          child: shuffle(),
                         ),
                         Expanded(
                           child: IconButton(
@@ -255,7 +260,7 @@ class _MusicViewState extends State<MusicView> {
                         Expanded(
                           child: _assetsAudioPlayer.builderIsPlaying(
                             builder: (context, isPlaying) {
-                              return (isPlaying
+                              return isPlaying
                                   ? IconButton(
                                       iconSize: 40,
                                       onPressed: () {
@@ -277,7 +282,7 @@ class _MusicViewState extends State<MusicView> {
                                         image:
                                             AssetImage("assets/icons/play.png"),
                                       ),
-                                    ));
+                                    );
                             },
                           ),
                         ),

@@ -149,7 +149,8 @@ class _SearchPageState extends State<SearchPage> {
                                       ),
                                       maxLines: 1,
                                     ),
-                                    trailing: homepopup(
+                                    trailing:
+                                     homepopup(
                                       audioId: result[index].metas.id!,
                                     ),
                                   ),

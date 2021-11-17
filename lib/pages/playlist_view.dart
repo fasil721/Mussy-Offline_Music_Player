@@ -1,4 +1,4 @@
-
+import 'package:Musify/databases/box.dart';
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:Musify/widgets/add_songs.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -17,22 +17,9 @@ class PlalistView extends StatefulWidget {
 
 class _PlalistViewState extends State<PlalistView> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-  List<dynamic> playlists = [];
-  List<Audio> audios = [];
-  openPlayer(int index) async {
-    await _assetsAudioPlayer.open(
-      Playlist(audios: audios, startIndex: index),
-      showNotification: true,
-      autoStart: true,
-      playInBackground: PlayInBackground.enabled,
-      loopMode: LoopMode.playlist,
-      notificationSettings: NotificationSettings(stopEnabled: false),
-    );
-  }
 
-  playPlaylist(Box box) async {
-    playlists = box.get(widget.playlistName);
-    audios = [];
+  Future<List<Audio>> openPlayer(int index, List<dynamic> playlists) async {
+    List<Audio> audios = [];
     playlists.forEach(
       (element) {
         audios.add(
@@ -47,6 +34,15 @@ class _PlalistViewState extends State<PlalistView> {
         );
       },
     );
+    await _assetsAudioPlayer.open(
+      Playlist(audios: audios, startIndex: index),
+      showNotification: true,
+      autoStart: true,
+      playInBackground: PlayInBackground.enabled,
+      loopMode: LoopMode.playlist,
+      notificationSettings: NotificationSettings(stopEnabled: false),
+    );
+    return audios;
   }
 
   @override
@@ -98,9 +94,9 @@ class _PlalistViewState extends State<PlalistView> {
         ],
       ),
       body: ValueListenableBuilder(
-        valueListenable: Hive.box('songs').listenable(),
-        builder: (context, Box box, _) {
-          playPlaylist(box);
+        valueListenable: Boxes.getInstance().listenable(),
+        builder: (context, Box _box, _) {
+          List<dynamic> playlists = _box.get(widget.playlistName);
           return playlists.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,
@@ -169,15 +165,14 @@ class _PlalistViewState extends State<PlalistView> {
                             ),
                           ),
                         ),
-                        onTap: () {
-                          openPlayer(index);
+                        onTap: ()async {
+                        List<Audio> audios=await openPlayer(index, playlists);
                            Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MusicView(audio: audios),
                             ),
                           );
-                          
                         },
                       ),
                     );

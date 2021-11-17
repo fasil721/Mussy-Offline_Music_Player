@@ -1,3 +1,4 @@
+import 'package:Musify/databases/box.dart';
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -13,23 +14,10 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-  List<dynamic> favorites = [];
-  List<Audio> audios = [];
-  openPlayer(int index) async {
-    await _assetsAudioPlayer.open(
-      Playlist(audios: audios, startIndex: index),
-      showNotification: true,
-      autoStart: true,
-      playInBackground: PlayInBackground.enabled,
-      loopMode: LoopMode.playlist,
-      notificationSettings: NotificationSettings(stopEnabled: false),
-    );
-  }
 
-  playFavorites(Box box) async {
-    favorites = box.get("favorites");
-    audios = [];
-    favorites.forEach(
+  Future<List<Audio>> openPlayer(int index, List<dynamic> favourites) async {
+    List<Audio> audios = [];
+    favourites.forEach(
       (element) {
         audios.add(
           Audio.file(
@@ -43,6 +31,15 @@ class _FavoritePageState extends State<FavoritePage> {
         );
       },
     );
+    await _assetsAudioPlayer.open(
+      Playlist(audios: audios, startIndex: index),
+      showNotification: true,
+      autoStart: true,
+      playInBackground: PlayInBackground.enabled,
+      loopMode: LoopMode.playlist,
+      notificationSettings: NotificationSettings(stopEnabled: false),
+    );
+    return audios;
   }
 
   @override
@@ -67,9 +64,9 @@ class _FavoritePageState extends State<FavoritePage> {
         ),
       ),
       body: ValueListenableBuilder(
-        valueListenable: Hive.box('songs').listenable(),
-        builder: (context, Box box, _) {
-          playFavorites(box);
+        valueListenable: Boxes.getInstance().listenable(),
+        builder: (context, Box _box, _) {
+          List<dynamic> favorites = _box.get("favorites");
           return favorites.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,
@@ -139,8 +136,9 @@ class _FavoritePageState extends State<FavoritePage> {
                           ),
                         ),
 
-                        onTap: () {
-                          openPlayer(index);
+                        onTap: () async {
+                          List<Audio> audios =
+                              await openPlayer(index, favorites);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -1,3 +1,4 @@
+import 'package:Musify/databases/box.dart';
 import 'package:Musify/databases/songs_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -12,12 +13,13 @@ class AddSongsInPlaylist extends StatefulWidget {
 }
 
 class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
+  Box _box = Boxes.getInstance();
   String searchText = "";
+
   @override
   Widget build(BuildContext context) {
-    var box = Hive.box("songs");
-    List<Songs> allsongs = box.get("tracks");
-    List<dynamic> playlists = box.get(widget.playlistName);
+    List<Songs> allsongs = _box.get("tracks");
+    List<dynamic> playlists = _box.get(widget.playlistName);
     List<Songs> result = searchText.isEmpty
         ? allsongs.toList()
         : allsongs
@@ -83,7 +85,7 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                                 ? IconButton(
                                     onPressed: () async {
                                       playlists.add(result[index]);
-                                      await box.put(
+                                      await _box.put(
                                           widget.playlistName, playlists);
                                       setState(() {});
                                     },
@@ -94,9 +96,8 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                                 : IconButton(
                                     onPressed: () async {
                                       playlists.removeWhere((element) =>
-                                          element.title ==
-                                          result[index].title);
-                                      await box.put(
+                                          element.title == result[index].title);
+                                      await _box.put(
                                           widget.playlistName, playlists);
 
                                       setState(() {});
@@ -117,9 +118,9 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                   ),
                 )
               : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Result not found"),
-              )
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Result not found"),
+                )
         ],
       ),
     );

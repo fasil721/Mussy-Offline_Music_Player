@@ -1,3 +1,4 @@
+import 'package:Musify/databases/box.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
   int currentIndex = 0;
-  Box musics = Hive.box('songs');
+  Box _box = Boxes.getInstance();
   List<SongModel> tracks = [];
   List<Songs> audio = [];
   List<Audio> songModels = [];
@@ -48,7 +49,7 @@ class _MyAppState extends State<MyApp> {
     if (!permissionStatus) {
       await _audioQuery.permissionsRequest();
       List<dynamic> favorites = [];
-      await musics.put("favorites", favorites);
+      await _box.put("favorites", favorites);
     }
     tracks = await _audioQuery.querySongs();
     audio = tracks
@@ -75,7 +76,7 @@ class _MyAppState extends State<MyApp> {
         );
       },
     );
-    await musics.put("tracks", audio);
+    await _box.put("tracks", audio);
     setState(() {});
   }
 

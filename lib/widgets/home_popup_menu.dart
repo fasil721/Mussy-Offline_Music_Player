@@ -1,3 +1,4 @@
+import 'package:Musify/databases/box.dart';
 import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/widgets/add_to_playlist.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +12,11 @@ class homepopup extends StatefulWidget {
 }
 
 class _homepopupState extends State<homepopup> {
+  Box _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
-    Box box = Hive.box("songs");
-    List<dynamic> favorites = box.get("favorites");
-    List<Songs> song = box.get("tracks");
+    List<Songs> song = _box.get("tracks");
+    List<dynamic> favorites = _box.get("favorites");
     final temp = song.firstWhere(
       (element) => element.id.toString().contains(widget.audioId),
     );
@@ -23,13 +24,12 @@ class _homepopupState extends State<homepopup> {
     return PopupMenuButton(
       itemBuilder: (BuildContext bc) => [
         favorites
-                .where((element) =>
-                    element.id.toString() == temp.id.toString())
+                .where((element) => element.id.toString() == temp.id.toString())
                 .isEmpty
             ? PopupMenuItem(
                 onTap: () async {
                   favorites.add(temp);
-                  await box.put("favorites", favorites);
+                  await _box.put("favorites", favorites);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(temp.title + " Added to Favorites"),
@@ -40,13 +40,12 @@ class _homepopupState extends State<homepopup> {
               )
             : PopupMenuItem(
                 onTap: () async {
-                  favorites.removeWhere((element) =>
-                      element.id.toString() == temp.id.toString());
-                  await box.put("favorites", favorites);
+                  favorites.removeWhere(
+                      (element) => element.id.toString() == temp.id.toString());
+                  await _box.put("favorites", favorites);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content:
-                          Text(temp.title + " Removed from Favorites"),
+                      content: Text(temp.title + " Removed from Favorites"),
                     ),
                   );
                 },

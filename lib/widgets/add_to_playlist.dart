@@ -1,4 +1,4 @@
-import 'package:Musify/databases/songs_adapter.dart';
+import 'package:Musify/databases/box.dart';
 import 'package:Musify/widgets/create_playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,10 +12,10 @@ class AddToPlaylist extends StatefulWidget {
 }
 
 class _AddToPlaylistState extends State<AddToPlaylist> {
+  Box _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
-    Box box = Hive.box("songs");
-    List<dynamic> playlistNames = box.keys.toList();
+    List<dynamic> playlistNames = _box.keys.toList();
     playlistNames.remove("tracks");
     playlistNames.remove("favorites");
 
@@ -48,7 +48,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
               scrollDirection: Axis.vertical,
               itemCount: playlistNames.length,
               itemBuilder: (context, index) {
-                List<dynamic> songofPlaylist = box.get(playlistNames[index]);
+                List<dynamic> songofPlaylist = _box.get(playlistNames[index]);
                 return Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
@@ -84,9 +84,9 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                         ? ElevatedButton(
                             onPressed: () async {
                               List<dynamic> songofPlaylist =
-                                  box.get(playlistNames[index]);
+                                  _box.get(playlistNames[index]);
                               songofPlaylist.add(widget.song);
-                              await box.put(
+                              await _box.put(
                                   playlistNames[index], songofPlaylist);
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -106,7 +106,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                               songofPlaylist.removeWhere((element) =>
                                   element.id.toString() ==
                                   widget.song.id.toString());
-                              await box.put(
+                              await _box.put(
                                   playlistNames[index], songofPlaylist);
                               setState(() {});
                             },

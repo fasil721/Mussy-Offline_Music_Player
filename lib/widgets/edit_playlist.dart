@@ -1,3 +1,4 @@
+import 'package:Musify/databases/box.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -10,7 +11,7 @@ class EditPlaylist extends StatefulWidget {
 }
 
 class _EditPlaylistState extends State<EditPlaylist> {
-  Box musics = Hive.box('songs');
+  Box _box = Boxes.getInstance();
   String? _title;
   final formkey = GlobalKey<FormState>();
   @override
@@ -64,7 +65,7 @@ class _EditPlaylistState extends State<EditPlaylist> {
                       _title = value;
                     },
                     validator: (value) {
-                      List<dynamic> keys = musics.keys.toList();
+                      List<dynamic> keys = _box.keys.toList();
                       if (value == "") {
                         return "Name required";
                       }
@@ -113,10 +114,10 @@ class _EditPlaylistState extends State<EditPlaylist> {
                         onPressed: () {
                           if (formkey.currentState!.validate()) {
                             List<dynamic> playlists =
-                                musics.get(widget.PlaylistName);
+                                _box.get(widget.PlaylistName);
                             setState(() {
-                              musics.put(_title, playlists);
-                              musics.delete(widget.PlaylistName);
+                              _box.put(_title, playlists);
+                              _box.delete(widget.PlaylistName);
                               Navigator.pop(context);
                             });
                           }
