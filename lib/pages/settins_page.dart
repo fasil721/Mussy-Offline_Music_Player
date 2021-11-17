@@ -1,3 +1,4 @@
+import 'package:Musify/pages/library_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -133,7 +134,6 @@ class _SettingsPageState extends State<SettingsPage> {
             padding: EdgeInsets.only(
               left: 20,
               top: 5,
-              right: 0,
             ),
             child: ListTile(
               leading: Icon(
@@ -165,28 +165,21 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               },
             ),
-          ), // margin: EdgeInsets.only(top: 250),
-          Padding(
-            padding: EdgeInsets.only(),
+          ),
+          Expanded(
             child: Column(
               children: [
-                Container(
-                  padding: EdgeInsets.only(
-                    bottom: 5,
-                    top: 230,
-                  ),
-                  child: Text(
-                    "version",
-                    style: GoogleFonts.rubik(
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
+                Text(
+                  "version",
+                  style: GoogleFonts.rubik(
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                    fontSize: 15,
                   ),
                 ),
                 Text(
-                  "1..0.0",
+                  "1.0.0",
                   style: GoogleFonts.rubik(
                     fontStyle: FontStyle.normal,
                     fontWeight: FontWeight.w400,

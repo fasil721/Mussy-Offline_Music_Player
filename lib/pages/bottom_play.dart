@@ -30,7 +30,6 @@ class _bottomPlayingState extends State<bottomPlating> {
       child: Container(
         decoration: BoxDecoration(
           color: Color(0xff4D3C3C),
-          //  Color(0xff414345),
           borderRadius: BorderRadius.all(
             Radius.circular(5),
           ),
