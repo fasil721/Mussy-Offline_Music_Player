@@ -1,4 +1,5 @@
-import 'package:Musify/databases/box.dart';
+import 'package:Musify/audio_player/song_playing.dart';
+import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,8 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-  AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
-  Future<List<Audio>> openPlayer(int index, List<dynamic> favourites) async {
+  List<Audio> playFavorites(int index, List<dynamic> favourites) {
     List<Audio> audios = [];
     favourites.forEach(
       (element) {
@@ -30,14 +30,6 @@ class _FavoritePageState extends State<FavoritePage> {
           ),
         );
       },
-    );
-    await _assetsAudioPlayer.open(
-      Playlist(audios: audios, startIndex: index),
-      showNotification: true,
-      autoStart: true,
-      playInBackground: PlayInBackground.enabled,
-      loopMode: LoopMode.playlist,
-      notificationSettings: NotificationSettings(stopEnabled: false),
     );
     return audios;
   }
@@ -138,7 +130,8 @@ class _FavoritePageState extends State<FavoritePage> {
 
                         onTap: () async {
                           List<Audio> audios =
-                              await openPlayer(index, favorites);
+                              await playFavorites(index, favorites);
+                          SongPlaying().openPlayer(index, audios);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -1,13 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
+  SettingsPage(this._notify);
+  final bool _notify;
+
   @override
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  var val = true;
+  bool? val;
+  bool _enabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -49,16 +56,39 @@ class _SettingsPageState extends State<SettingsPage> {
                     color: Colors.white,
                   ),
                   trailing: Switch(
-                    value: val,
-                    onChanged: (bool) {
-                      if (val) {
+                    value: val ?? widget._notify,
+                    onChanged: (bool) async {
+                      if (val == true) {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setBool('notify', false);
+                        print("false");
                         setState(() {
-                          val = false;
+                          val = bool;
                         });
                       } else {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.remove('notify');
+                        print("true");
                         setState(() {
-                          val = true;
+                          val = bool;
                         });
+                      }
+                      if (_enabled) {
+                        setState(
+                          () => _enabled = false,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text("App need restart to Change the settings"),
+                          ),
+                        );
+                        Timer(
+                          Duration(seconds: 5),
+                          () => setState(() => _enabled = true),
+                        );
                       }
                     },
                   ),

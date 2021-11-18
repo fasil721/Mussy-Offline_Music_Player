@@ -1,4 +1,4 @@
-import 'package:Musify/databases/box.dart';
+import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/widgets/add_to_playlist.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';

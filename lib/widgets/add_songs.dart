@@ -1,13 +1,16 @@
-import 'package:Musify/databases/box.dart';
+import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/databases/songs_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class AddSongsInPlaylist extends StatefulWidget {
-  const AddSongsInPlaylist({Key? key, required this.playlistName})
-      : super(key: key);
+  const AddSongsInPlaylist({
+    Key? key,
+    required this.playlistName,
+  }) : super(key: key);
   final String playlistName;
+
   @override
   _AddSongsInPlaylistState createState() => _AddSongsInPlaylistState();
 }

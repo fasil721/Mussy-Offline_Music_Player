@@ -1,4 +1,4 @@
-import 'package:Musify/databases/box.dart';
+import 'package:Musify/databases/box_instance.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -6,6 +6,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/home_page.dart';
 import 'pages/library_page.dart';
 import 'pages/search_page.dart';
@@ -16,16 +17,21 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(SongsAdapter());
   await Hive.openBox('songs');
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool? _notify = prefs.getBool('notify');
 
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyApp(),
+      home: MyApp(_notify ?? true),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
+  MyApp(this._notify);
+  final bool _notify;
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -83,7 +89,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final screens = [
-      Homepage(songModels),
+      Homepage(songModels,widget._notify),
       SearchPage(songModels),
       LibraryPage(),
     ];

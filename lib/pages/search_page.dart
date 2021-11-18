@@ -1,3 +1,4 @@
+import 'package:Musify/audio_player/song_playing.dart';
 import 'package:Musify/widgets/home_popup_menu.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -12,18 +13,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   String searchText = "";
-  openPlayer(int index, List<Audio> result) async {
-    await _assetsAudioPlayer.open(
-      Playlist(audios: result, startIndex: index),
-      showNotification: true,
-      autoStart: true,
-      playInBackground: PlayInBackground.enabled,
-      loopMode: LoopMode.playlist,
-      notificationSettings: NotificationSettings(stopEnabled: false),
-    );
-  }
 
   Future<String> debounce() async {
     await Future.delayed(
@@ -111,7 +101,8 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                   child: ListTile(
                                     onTap: () {
-                                      openPlayer(index, result);
+                                      // openPlayer(index, result);
+                                      SongPlaying().openPlayer(index, result);
                                     },
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
@@ -120,12 +111,10 @@ class _SearchPageState extends State<SearchPage> {
                                     ),
                                     // tileColor: Color(0xffC4C4C4),
                                     leading: QueryArtworkWidget(
-                                      id: int.parse(
-                                          result[index].metas.id!),
+                                      id: int.parse(result[index].metas.id!),
                                       type: ArtworkType.AUDIO,
                                       nullArtworkWidget: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(50),
+                                        borderRadius: BorderRadius.circular(50),
                                         child: Image(
                                           height: 50,
                                           image: AssetImage(
@@ -149,8 +138,7 @@ class _SearchPageState extends State<SearchPage> {
                                       ),
                                       maxLines: 1,
                                     ),
-                                    trailing:
-                                     homepopup(
+                                    trailing: homepopup(
                                       audioId: result[index].metas.id!,
                                     ),
                                   ),

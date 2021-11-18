@@ -1,4 +1,5 @@
-import 'package:Musify/databases/box.dart';
+import 'package:Musify/audio_player/song_playing.dart';
+import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:Musify/widgets/add_songs.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -16,9 +17,8 @@ class PlalistView extends StatefulWidget {
 }
 
 class _PlalistViewState extends State<PlalistView> {
-  AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
-  Future<List<Audio>> openPlayer(int index, List<dynamic> playlists) async {
+  List<Audio> playPlaylist(int index, List<dynamic> playlists) {
     List<Audio> audios = [];
     playlists.forEach(
       (element) {
@@ -33,14 +33,6 @@ class _PlalistViewState extends State<PlalistView> {
           ),
         );
       },
-    );
-    await _assetsAudioPlayer.open(
-      Playlist(audios: audios, startIndex: index),
-      showNotification: true,
-      autoStart: true,
-      playInBackground: PlayInBackground.enabled,
-      loopMode: LoopMode.playlist,
-      notificationSettings: NotificationSettings(stopEnabled: false),
     );
     return audios;
   }
@@ -165,9 +157,11 @@ class _PlalistViewState extends State<PlalistView> {
                             ),
                           ),
                         ),
-                        onTap: ()async {
-                        List<Audio> audios=await openPlayer(index, playlists);
-                           Navigator.push(
+                        onTap: () async {
+                          List<Audio> audios =
+                              await playPlaylist(index, playlists);
+                          SongPlaying().openPlayer(index, audios);
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MusicView(audio: audios),

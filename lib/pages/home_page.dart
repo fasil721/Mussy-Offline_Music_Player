@@ -1,3 +1,4 @@
+import 'package:Musify/audio_player/song_playing.dart';
 import 'package:Musify/pages/settins_page.dart';
 import 'package:Musify/widgets/home_popup_menu.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -6,26 +7,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
-  Homepage(this.audio);
+  Homepage(this.audio, this._notify);
   final List<Audio> audio;
+  final bool _notify;
   @override
   State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
-  AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-
-  openPlayer(int index) async {
-    await _assetsAudioPlayer.open(
-      Playlist(audios: widget.audio, startIndex: index),
-      showNotification: true,
-      autoStart: true,
-      playInBackground: PlayInBackground.enabled,
-      loopMode: LoopMode.playlist,
-      notificationSettings: NotificationSettings(stopEnabled: false),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,7 +47,7 @@ class _HomepageState extends State<Homepage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SettingsPage(),
+                    builder: (context) => SettingsPage(widget._notify),
                   ),
                 );
               },
@@ -82,14 +71,13 @@ class _HomepageState extends State<Homepage> {
                     ),
                     child: ListTile(
                       onTap: () {
-                        openPlayer(index);
+                        SongPlaying().openPlayer(index, widget.audio);
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(5),
                         ),
                       ),
-                      // tileColor: Color(0xffC4C4C4),
                       leading: QueryArtworkWidget(
                         id: int.parse(widget.audio[index].metas.id!),
                         type: ArtworkType.AUDIO,

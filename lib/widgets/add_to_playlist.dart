@@ -1,4 +1,4 @@
-import 'package:Musify/databases/box.dart';
+import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/widgets/create_playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

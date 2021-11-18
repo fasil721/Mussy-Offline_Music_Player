@@ -40,6 +40,7 @@ dependencies:
   assets_audio_player: ^3.0.3+6
   audio_video_progress_bar: ^0.9.0
   google_fonts: ^2.1.0
+  shared_preferences: ^2.0.8
 
 dev_dependencies:
   flutter_test:
