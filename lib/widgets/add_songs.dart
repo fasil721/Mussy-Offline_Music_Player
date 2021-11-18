@@ -22,7 +22,7 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
   @override
   Widget build(BuildContext context) {
     List<Songs> allsongs = _box.get("tracks");
-    List<dynamic> playlists = _box.get(widget.playlistName);
+
     List<Songs> result = searchText.isEmpty
         ? allsongs.toList()
         : allsongs
@@ -78,38 +78,9 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                           id: result[index].id,
                           type: ArtworkType.AUDIO,
                         ),
-                        trailing: Builder(
-                          builder: (context) {
-                            return playlists
-                                    .where((element) =>
-                                        element.id.toString() ==
-                                        result[index].id.toString())
-                                    .isEmpty
-                                ? IconButton(
-                                    onPressed: () async {
-                                      playlists.add(result[index]);
-                                      await _box.put(
-                                          widget.playlistName, playlists);
-                                      setState(() {});
-                                    },
-                                    icon: const Icon(
-                                      Icons.add,
-                                    ),
-                                  )
-                                : IconButton(
-                                    onPressed: () async {
-                                      playlists.removeWhere((element) =>
-                                          element.title == result[index].title);
-                                      await _box.put(
-                                          widget.playlistName, playlists);
-
-                                      setState(() {});
-                                    },
-                                    icon: const Icon(
-                                      Icons.check_box,
-                                    ),
-                                  );
-                          },
+                        trailing: AddAndRemove(
+                          playlistName: widget.playlistName,
+                          result: result[index],
                         ),
                       );
                     },
@@ -127,5 +98,48 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
         ],
       ),
     );
+  }
+}
+
+class AddAndRemove extends StatefulWidget {
+  const AddAndRemove(
+      {Key? key, required this.playlistName, required this.result})
+      : super(key: key);
+  final String playlistName;
+  final Songs result;
+  @override
+  _AddAndRemoveState createState() => _AddAndRemoveState();
+}
+
+class _AddAndRemoveState extends State<AddAndRemove> {
+  Box _box = Boxes.getInstance();
+  @override
+  Widget build(BuildContext context) {
+    List<dynamic> playlists = _box.get(widget.playlistName);
+    return playlists
+            .where((element) =>
+                element.id.toString() == widget.result.id.toString())
+            .isEmpty
+        ? IconButton(
+            onPressed: () async {
+              playlists.add(widget.result);
+              await _box.put(widget.playlistName, playlists);
+              setState(() {});
+            },
+            icon: const Icon(
+              Icons.add,
+            ),
+          )
+        : IconButton(
+            onPressed: () async {
+              playlists.removeWhere((element) =>
+                  element.id.toString() == widget.result.id.toString());
+              await _box.put(widget.playlistName, playlists);
+              setState(() {});
+            },
+            icon: const Icon(
+              Icons.check_box,
+            ),
+          );
   }
 }

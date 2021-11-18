@@ -15,6 +15,22 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool? val;
   bool _enabled = true;
+  restartNotify() {
+    if (_enabled) {
+      setState(
+        () => _enabled = false,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("App need restart to Change the settings"),
+        ),
+      );
+      Timer(
+        Duration(seconds: 5),
+        () => setState(() => _enabled = true),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,31 +80,18 @@ class _SettingsPageState extends State<SettingsPage> {
                         prefs.setBool('notify', false);
                         print("false");
                         setState(() {
-                          val = bool;
+                          val = false;
                         });
+                        restartNotify();
                       } else {
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
                         prefs.remove('notify');
                         print("true");
                         setState(() {
-                          val = bool;
+                          val = true;
                         });
-                      }
-                      if (_enabled) {
-                        setState(
-                          () => _enabled = false,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content:
-                                Text("App need restart to Change the settings"),
-                          ),
-                        );
-                        Timer(
-                          Duration(seconds: 5),
-                          () => setState(() => _enabled = true),
-                        );
+                        restartNotify();
                       }
                     },
                   ),
