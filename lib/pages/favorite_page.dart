@@ -14,7 +14,7 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-  Future<List<Audio>> playFavorites(int index, List<dynamic> favourites) async {
+  List<Audio> convertFavorites(List<dynamic> favourites) {
     List<Audio> audios = [];
     favourites.forEach(
       (element) {
@@ -30,7 +30,7 @@ class _FavoritePageState extends State<FavoritePage> {
         );
       },
     );
-    return await audios;
+    return audios;
   }
 
   @override
@@ -47,7 +47,7 @@ class _FavoritePageState extends State<FavoritePage> {
           },
         ),
         title: Text(
-          "Favorutes",
+          "Favorite",
           style: GoogleFonts.rubik(
             color: Colors.white,
             fontSize: 25,
@@ -58,6 +58,7 @@ class _FavoritePageState extends State<FavoritePage> {
         valueListenable: Boxes.getInstance().listenable(),
         builder: (context, Box _box, _) {
           List<dynamic> favorites = _box.get("favorites");
+          List<Audio> audios = convertFavorites(favorites);
           return favorites.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,
@@ -125,9 +126,7 @@ class _FavoritePageState extends State<FavoritePage> {
                             color: Colors.white,
                           ),
                         ),
-                        onTap: () async {
-                          List<Audio> audios =
-                              await playFavorites(index, favorites);
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(

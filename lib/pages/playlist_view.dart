@@ -17,7 +17,7 @@ class PlalistView extends StatefulWidget {
 }
 
 class _PlalistViewState extends State<PlalistView> {
-  Future<List<Audio>> playPlaylist(int index, List<dynamic> playlists) async {
+  List<Audio> convertPlaylist(List<dynamic> playlists) {
     List<Audio> audios = [];
     playlists.forEach(
       (element) {
@@ -33,7 +33,7 @@ class _PlalistViewState extends State<PlalistView> {
         );
       },
     );
-    return await audios;
+    return audios;
   }
 
   @override
@@ -88,6 +88,7 @@ class _PlalistViewState extends State<PlalistView> {
         valueListenable: Boxes.getInstance().listenable(),
         builder: (context, Box _box, _) {
           List<dynamic> playlists = _box.get(widget.playlistName);
+          List<Audio> audios = convertPlaylist(playlists);
           return playlists.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,
@@ -129,7 +130,7 @@ class _PlalistViewState extends State<PlalistView> {
                             PopupMenuItem(
                               value: "1",
                               child: Text(
-                                "Delete song",
+                                "Remove song",
                                 style: TextStyle(fontSize: 15),
                               ),
                             ),
@@ -156,16 +157,14 @@ class _PlalistViewState extends State<PlalistView> {
                             ),
                           ),
                         ),
-                        onTap: () async {
-                          List<Audio> audios =
-                              await playPlaylist(index, playlists);
-                          SongPlaying().openPlayer(index, audios);
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MusicView(audio: audios),
                             ),
                           );
+                          SongPlaying().openPlayer(index, audios);
                         },
                       ),
                     );
