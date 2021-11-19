@@ -14,8 +14,7 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-
-  List<Audio> playFavorites(int index, List<dynamic> favourites) {
+  Future<List<Audio>> playFavorites(int index, List<dynamic> favourites) async {
     List<Audio> audios = [];
     favourites.forEach(
       (element) {
@@ -31,7 +30,7 @@ class _FavoritePageState extends State<FavoritePage> {
         );
       },
     );
-    return audios;
+    return await audios;
   }
 
   @override
@@ -72,7 +71,6 @@ class _FavoritePageState extends State<FavoritePage> {
                         right: 10,
                       ),
                       child: ListTile(
-                        // tileColor: Color(0xff4D3C3C),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(5),
@@ -127,17 +125,16 @@ class _FavoritePageState extends State<FavoritePage> {
                             color: Colors.white,
                           ),
                         ),
-
                         onTap: () async {
                           List<Audio> audios =
                               await playFavorites(index, favorites);
-                          SongPlaying().openPlayer(index, audios);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => MusicView(audio: audios),
                             ),
                           );
+                          SongPlaying().openPlayer(index, audios);
                         },
                       ),
                     );

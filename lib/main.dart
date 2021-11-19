@@ -17,13 +17,21 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(SongsAdapter());
   await Hive.openBox('songs');
+  Box _box = await Boxes.getInstance();
+  List<dynamic> keys = _box.keys.toList();
+  if (keys.isEmpty) {
+    List<dynamic> favorites = [];
+    await _box.put("favorites", favorites);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('notify', true);
+  }
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool? _notify = prefs.getBool('notify');
+  bool? _notify = await prefs.getBool('notify');
 
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyApp(_notify ?? true),
+      home: MyApp(_notify!),
     ),
   );
 }
@@ -54,8 +62,6 @@ class _MyAppState extends State<MyApp> {
     bool permissionStatus = await _audioQuery.permissionsStatus();
     if (!permissionStatus) {
       await _audioQuery.permissionsRequest();
-      List<dynamic> favorites = [];
-      await _box.put("favorites", favorites);
     }
     tracks = await _audioQuery.querySongs();
     audio = tracks
@@ -89,7 +95,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final screens = [
-      Homepage(songModels,widget._notify),
+      Homepage(songModels, widget._notify),
       SearchPage(songModels),
       LibraryPage(),
     ];

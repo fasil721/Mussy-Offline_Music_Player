@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
-  Homepage(this.audio, this._notify);
+  Homepage(this.audio,this._notify);
   final List<Audio> audio;
   final bool _notify;
   @override

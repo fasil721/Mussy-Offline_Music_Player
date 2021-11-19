@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +12,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+
+
   bool? val;
   bool _enabled = true;
   restartNotify() {
@@ -22,7 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("App need restart to Change the settings"),
+          content: Text("App need restart to change the settings"),
         ),
       );
       Timer(
@@ -74,25 +75,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   trailing: Switch(
                     value: val ?? widget._notify,
                     onChanged: (bool) async {
-                      if (val == true) {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.setBool('notify', false);
-                        print("false");
-                        setState(() {
-                          val = false;
-                        });
-                        restartNotify();
-                      } else {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.remove('notify');
-                        print("true");
-                        setState(() {
-                          val = true;
-                        });
-                        restartNotify();
-                      }
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        val = bool;
+                        prefs.setBool("notify", bool);
+                      });
+                      restartNotify();
                     },
                   ),
                   title: Text(

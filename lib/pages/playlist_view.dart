@@ -17,8 +17,7 @@ class PlalistView extends StatefulWidget {
 }
 
 class _PlalistViewState extends State<PlalistView> {
-
-  List<Audio> playPlaylist(int index, List<dynamic> playlists) {
+  Future<List<Audio>> playPlaylist(int index, List<dynamic> playlists) async {
     List<Audio> audios = [];
     playlists.forEach(
       (element) {
@@ -34,7 +33,7 @@ class _PlalistViewState extends State<PlalistView> {
         );
       },
     );
-    return audios;
+    return await audios;
   }
 
   @override
