@@ -1,3 +1,4 @@
+import 'package:Musify/audio_player/song_playing.dart';
 import 'package:Musify/databases/box_instance.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import 'pages/home_page.dart';
 import 'pages/library_page.dart';
 import 'pages/search_page.dart';
 import 'databases/songs_adapter.dart';
-import 'pages/bottom_play.dart';
+import 'pages/bottom_playing_screen.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -22,12 +23,26 @@ void main() async {
   if (keys.isEmpty) {
     List<dynamic> favorites = [];
     await _box.put("favorites", favorites);
+    List<dynamic> recentsong = [];
+    await _box.put("recentsong", recentsong);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('notify', true);
   }
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool? _notify = await prefs.getBool('notify');
-
+  AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  List<dynamic> recentsongs = _box.get("recentsong");
+  if (recentsongs.isNotEmpty) {
+    List<Audio> audios = SongPlaying().convertToAudios(recentsongs);
+    _assetsAudioPlayer.open(
+      Playlist(
+        audios: audios,
+        startIndex: 0,
+      ),
+      autoStart: false,
+    );
+  }
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,

@@ -160,7 +160,10 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       ),
                     )
-              : SizedBox()
+              : SizedBox(),
+          SizedBox(
+            height: 75,
+          )
         ],
       ),
     );

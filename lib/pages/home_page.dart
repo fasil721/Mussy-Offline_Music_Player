@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
-  Homepage(this.audio,this._notify);
+  Homepage(this.audio, this._notify);
   final List<Audio> audio;
   final bool _notify;
   @override
@@ -58,68 +58,79 @@ class _HomepageState extends State<Homepage> {
             ),
           ],
         ),
-        body: widget.audio.isNotEmpty
-            ? ListView.builder(
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                itemCount: widget.audio.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 5,
-                      right: 0,
-                    ),
-                    child: ListTile(
-                      onTap: () {
-                        SongPlaying().openPlayer(index, widget.audio);
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      leading: QueryArtworkWidget(
-                        id: int.parse(widget.audio[index].metas.id!),
-                        type: ArtworkType.AUDIO,
-                        nullArtworkWidget: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Image(
-                            height: 50,
-                            image: AssetImage("assets/icons/default.jpg"),
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              widget.audio.isNotEmpty
+                  ? ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: widget.audio.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            left: 5,
+                            right: 0,
                           ),
-                        ),
-                      ),
-                      title: Text(
-                        widget.audio[index].metas.title!,
-                        style: GoogleFonts.rubik(
-                          fontSize: 16,
+                          child: ListTile(
+                            onTap: () {
+                              SongPlaying().openPlayer(index, widget.audio);
+                            },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                            leading: QueryArtworkWidget(
+                              id: int.parse(widget.audio[index].metas.id!),
+                              type: ArtworkType.AUDIO,
+                              nullArtworkWidget: ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: Image(
+                                  height: 50,
+                                  image: AssetImage("assets/icons/default.jpg"),
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              widget.audio[index].metas.title!,
+                              style: GoogleFonts.rubik(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                              maxLines: 1,
+                            ),
+                            subtitle: Text(
+                              widget.audio[index].metas.artist!,
+                              style: GoogleFonts.rubik(
+                                fontSize: 13,
+                                color: Colors.grey,
+                              ),
+                              maxLines: 1,
+                            ),
+                            trailing: homepopup(
+                              audioId: widget.audio[index].metas.id!,
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Text(
+                        "No songs here",
+                        style: TextStyle(
                           color: Colors.white,
+                          fontSize: 25,
                         ),
-                        maxLines: 1,
                       ),
-                      subtitle: Text(
-                        widget.audio[index].metas.artist!,
-                        style: GoogleFonts.rubik(
-                          fontSize: 13,
-                          color: Colors.grey,
-                        ),
-                        maxLines: 1,
-                      ),
-                      trailing:
-                          homepopup(audioId: widget.audio[index].metas.id!),
                     ),
-                  );
-                },
+              SizedBox(
+                height: 75,
               )
-            : Center(
-                child: Text(
-                  "No songs here",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                  ),
-                ),
-              ),
+            ],
+          ),
+        ),
       ),
     );
   }

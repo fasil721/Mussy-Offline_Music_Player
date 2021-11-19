@@ -14,25 +14,6 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-  List<Audio> convertFavorites(List<dynamic> favourites) {
-    List<Audio> audios = [];
-    favourites.forEach(
-      (element) {
-        audios.add(
-          Audio.file(
-            element.uri.toString(),
-            metas: Metas(
-              title: element.title,
-              artist: element.artist,
-              id: element.id.toString(),
-            ),
-          ),
-        );
-      },
-    );
-    return audios;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +39,7 @@ class _FavoritePageState extends State<FavoritePage> {
         valueListenable: Boxes.getInstance().listenable(),
         builder: (context, Box _box, _) {
           List<dynamic> favorites = _box.get("favorites");
-          List<Audio> audios = convertFavorites(favorites);
+          List<Audio> audios = SongPlaying().convertToAudios(favorites);
           return favorites.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,

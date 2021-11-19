@@ -16,4 +16,24 @@ class SongPlaying {
       notificationSettings: NotificationSettings(stopEnabled: false),
     );
   }
+
+  List<Audio> convertToAudios(List<dynamic> songs) {
+    List<Audio> audios = [];
+    songs.forEach(
+      (element) {
+        audios.add(
+          Audio.file(
+            element.uri.toString(),
+            metas: Metas(
+              title: element.title,
+              artist: element.artist,
+              id: element.id.toString(),
+            ),
+          ),
+        );
+      },
+    );
+
+    return audios;
+  }
 }

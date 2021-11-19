@@ -104,6 +104,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 allKeys = box.keys.toList();
                 allKeys.remove("tracks");
                 allKeys.remove("favorites");
+                allKeys.remove("recentsong");
                 playlists = allKeys.toList();
                 return ListView.separated(
                   shrinkWrap: true,

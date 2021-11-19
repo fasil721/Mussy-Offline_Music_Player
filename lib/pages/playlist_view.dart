@@ -17,24 +17,7 @@ class PlalistView extends StatefulWidget {
 }
 
 class _PlalistViewState extends State<PlalistView> {
-  List<Audio> convertPlaylist(List<dynamic> playlists) {
-    List<Audio> audios = [];
-    playlists.forEach(
-      (element) {
-        audios.add(
-          Audio.file(
-            element.uri.toString(),
-            metas: Metas(
-              title: element.title,
-              artist: element.artist,
-              id: element.id.toString(),
-            ),
-          ),
-        );
-      },
-    );
-    return audios;
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +71,7 @@ class _PlalistViewState extends State<PlalistView> {
         valueListenable: Boxes.getInstance().listenable(),
         builder: (context, Box _box, _) {
           List<dynamic> playlists = _box.get(widget.playlistName);
-          List<Audio> audios = convertPlaylist(playlists);
+          List<Audio> audios = SongPlaying().convertToAudios(playlists);
           return playlists.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,

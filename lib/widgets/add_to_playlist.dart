@@ -18,6 +18,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
     List<dynamic> playlistNames = _box.keys.toList();
     playlistNames.remove("tracks");
     playlistNames.remove("favorites");
+    playlistNames.remove("recentsong");
 
     return Container(
       color: Colors.grey,
