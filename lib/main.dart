@@ -28,12 +28,11 @@ void main() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('notify', true);
   }
-
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool? _notify = await prefs.getBool('notify');
-  AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   List<dynamic> recentsongs = _box.get("recentsong");
-  if (recentsongs.isNotEmpty) {
+  if (recentsongs.length == 1) {
+    AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
     List<Audio> audios = SongPlaying().convertToAudios(recentsongs);
     _assetsAudioPlayer.open(
       Playlist(
@@ -43,6 +42,7 @@ void main() async {
       autoStart: false,
     );
   }
+
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -89,20 +89,7 @@ class _MyAppState extends State<MyApp> {
           ),
         )
         .toList();
-    tracks.forEach(
-      (element) {
-        songModels.add(
-          Audio.file(
-            element.uri.toString(),
-            metas: Metas(
-              title: element.title,
-              artist: element.artist,
-              id: element.id.toString(),
-            ),
-          ),
-        );
-      },
-    );
+    songModels = SongPlaying().convertToAudios(tracks);
     await _box.put("tracks", audio);
     setState(() {});
   }

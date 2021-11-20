@@ -28,7 +28,7 @@ class _SearchPageState extends State<SearchPage> {
         .where(
           (element) => element.metas.title!
               .toLowerCase()
-              .contains(searchText.toLowerCase()),
+              .startsWith(searchText.toLowerCase()),
         )
         .toList();
     return Scaffold(
@@ -84,70 +84,74 @@ class _SearchPageState extends State<SearchPage> {
           searchText.isNotEmpty
               ? result.isNotEmpty
                   ? Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: result.length,
-                        itemBuilder: (context, index) {
-                          return FutureBuilder(
-                            future: debounce(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 10,
-                                    right: 10,
-                                  ),
-                                  child: ListTile(
-                                    onTap: () {
-                                      // openPlayer(index, result);
-                                      SongPlaying().openPlayer(index, result);
-                                    },
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5),
-                                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 75),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          itemCount: result.length,
+                          itemBuilder: (context, index) {
+                            return FutureBuilder(
+                              future: debounce(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                      right: 10,
                                     ),
-                                    // tileColor: Color(0xffC4C4C4),
-                                    leading: QueryArtworkWidget(
-                                      id: int.parse(result[index].metas.id!),
-                                      type: ArtworkType.AUDIO,
-                                      nullArtworkWidget: ClipRRect(
-                                        borderRadius: BorderRadius.circular(50),
-                                        child: Image(
-                                          height: 50,
-                                          image: AssetImage(
-                                              "assets/icons/default.jpg"),
+                                    child: ListTile(
+                                      onTap: () {
+                                        // openPlayer(index, result);
+                                        SongPlaying().openPlayer(index, result);
+                                      },
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5),
                                         ),
                                       ),
-                                    ),
-                                    title: Text(
-                                      result[index].metas.title!,
-                                      style: GoogleFonts.rubik(
-                                        fontSize: 16,
-                                        color: Colors.white,
+                                      // tileColor: Color(0xffC4C4C4),
+                                      leading: QueryArtworkWidget(
+                                        id: int.parse(result[index].metas.id!),
+                                        type: ArtworkType.AUDIO,
+                                        nullArtworkWidget: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          child: Image(
+                                            height: 50,
+                                            image: AssetImage(
+                                                "assets/icons/default.jpg"),
+                                          ),
+                                        ),
                                       ),
-                                      maxLines: 1,
-                                    ),
-                                    subtitle: Text(
-                                      result[index].metas.artist!,
-                                      style: GoogleFonts.rubik(
-                                        fontSize: 13,
-                                        color: Colors.grey,
+                                      title: Text(
+                                        result[index].metas.title!,
+                                        style: GoogleFonts.rubik(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                        ),
+                                        maxLines: 1,
                                       ),
-                                      maxLines: 1,
+                                      subtitle: Text(
+                                        result[index].metas.artist!,
+                                        style: GoogleFonts.rubik(
+                                          fontSize: 13,
+                                          color: Colors.grey,
+                                        ),
+                                        maxLines: 1,
+                                      ),
+                                      trailing: homepopup(
+                                        audioId: result[index].metas.id!,
+                                      ),
                                     ),
-                                    trailing: homepopup(
-                                      audioId: result[index].metas.id!,
-                                    ),
-                                  ),
-                                );
-                              }
-                              return Container();
-                            },
-                          );
-                        },
+                                  );
+                                }
+                                return Container();
+                              },
+                            );
+                          },
+                        ),
                       ),
                     )
                   : Padding(
@@ -161,9 +165,6 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     )
               : SizedBox(),
-          SizedBox(
-            height: 75,
-          )
         ],
       ),
     );

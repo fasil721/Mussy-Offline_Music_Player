@@ -193,7 +193,7 @@ class _MusicViewState extends State<MusicView> {
                               if (prevDone) {
                                 prevDone = false;
                                 await _assetsAudioPlayer.previous();
-                                nextDone = true;
+                                prevDone = true;
                               }
                             },
                             icon: Image(

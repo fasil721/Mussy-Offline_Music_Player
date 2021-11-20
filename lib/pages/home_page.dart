@@ -58,79 +58,72 @@ class _HomepageState extends State<Homepage> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              widget.audio.isNotEmpty
-                  ? ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: widget.audio.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                            left: 5,
-                            right: 0,
+        body: widget.audio.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.only(bottom: 75),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: widget.audio.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        left: 5,
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          SongPlaying().openPlayer(index, widget.audio);
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
                           ),
-                          child: ListTile(
-                            onTap: () {
-                              SongPlaying().openPlayer(index, widget.audio);
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            leading: QueryArtworkWidget(
-                              id: int.parse(widget.audio[index].metas.id!),
-                              type: ArtworkType.AUDIO,
-                              nullArtworkWidget: ClipRRect(
-                                borderRadius: BorderRadius.circular(50),
-                                child: Image(
-                                  height: 50,
-                                  image: AssetImage("assets/icons/default.jpg"),
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              widget.audio[index].metas.title!,
-                              style: GoogleFonts.rubik(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                              maxLines: 1,
-                            ),
-                            subtitle: Text(
-                              widget.audio[index].metas.artist!,
-                              style: GoogleFonts.rubik(
-                                fontSize: 13,
-                                color: Colors.grey,
-                              ),
-                              maxLines: 1,
-                            ),
-                            trailing: homepopup(
-                              audioId: widget.audio[index].metas.id!,
+                        ),
+                        leading: QueryArtworkWidget(
+                          id: int.parse(widget.audio[index].metas.id!),
+                          type: ArtworkType.AUDIO,
+                          nullArtworkWidget: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image(
+                              height: 50,
+                              image: AssetImage("assets/icons/default.jpg"),
                             ),
                           ),
-                        );
-                      },
-                    )
-                  : Center(
-                      child: Text(
-                        "No songs here",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
+                        ),
+                        title: Text(
+                          widget.audio[index].metas.title!,
+                          style: GoogleFonts.rubik(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                          maxLines: 1,
+                        ),
+                        subtitle: Text(
+                          widget.audio[index].metas.artist!,
+                          style: GoogleFonts.rubik(
+                            fontSize: 13,
+                            color: Colors.grey,
+                          ),
+                          maxLines: 1,
+                        ),
+                        trailing: homepopup(
+                          audioId: widget.audio[index].metas.id!,
                         ),
                       ),
-                    ),
-              SizedBox(
-                height: 75,
+                    );
+                  },
+                ),
               )
-            ],
-          ),
-        ),
+            : Center(
+                child: Text(
+                  "No songs here",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                  ),
+                ),
+              ),
       ),
     );
   }

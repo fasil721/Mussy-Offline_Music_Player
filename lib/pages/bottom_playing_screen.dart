@@ -27,16 +27,19 @@ class _bottomPlayingState extends State<bottomPlating> {
 
   Box _box = Boxes.getInstance();
   find(List<Audio> source, String fromPath) {
-    if (source.length != 0)
+    if (source.length != 0) {
       myAudio = source.firstWhere((element) => element.path == fromPath);
-
-    List<Songs> song = _box.get("tracks");
-    final temp = song.firstWhere(
-      (element) => element.id.toString().contains(myAudio!.metas.id.toString()),
-    );
-    List<dynamic> recentsong = [];
-    recentsong.add(temp);
-    _box.put("recentsong", recentsong);
+      if (myAudio != null) {
+        List<dynamic> song = _box.get("tracks");
+        final temp = song.firstWhere(
+          (element) =>
+              element.id.toString().contains(myAudio!.metas.id.toString()),
+        );
+        List<dynamic> recentsong = [];
+        recentsong.add(temp);
+        _box.put("recentsong", recentsong);
+      }
+    }
   }
 
   @override
@@ -104,7 +107,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                             if (prevDone) {
                               prevDone = false;
                               await _assetsAudioPlayer.previous();
-                              nextDone = true;
+                              prevDone = true;
                             }
                           },
                           icon: Icon(
