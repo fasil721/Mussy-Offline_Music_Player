@@ -69,7 +69,7 @@ class _PlalistViewState extends State<PlalistView> {
         valueListenable: Boxes.getInstance().listenable(),
         builder: (context, Box _box, _) {
           List<dynamic> playlists = _box.get(widget.playlistName);
-          List<Audio> audios = SongPlaying().convertToAudios(playlists);
+          List<Audio> audios = Player().convertToAudios(playlists);
           return playlists.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,
@@ -145,7 +145,7 @@ class _PlalistViewState extends State<PlalistView> {
                               builder: (context) => MusicView(audio: audios),
                             ),
                           );
-                          SongPlaying().openPlayer(index, audios);
+                          Player().openPlayer(index, audios);
                         },
                       ),
                     );

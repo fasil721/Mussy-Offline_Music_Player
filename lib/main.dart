@@ -39,7 +39,7 @@ void main() async {
   List<dynamic> recentsongs = _box.get("recentsong");
   if (recentsongs.isNotEmpty) {
     AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-    List<Audio> audios = SongPlaying().convertToAudios(recentsongs);
+    List<Audio> audios = Player().convertToAudios(recentsongs);
     _assetsAudioPlayer.open(
       Playlist(
         audios: audios,
@@ -70,6 +70,7 @@ class _MyAppState extends State<MyApp> {
   int currentIndex = 0;
   Box _box = Boxes.getInstance();
   List<SongModel> tracks = [];
+  List<SongModel> musics = [];
   List<Songs> audio = [];
   List<Audio> songModels = [];
 
@@ -85,17 +86,25 @@ class _MyAppState extends State<MyApp> {
       await _audioQuery.permissionsRequest();
     }
     tracks = await _audioQuery.querySongs();
-    audio = tracks
+
+    tracks.forEach((element) {
+      if (element.fileExtension == "mp3" || element.fileExtension == "opus") {
+        musics.add(element);
+      }
+    });
+    print(musics.length);
+    audio = musics
         .map(
           (e) => Songs(
             title: e.title,
             artist: e.artist,
             uri: e.uri,
             id: e.id,
+            duration: e.duration,
           ),
         )
         .toList();
-    songModels = SongPlaying().convertToAudios(tracks);
+    songModels = Player().convertToAudios(musics);
     await _box.put("tracks", audio);
     setState(() {});
   }

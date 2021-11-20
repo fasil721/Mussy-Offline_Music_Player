@@ -14,7 +14,7 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-  SongPlaying? _songPlaying;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +40,7 @@ class _FavoritePageState extends State<FavoritePage> {
         valueListenable: Boxes.getInstance().listenable(),
         builder: (context, Box _box, _) {
           List<dynamic> favorites = _box.get("favorites");
-          List<Audio> audios =SongPlaying().convertToAudios(favorites);
+          List<Audio> audios =Player().convertToAudios(favorites);
           return favorites.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,
@@ -115,7 +115,7 @@ class _FavoritePageState extends State<FavoritePage> {
                               builder: (context) => MusicView(audio: audios),
                             ),
                           );
-                         SongPlaying().openPlayer(index, audios);
+                         Player().openPlayer(index, audios);
                         },
                       ),
                     );

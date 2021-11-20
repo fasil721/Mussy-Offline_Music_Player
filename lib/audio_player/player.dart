@@ -1,7 +1,8 @@
+import 'package:Musify/databases/songs_adapter.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SongPlaying {
+class Player {
   AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
   openPlayer(int index, List<Audio> audios) async {
@@ -19,6 +20,7 @@ class SongPlaying {
 
   List<Audio> convertToAudios(List<dynamic> songs) {
     List<Audio> audios = [];
+
     songs.forEach(
       (element) {
         audios.add(
@@ -34,5 +36,11 @@ class SongPlaying {
       },
     );
     return audios;
+  }
+
+  Songs findSongFromDatabase(List<dynamic> songs, String id) {
+    return songs.firstWhere(
+      (element) => element.id.toString().contains(id),
+    );
   }
 }

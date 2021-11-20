@@ -1,3 +1,4 @@
+import 'package:Musify/audio_player/player.dart';
 import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/widgets/add_to_playlist.dart';
@@ -15,12 +16,9 @@ class _homepopupState extends State<homepopup> {
   Box _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
-    List<Songs> song = _box.get("tracks");
+    List<Songs> songs = _box.get("tracks");
     List<dynamic> favorites = _box.get("favorites");
-    final temp = song.firstWhere(
-      (element) => element.id.toString().contains(widget.audioId),
-    );
-
+    final temp = Player().findSongFromDatabase(songs, widget.audioId);
     return PopupMenuButton(
       itemBuilder: (BuildContext bc) => [
         favorites

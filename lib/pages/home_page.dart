@@ -82,7 +82,7 @@ class _HomepageState extends State<Homepage> {
                           if (recentsongs.isEmpty) {
                             setState(() {});
                           }
-                          SongPlaying().openPlayer(index, widget.audio);
+                          Player().openPlayer(index, widget.audio);
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(

@@ -1,3 +1,4 @@
+import 'package:Musify/audio_player/player.dart';
 import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/widgets/add_to_playlist.dart';
@@ -32,10 +33,8 @@ class _MusicViewState extends State<MusicView> {
   }
 
   find2(Audio myAudio) {
-    List<Songs> song = _box.get("tracks");
-    music = song.firstWhere(
-      (element) => element.id.toString().contains(myAudio.metas.id.toString()),
-    );
+    List<dynamic> songs = _box.get("tracks");
+    music = Player().findSongFromDatabase(songs, myAudio.metas.id.toString());
   }
 
   Widget popupMenu() {
@@ -167,7 +166,7 @@ class _MusicViewState extends State<MusicView> {
                       thumbColor: Colors.white,
                       baseBarColor: Colors.grey,
                       progress: infos.currentPosition,
-                      total: infos.duration,
+                      total: Duration(milliseconds: music!.duration),
                       timeLabelTextStyle: TextStyle(color: Colors.white),
                       onSeek: (duration) {
                         _assetsAudioPlayer.seek(duration);

@@ -21,13 +21,14 @@ class SongsAdapter extends TypeAdapter<Songs> {
       artist: fields[1] as dynamic,
       uri: fields[2] as dynamic,
       id: fields[3] as dynamic,
+      duration: fields[4] as dynamic,
     );
   }
 
   @override
   void write(BinaryWriter writer, Songs obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class SongsAdapter extends TypeAdapter<Songs> {
       ..writeByte(2)
       ..write(obj.uri)
       ..writeByte(3)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(4)
+      ..write(obj.duration);
   }
 
   @override

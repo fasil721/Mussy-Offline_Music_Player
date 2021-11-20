@@ -102,7 +102,7 @@ class _SearchPageState extends State<SearchPage> {
                                     ),
                                     child: ListTile(
                                       onTap: () {
-                                        SongPlaying().openPlayer(index, result);
+                                        Player().openPlayer(index, result);
                                       },
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(

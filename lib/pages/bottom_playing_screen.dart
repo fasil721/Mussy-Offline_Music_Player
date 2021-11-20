@@ -1,5 +1,5 @@
+import 'package:Musify/audio_player/player.dart';
 import 'package:Musify/databases/box_instance.dart';
-import 'package:Musify/databases/songs_adapter.dart';
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +30,9 @@ class _bottomPlayingState extends State<bottomPlating> {
     if (source.length != 0) {
       myAudio = source.firstWhere((element) => element.path == fromPath);
       if (myAudio != null) {
-        List<dynamic> song = _box.get("tracks");
-        final temp = song.firstWhere(
-          (element) =>
-              element.id.toString().contains(myAudio!.metas.id.toString()),
-        );
+        List<dynamic> songs = _box.get("tracks");
+        final temp =
+            Player().findSongFromDatabase(songs, myAudio!.metas.id.toString());
         List<dynamic> recentsong = [];
         recentsong.add(temp);
         _box.put("recentsong", recentsong);
