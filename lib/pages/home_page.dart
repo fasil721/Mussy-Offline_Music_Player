@@ -1,9 +1,11 @@
-import 'package:Musify/audio_player/song_playing.dart';
+import 'package:Musify/audio_player/player.dart';
+import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/pages/settins_page.dart';
 import 'package:Musify/widgets/home_popup_menu.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
@@ -15,8 +17,10 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  Box _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
+    List<dynamic> recentsongs = _box.get("recentsong");
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -60,7 +64,9 @@ class _HomepageState extends State<Homepage> {
         ),
         body: widget.audio.isNotEmpty
             ? Padding(
-                padding: const EdgeInsets.only(bottom: 75),
+                padding: recentsongs.isEmpty
+                    ? EdgeInsets.only(bottom: 0)
+                    : EdgeInsets.only(bottom: 75),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   physics: BouncingScrollPhysics(),
@@ -73,6 +79,9 @@ class _HomepageState extends State<Homepage> {
                       ),
                       child: ListTile(
                         onTap: () {
+                          if (recentsongs.isEmpty) {
+                            setState(() {});
+                          }
                           SongPlaying().openPlayer(index, widget.audio);
                         },
                         shape: RoundedRectangleBorder(

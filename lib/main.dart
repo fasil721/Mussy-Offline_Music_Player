@@ -1,7 +1,8 @@
-import 'package:Musify/audio_player/song_playing.dart';
+import 'package:Musify/audio_player/player.dart';
 import 'package:Musify/databases/box_instance.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -30,8 +31,13 @@ void main() async {
   }
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool? _notify = await prefs.getBool('notify');
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   List<dynamic> recentsongs = _box.get("recentsong");
-  if (recentsongs.length == 1) {
+  if (recentsongs.isNotEmpty) {
     AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
     List<Audio> audios = SongPlaying().convertToAudios(recentsongs);
     _assetsAudioPlayer.open(

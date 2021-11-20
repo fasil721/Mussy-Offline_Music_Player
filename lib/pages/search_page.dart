@@ -1,4 +1,4 @@
-import 'package:Musify/audio_player/song_playing.dart';
+import 'package:Musify/audio_player/player.dart';
 import 'package:Musify/widgets/home_popup_menu.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   String searchText = "";
-
   Future<String> debounce() async {
     await Future.delayed(
       Duration(seconds: 1),
@@ -103,7 +102,6 @@ class _SearchPageState extends State<SearchPage> {
                                     ),
                                     child: ListTile(
                                       onTap: () {
-                                        // openPlayer(index, result);
                                         SongPlaying().openPlayer(index, result);
                                       },
                                       shape: RoundedRectangleBorder(
@@ -111,7 +109,6 @@ class _SearchPageState extends State<SearchPage> {
                                           Radius.circular(5),
                                         ),
                                       ),
-                                      // tileColor: Color(0xffC4C4C4),
                                       leading: QueryArtworkWidget(
                                         id: int.parse(result[index].metas.id!),
                                         type: ArtworkType.AUDIO,

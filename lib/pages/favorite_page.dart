@@ -1,4 +1,4 @@
-import 'package:Musify/audio_player/song_playing.dart';
+import 'package:Musify/audio_player/player.dart';
 import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -14,6 +14,7 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
+  SongPlaying? _songPlaying;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,87 +40,87 @@ class _FavoritePageState extends State<FavoritePage> {
         valueListenable: Boxes.getInstance().listenable(),
         builder: (context, Box _box, _) {
           List<dynamic> favorites = _box.get("favorites");
-          List<Audio> audios = SongPlaying().convertToAudios(favorites);
+          List<Audio> audios =SongPlaying().convertToAudios(favorites);
           return favorites.isNotEmpty
               ? ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                physics: ScrollPhysics(),
-                itemCount: favorites.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 10,
-                      right: 10,
-                    ),
-                    child: ListTile(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
-                        ),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  physics: ScrollPhysics(),
+                  itemCount: favorites.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
                       ),
-                      title: Text(
-                        favorites[index].title!,
-                        maxLines: 1,
-                        textAlign: TextAlign.justify,
-                        style: GoogleFonts.rubik(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      subtitle: Text(
-                        favorites[index].artist!,
-                        style: GoogleFonts.rubik(
-                          fontSize: 13,
-                          color: Colors.grey,
-                        ),
-                        maxLines: 1,
-                      ),
-                      leading: QueryArtworkWidget(
-                        id: favorites[index].id!,
-                        type: ArtworkType.AUDIO,
-                        nullArtworkWidget: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Image(
-                            height: 50,
-                            image: AssetImage("assets/icons/default.jpg"),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
                           ),
                         ),
-                      ),
-                      trailing: PopupMenuButton(
-                        itemBuilder: (BuildContext bc) => [
-                          PopupMenuItem(
-                            value: "1",
-                            child: Text(
-                              "Remove Song",
-                              style: TextStyle(fontSize: 15),
+                        title: Text(
+                          favorites[index].title!,
+                          maxLines: 1,
+                          textAlign: TextAlign.justify,
+                          style: GoogleFonts.rubik(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                        subtitle: Text(
+                          favorites[index].artist!,
+                          style: GoogleFonts.rubik(
+                            fontSize: 13,
+                            color: Colors.grey,
+                          ),
+                          maxLines: 1,
+                        ),
+                        leading: QueryArtworkWidget(
+                          id: favorites[index].id!,
+                          type: ArtworkType.AUDIO,
+                          nullArtworkWidget: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image(
+                              height: 50,
+                              image: AssetImage("assets/icons/default.jpg"),
                             ),
                           ),
-                        ],
-                        onSelected: (value) {
-                          if (value == "1") {
-                            favorites.removeAt(index);
-                            setState(() {});
-                          }
-                        },
-                        icon: Icon(
-                          Icons.more_horiz,
-                          color: Colors.white,
                         ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MusicView(audio: audios),
+                        trailing: PopupMenuButton(
+                          itemBuilder: (BuildContext bc) => [
+                            PopupMenuItem(
+                              value: "1",
+                              child: Text(
+                                "Remove Song",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                          ],
+                          onSelected: (value) {
+                            if (value == "1") {
+                              favorites.removeAt(index);
+                              setState(() {});
+                            }
+                          },
+                          icon: Icon(
+                            Icons.more_horiz,
+                            color: Colors.white,
                           ),
-                        );
-                        SongPlaying().openPlayer(index, audios);
-                      },
-                    ),
-                  );
-                },
-              )
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MusicView(audio: audios),
+                            ),
+                          );
+                         SongPlaying().openPlayer(index, audios);
+                        },
+                      ),
+                    );
+                  },
+                )
               : Center(
                   child: Text(
                     "No songs here",

@@ -1,4 +1,4 @@
-import 'package:Musify/audio_player/song_playing.dart';
+import 'package:Musify/audio_player/player.dart';
 import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/pages/playing_screen.dart';
 import 'package:Musify/widgets/add_songs.dart';
@@ -17,8 +17,6 @@ class PlalistView extends StatefulWidget {
 }
 
 class _PlalistViewState extends State<PlalistView> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
