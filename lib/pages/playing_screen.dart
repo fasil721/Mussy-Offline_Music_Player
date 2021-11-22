@@ -62,198 +62,209 @@ class _MusicViewState extends State<MusicView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 15),
-          child: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Image(
-              height: 25,
-              image: AssetImage("assets/icons/arrow.png"),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          begin: Alignment.topLeft,
+          end: FractionalOffset(0, 0.5),
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 15),
+            child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Image(
+                height: 25,
+                image: AssetImage("assets/icons/arrow.png"),
+              ),
             ),
           ),
+          actions: [
+            popupMenu(),
+            SizedBox(
+              width: 15,
+            )
+          ],
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          toolbarHeight: 80,
         ),
-        actions: [
-          popupMenu(),
-          SizedBox(
-            width: 15,
-          )
-        ],
-        backgroundColor: Colors.black,
-        elevation: 0,
-        toolbarHeight: 80,
-      ),
-      backgroundColor: Colors.black,
-      body: _assetsAudioPlayer.builderCurrent(
-        builder: (BuildContext context, Playing? playing) {
-          final myAudio = find(
-            widget.audio,
-            playing!.audio.assetAudioPath,
-          );
-          find2(myAudio);
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 4,
-                child: Center(
-                  child: QueryArtworkWidget(
-                    artworkHeight: 300,
-                    artworkWidth: 300,
-                    id: int.parse(myAudio.metas.id!),
-                    nullArtworkWidget: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Image(
-                        height: 300,
-                        image: AssetImage("assets/icons/default.jpg"),
+        body: _assetsAudioPlayer.builderCurrent(
+          builder: (BuildContext context, Playing? playing) {
+            final myAudio = find(
+              widget.audio,
+              playing!.audio.assetAudioPath,
+            );
+            find2(myAudio);
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 6,
+                  child: Center(
+                    child: QueryArtworkWidget(
+                      artworkHeight: 300,
+                      artworkWidth: 300,
+                      id: int.parse(myAudio.metas.id!),
+                      nullArtworkWidget: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Image(
+                          height: 300,
+                          image: AssetImage("assets/icons/default.jpg"),
+                        ),
                       ),
+                      type: ArtworkType.AUDIO,
                     ),
-                    type: ArtworkType.AUDIO,
                   ),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 23,
-                    right: 15,
-                  ),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 15.0,
-                      horizontal: 16.0,
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    height: 85,
+                    padding: const EdgeInsets.only(
+                      left: 23,
+                      right: 15,
                     ),
-                    title: Text(
-                      myAudio.metas.title!,
-                      maxLines: 1,
-                      style: GoogleFonts.rubik(
-                        color: Colors.white,
-                        fontSize: 20,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10.0,
+                        horizontal: 16.0,
                       ),
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        myAudio.metas.artist!,
+                      title: Text(
+                        myAudio.metas.title!,
                         maxLines: 1,
                         style: GoogleFonts.rubik(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 20,
                         ),
                       ),
-                    ),
-                    trailing: Favourites(music: music!, myAudio: myAudio),
-                  ),
-                ),
-              ),
-              Container(
-                height: 30,
-                padding: const EdgeInsets.only(
-                  right: 40,
-                  left: 40,
-                ),
-                child: _assetsAudioPlayer.builderRealtimePlayingInfos(
-                  builder: (context, RealtimePlayingInfos? infos) {
-                    if (infos == null) {
-                      return SizedBox();
-                    }
-                    return ProgressBar(
-                      timeLabelPadding: 8,
-                      progressBarColor: Colors.white,
-                      thumbColor: Colors.white,
-                      baseBarColor: Colors.grey,
-                      progress: infos.currentPosition,
-                      total: Duration(milliseconds: music!.duration),
-                      timeLabelTextStyle: TextStyle(color: Colors.white),
-                      onSeek: (duration) {
-                        _assetsAudioPlayer.seek(duration);
-                      },
-                    );
-                  },
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Shuffle(),
-                        ),
-                        Expanded(
-                          child: IconButton(
-                            onPressed: () async {
-                              if (prevDone) {
-                                prevDone = false;
-                                await _assetsAudioPlayer.previous();
-                                prevDone = true;
-                              }
-                            },
-                            icon: Image(
-                              image: AssetImage("assets/icons/start.png"),
-                            ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          myAudio.metas.artist!,
+                          maxLines: 1,
+                          style: GoogleFonts.rubik(
+                            color: Colors.white,
+                            fontSize: 14,
                           ),
                         ),
-                        Expanded(
-                          child: _assetsAudioPlayer.builderIsPlaying(
-                            builder: (context, isPlaying) {
-                              return isPlaying
-                                  ? IconButton(
-                                      iconSize: 40,
-                                      onPressed: () {
-                                        _assetsAudioPlayer.playOrPause();
-                                      },
-                                      icon: Image(
-                                        height: 50,
-                                        image: AssetImage(
-                                            "assets/icons/pause.png"),
-                                      ),
-                                    )
-                                  : IconButton(
-                                      iconSize: 40,
-                                      onPressed: () {
-                                        _assetsAudioPlayer.playOrPause();
-                                      },
-                                      icon: Image(
-                                        height: 50,
-                                        image:
-                                            AssetImage("assets/icons/play.png"),
-                                      ),
-                                    );
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: IconButton(
-                            onPressed: () async {
-                              if (nextDone) {
-                                nextDone = false;
-                                await _assetsAudioPlayer.next();
-                                nextDone = true;
-                              }
-                            },
-                            icon: Image(
-                              image: AssetImage("assets/icons/end.png"),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Repeat(),
-                        )
-                      ],
+                      ),
+                      trailing: Favourites(music: music!, myAudio: myAudio),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+                Container(
+                  height: 30,
+                  padding: const EdgeInsets.only(
+                    right: 40,
+                    left: 40,
+                  ),
+                  child: _assetsAudioPlayer.builderRealtimePlayingInfos(
+                    builder: (context, RealtimePlayingInfos? infos) {
+                      if (infos == null) {
+                        return SizedBox();
+                      }
+                      return ProgressBar(
+                        timeLabelPadding: 8,
+                        progressBarColor: Colors.white,
+                        thumbColor: Colors.white,
+                        baseBarColor: Colors.grey,
+                        progress: infos.currentPosition,
+                        total: Duration(milliseconds: music!.duration),
+                        timeLabelTextStyle: TextStyle(color: Colors.white),
+                        onSeek: (duration) {
+                          _assetsAudioPlayer.seek(duration);
+                        },
+                      );
+                    },
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Shuffle(),
+                          ),
+                          Expanded(
+                            child: IconButton(
+                              onPressed: () async {
+                                if (prevDone) {
+                                  prevDone = false;
+                                  await _assetsAudioPlayer.previous();
+                                  prevDone = true;
+                                }
+                              },
+                              icon: Image(
+                                image: AssetImage("assets/icons/start.png"),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: _assetsAudioPlayer.builderIsPlaying(
+                              builder: (context, isPlaying) {
+                                return isPlaying
+                                    ? IconButton(
+                                        iconSize: 40,
+                                        onPressed: () {
+                                          _assetsAudioPlayer.playOrPause();
+                                        },
+                                        icon: Image(
+                                          height: 50,
+                                          image: AssetImage(
+                                              "assets/icons/pause.png"),
+                                        ),
+                                      )
+                                    : IconButton(
+                                        iconSize: 40,
+                                        onPressed: () {
+                                          _assetsAudioPlayer.playOrPause();
+                                        },
+                                        icon: Image(
+                                          height: 50,
+                                          image: AssetImage(
+                                              "assets/icons/play.png"),
+                                        ),
+                                      );
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: IconButton(
+                              onPressed: () async {
+                                if (nextDone) {
+                                  nextDone = false;
+                                  await _assetsAudioPlayer.next();
+                                  nextDone = true;
+                                }
+                              },
+                              icon: Image(
+                                image: AssetImage("assets/icons/end.png"),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Repeat(),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -272,16 +283,16 @@ class _FavouritesState extends State<Favourites> {
   Box _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
-    List<dynamic> favorites = _box.get("favorites");
+    List<dynamic> favourites = _box.get("favourites");
 
-    return favorites
+    return favourites
             .where((element) =>
                 element.id.toString() == widget.myAudio.metas.id.toString())
             .isEmpty
         ? IconButton(
             onPressed: () async {
-              favorites.add(widget.music);
-              await _box.put("favorites", favorites);
+              favourites.add(widget.music);
+              await _box.put("favourites", favourites);
               setState(() {});
             },
             icon: Image(
@@ -291,9 +302,9 @@ class _FavouritesState extends State<Favourites> {
           )
         : IconButton(
             onPressed: () async {
-              favorites.removeWhere((element) =>
+              favourites.removeWhere((element) =>
                   element.id.toString() == widget.music.id.toString());
-              await _box.put("favorites", favorites);
+              await _box.put("favourites", favourites);
               setState(() {});
             },
             icon: Image(

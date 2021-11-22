@@ -24,9 +24,9 @@ class _HomepageState extends State<Homepage> {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff4D3C3C), Color(0xff000000)],
+          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
           begin: Alignment.topLeft,
-          end: FractionalOffset(0, 0.9),
+          end: FractionalOffset(0, 1.3),
         ),
       ),
       child: Scaffold(

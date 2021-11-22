@@ -20,7 +20,6 @@ class Player {
 
   List<Audio> convertToAudios(List<dynamic> songs) {
     List<Audio> audios = [];
-
     songs.forEach(
       (element) {
         audios.add(

@@ -22,8 +22,8 @@ void main() async {
   Box _box = await Boxes.getInstance();
   List<dynamic> keys = _box.keys.toList();
   if (keys.isEmpty) {
-    List<dynamic> favorites = [];
-    await _box.put("favorites", favorites);
+    List<dynamic> favourites = [];
+    await _box.put("favourites", favourites);
     List<dynamic> recentsong = [];
     await _box.put("recentsong", recentsong);
     SharedPreferences prefs = await SharedPreferences.getInstance();

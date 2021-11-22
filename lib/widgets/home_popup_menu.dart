@@ -17,37 +17,37 @@ class _homepopupState extends State<homepopup> {
   @override
   Widget build(BuildContext context) {
     List<Songs> songs = _box.get("tracks");
-    List<dynamic> favorites = _box.get("favorites");
+    List<dynamic> favourites = _box.get("favourites");
     final temp = Player().findSongFromDatabase(songs, widget.audioId);
     return PopupMenuButton(
       itemBuilder: (BuildContext bc) => [
-        favorites
+        favourites
                 .where((element) => element.id.toString() == temp.id.toString())
                 .isEmpty
             ? PopupMenuItem(
                 onTap: () async {
-                  favorites.add(temp);
-                  await _box.put("favorites", favorites);
+                  favourites.add(temp);
+                  await _box.put("favourites", favourites);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(temp.title + " Added to Favorites"),
+                      content: Text(temp.title + " Added to Favourites"),
                     ),
                   );
                 },
-                child: Text("Add to favorite"),
+                child: Text("Add to favourite"),
               )
             : PopupMenuItem(
                 onTap: () async {
-                  favorites.removeWhere(
+                  favourites.removeWhere(
                       (element) => element.id.toString() == temp.id.toString());
-                  await _box.put("favorites", favorites);
+                  await _box.put("favourites", favourites);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(temp.title + " Removed from Favorites"),
+                      content: Text(temp.title + " Removed from Favourites"),
                     ),
                   );
                 },
-                child: Text("Remove from favorite"),
+                child: Text("Remove from favourite"),
               ),
         PopupMenuItem(
           child: Text("Add to playlist"),

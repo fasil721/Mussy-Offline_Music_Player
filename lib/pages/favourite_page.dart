@@ -1,7 +1,6 @@
 import 'package:Musify/audio_player/player.dart';
 import 'package:Musify/databases/box_instance.dart';
 import 'package:Musify/pages/playing_screen.dart';
-import 'package:Musify/widgets/add_songs.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,14 +8,12 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-class PlalistView extends StatefulWidget {
-  const PlalistView({Key? key, required this.playlistName}) : super(key: key);
-  final String playlistName;
+class FavoritePage extends StatefulWidget {
   @override
-  _PlalistViewState createState() => _PlalistViewState();
+  State<FavoritePage> createState() => _FavoritePageState();
 }
 
-class _PlalistViewState extends State<PlalistView> {
+class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,58 +29,33 @@ class _PlalistViewState extends State<PlalistView> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          leadingWidth: 70,
           toolbarHeight: 80,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 14),
-            child: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            "Favourites",
+            style: GoogleFonts.rubik(
+              color: Colors.white,
+              fontSize: 25,
             ),
           ),
-          title: Center(
-            child: Text(
-              widget.playlistName,
-              style: GoogleFonts.rubik(
-                color: Colors.white,
-                fontSize: 27,
-              ),
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (Context) => AddSongsInPlaylist(
-                    playlistName: widget.playlistName,
-                  ),
-                );
-              },
-              icon: Icon(
-                Icons.add,
-                size: 30,
-              ),
-            ),
-            Container(
-              width: 12,
-            ),
-          ],
         ),
         body: ValueListenableBuilder(
           valueListenable: Boxes.getInstance().listenable(),
           builder: (context, Box _box, _) {
-            List<dynamic> playlists = _box.get(widget.playlistName);
-            List<Audio> audios = Player().convertToAudios(playlists);
-            return playlists.isNotEmpty
+            List<dynamic> favourites = _box.get("favourites");
+            List<Audio> audios = Player().convertToAudios(favourites);
+            return favourites.isNotEmpty
                 ? ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     physics: ScrollPhysics(),
-                    itemCount: playlists.length,
+                    itemCount: favourites.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(
@@ -91,14 +63,13 @@ class _PlalistViewState extends State<PlalistView> {
                           right: 10,
                         ),
                         child: ListTile(
-                          // tileColor: Color(0xff4D3C3C),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(5),
                             ),
                           ),
                           title: Text(
-                            playlists[index].title,
+                            favourites[index].title!,
                             maxLines: 1,
                             textAlign: TextAlign.justify,
                             style: GoogleFonts.rubik(
@@ -107,36 +78,15 @@ class _PlalistViewState extends State<PlalistView> {
                             ),
                           ),
                           subtitle: Text(
-                            playlists[index].artist!,
+                            favourites[index].artist!,
                             style: GoogleFonts.rubik(
                               fontSize: 13,
                               color: Colors.grey,
                             ),
                             maxLines: 1,
                           ),
-                          trailing: PopupMenuButton(
-                            itemBuilder: (BuildContext bc) => [
-                              PopupMenuItem(
-                                value: "1",
-                                child: Text(
-                                  "Remove song",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ),
-                            ],
-                            onSelected: (value) {
-                              if (value == "1") {
-                                playlists.removeAt(index);
-                                setState(() {});
-                              }
-                            },
-                            icon: Icon(
-                              Icons.more_horiz,
-                              color: Colors.white,
-                            ),
-                          ),
                           leading: QueryArtworkWidget(
-                            id: playlists[index].id!,
+                            id: favourites[index].id!,
                             type: ArtworkType.AUDIO,
                             nullArtworkWidget: ClipRRect(
                               borderRadius: BorderRadius.circular(50),
@@ -144,6 +94,27 @@ class _PlalistViewState extends State<PlalistView> {
                                 height: 50,
                                 image: AssetImage("assets/icons/default.jpg"),
                               ),
+                            ),
+                          ),
+                          trailing: PopupMenuButton(
+                            itemBuilder: (BuildContext bc) => [
+                              PopupMenuItem(
+                                value: "1",
+                                child: Text(
+                                  "Remove Song",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ),
+                            ],
+                            onSelected: (value) {
+                              if (value == "1") {
+                                favourites.removeAt(index);
+                                setState(() {});
+                              }
+                            },
+                            icon: Icon(
+                              Icons.more_horiz,
+                              color: Colors.white,
                             ),
                           ),
                           onTap: () {

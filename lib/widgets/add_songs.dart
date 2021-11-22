@@ -33,7 +33,13 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
             )
             .toList();
     return Container(
-      color: Colors.grey,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          begin: Alignment.topLeft,
+          end: FractionalOffset(0, 1.3),
+        ),
+      ),
       child: Column(
         children: [
           Padding(
@@ -43,21 +49,23 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
             child: TextField(
               cursorColor: Colors.black,
               decoration: InputDecoration(
-                fillColor: Colors.white70,
+                fillColor: Colors.grey,
                 filled: true,
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 hintText: 'Search a song',
+                focusColor: Color(0xff3a2d2d),
+                hoverColor: Color(0xff3a2d2d),
                 prefixIcon: Icon(
                   Icons.search,
-                  color: Color(0xff4D3C3C),
+                  color: Color(0xff3a2d2d),
                 ),
               ),
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 15,
+                color: Color(0xff3a2d2d),
+                fontSize: 16,
               ),
               onChanged: (value) {
                 setState(() {
@@ -72,11 +80,23 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                     itemCount: result.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        tileColor: Colors.white,
-                        title: Text(result[index].title),
+                        title: Text(
+                          result[index].title,
+                          style: TextStyle(
+                            color: Colors.white70,
+                          ),
+                          maxLines: 1,
+                        ),
                         leading: QueryArtworkWidget(
                           id: result[index].id,
                           type: ArtworkType.AUDIO,
+                          nullArtworkWidget: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image(
+                              height: 50,
+                              image: AssetImage("assets/icons/default.jpg"),
+                            ),
+                          ),
                         ),
                         trailing: AddAndRemove(
                           playlistName: widget.playlistName,
@@ -128,6 +148,7 @@ class _AddAndRemoveState extends State<AddAndRemove> {
             },
             icon: const Icon(
               Icons.add,
+              color: Colors.white70,
             ),
           )
         : IconButton(
@@ -139,6 +160,7 @@ class _AddAndRemoveState extends State<AddAndRemove> {
             },
             icon: const Icon(
               Icons.check_box,
+              color: Colors.white70,
             ),
           );
   }

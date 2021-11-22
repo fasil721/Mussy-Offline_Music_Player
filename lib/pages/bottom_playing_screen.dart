@@ -46,7 +46,7 @@ class _bottomPlayingState extends State<bottomPlating> {
       alignment: Alignment.bottomCenter,
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xff4D3C3C),
+          color: Color(0xff3a2d2d),
           borderRadius: BorderRadius.all(
             Radius.circular(5),
           ),
@@ -137,7 +137,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                                         icon: Icon(
                                           Icons.pause,
                                           color: Colors.white,
-                                          size: 20,
+                                          size: 19,
                                         ),
                                       ),
                                     )
@@ -150,7 +150,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                                         icon: Icon(
                                           Icons.play_arrow,
                                           color: Colors.white,
-                                          size: 20,
+                                          size: 19,
                                         ),
                                       ),
                                     );

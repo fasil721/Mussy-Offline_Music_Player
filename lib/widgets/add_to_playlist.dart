@@ -17,11 +17,17 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
   Widget build(BuildContext context) {
     List<dynamic> playlistNames = _box.keys.toList();
     playlistNames.remove("tracks");
-    playlistNames.remove("favorites");
+    playlistNames.remove("favourites");
     playlistNames.remove("recentsong");
 
     return Container(
-      color: Colors.grey,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          begin: Alignment.topLeft,
+          end: FractionalOffset(0, 1.3),
+        ),
+      ),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -38,9 +44,15 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                   },
                   icon: Icon(
                     Icons.add,
+                    color: Colors.white,
+                  ),
+                ), 
+                title: Text(
+                  "Create a new Playlist",
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
                 ),
-                title: Text("Create a new Playlist"),
               ),
             ),
             ListView.builder(
@@ -51,14 +63,9 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
               itemBuilder: (context, index) {
                 List<dynamic> songofPlaylist = _box.get(playlistNames[index]);
                 return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Color(0xff4D3C3C),
-                  ),
                   margin: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                    bottom: 10,
+                    left: 10,
+                    right: 10,
                   ),
                   child: ListTile(
                     onTap: () {
@@ -83,6 +90,9 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                                 widget.song.id.toString())
                             .isEmpty
                         ? ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey,
+                            ),
                             onPressed: () async {
                               List<dynamic> songofPlaylist =
                                   _box.get(playlistNames[index]);
@@ -100,24 +110,38 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                                 ),
                               );
                             },
-                            child: Text("Add here"),
+                            child: Text(
+                              "Add",
+                              style: TextStyle(
+                                color: Color(0xff3a2d2d),
+                              ),
+                            ),
                           )
                         : ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey,
+                            ),
                             onPressed: () async {
-                              songofPlaylist.removeWhere((element) =>
-                                  element.id.toString() ==
-                                  widget.song.id.toString());
+                              songofPlaylist.removeWhere(
+                                (element) =>
+                                    element.id.toString() ==
+                                    widget.song.id.toString(),
+                              );
                               await _box.put(
                                   playlistNames[index], songofPlaylist);
                               setState(() {});
                             },
-                            child: Text("Remove here"),
+                            child: Text(
+                              "Remove",
+                              style: TextStyle(
+                                color: Color(0xff3a2d2d),
+                              ),
+                            ),
                           ),
                     contentPadding: EdgeInsets.symmetric(
                       vertical: 3.0,
                       horizontal: 16.0,
                     ),
-                    tileColor: Color(0xff4D3C3C),
                   ),
                 );
               },
