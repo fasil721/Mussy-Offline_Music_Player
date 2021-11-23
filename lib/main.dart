@@ -20,6 +20,7 @@ void main() async {
   Hive.registerAdapter(SongsAdapter());
   await Hive.openBox('songs');
   Box _box = await Boxes.getInstance();
+  WidgetsFlutterBinding.ensureInitialized();
   List<dynamic> keys = _box.keys.toList();
   if (keys.isEmpty) {
     List<dynamic> favourites = [];
@@ -29,13 +30,13 @@ void main() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('notify', true);
   }
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool? _notify = await prefs.getBool('notify');
-
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool? _notify = await prefs.getBool('notify');
+
   List<dynamic> recentsongs = _box.get("recentsong");
   if (recentsongs.isNotEmpty) {
     AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
@@ -50,11 +51,63 @@ void main() async {
   }
 
   runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyApp(_notify!),
+    FutureBuilder(
+      future: Init.instance.initialize(),
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const MaterialApp(home: Splash());
+        } else {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: MyApp(_notify!),
+          );
+        }
+      },
     ),
   );
+}
+
+class Init {
+  Init._();
+  static final instance = Init._();
+
+  Future initialize() async {
+    await Future.delayed(
+      const Duration(seconds: 3),
+    );
+  }
+}
+
+class Splash extends StatelessWidget {
+  const Splash({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color(0xff3a2d2d),
+            Color(0xff0000000),
+          ],
+          begin: Alignment.topLeft,
+          end: FractionalOffset(0, 1.3),
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Image(
+              height: 150,
+              image: AssetImage("assets/icons/icon.png"),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatefulWidget {

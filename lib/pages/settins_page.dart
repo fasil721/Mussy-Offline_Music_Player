@@ -108,6 +108,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     right: 0,
                   ),
                   child: ListTile(
+                    onTap: () {},
                     leading: Icon(
                       Icons.share,
                       color: Colors.white,
@@ -128,6 +129,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     right: 0,
                   ),
                   child: ListTile(
+                    onTap: () {},
                     leading: Icon(
                       Icons.lock,
                       color: Colors.white,
@@ -148,6 +150,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     right: 0,
                   ),
                   child: ListTile(
+                    onTap: () {},
                     leading: Icon(
                       Icons.receipt,
                       color: Colors.white,
@@ -186,7 +189,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           borderRadius: BorderRadius.circular(50),
                           child: Image(
                             height: 50,
-                            image: AssetImage("assets/icons/default.jpg"),
+                            image: AssetImage("assets/icons/icon.png"),
                           ),
                         ),
                         applicationVersion: '1.0.0',
