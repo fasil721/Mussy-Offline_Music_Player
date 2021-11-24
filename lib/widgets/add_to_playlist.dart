@@ -1,5 +1,5 @@
-import 'package:Musify/databases/box_instance.dart';
-import 'package:Musify/widgets/create_playlist.dart';
+import 'package:Mussy/databases/box_instance.dart';
+import 'package:Mussy/widgets/create_playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';

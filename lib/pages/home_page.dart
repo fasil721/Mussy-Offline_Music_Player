@@ -1,7 +1,7 @@
-import 'package:Musify/audio_player/player.dart';
-import 'package:Musify/databases/box_instance.dart';
-import 'package:Musify/pages/settins_page.dart';
-import 'package:Musify/widgets/home_popup_menu.dart';
+import 'package:Mussy/audio_player/player.dart';
+import 'package:Mussy/databases/box_instance.dart';
+import 'package:Mussy/pages/settins_page.dart';
+import 'package:Mussy/widgets/home_popup_menu.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,7 +26,7 @@ class _HomepageState extends State<Homepage> {
         gradient: LinearGradient(
           colors: [Color(0xff3a2d2d), Color(0xff0000000)],
           begin: Alignment.topLeft,
-          end: FractionalOffset(0, 1.3),
+          end: FractionalOffset(0, 1),
         ),
       ),
       child: Scaffold(
@@ -38,7 +38,7 @@ class _HomepageState extends State<Homepage> {
           title: Padding(
             padding: const EdgeInsets.all(15.0),
             child: Text(
-              "Musify",
+              "Mussy",
               style: GoogleFonts.rubik(
                 color: Colors.white,
                 fontSize: 30,

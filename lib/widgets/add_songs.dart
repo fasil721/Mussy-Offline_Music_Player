@@ -1,5 +1,5 @@
-import 'package:Musify/databases/box_instance.dart';
-import 'package:Musify/databases/songs_adapter.dart';
+import 'package:Mussy/databases/box_instance.dart';
+import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';

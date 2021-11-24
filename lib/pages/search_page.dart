@@ -1,5 +1,5 @@
-import 'package:Musify/audio_player/player.dart';
-import 'package:Musify/widgets/home_popup_menu.dart';
+import 'package:Mussy/audio_player/player.dart';
+import 'package:Mussy/widgets/home_popup_menu.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

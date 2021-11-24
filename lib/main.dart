@@ -1,5 +1,5 @@
-import 'package:Musify/audio_player/player.dart';
-import 'package:Musify/databases/box_instance.dart';
+import 'package:Mussy/audio_player/player.dart';
+import 'package:Mussy/databases/box_instance.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -100,7 +100,7 @@ class Splash extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image(
-              height: 150,
+              height: 180,
               image: AssetImage("assets/icons/icon.png"),
             ),
           ),

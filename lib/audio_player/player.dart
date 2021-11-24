@@ -1,4 +1,4 @@
-import 'package:Musify/databases/songs_adapter.dart';
+import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,6 +1,6 @@
-import 'package:Musify/pages/playlist_view.dart';
-import 'package:Musify/widgets/create_playlist.dart';
-import 'package:Musify/widgets/edit_playlist.dart';
+import 'package:Mussy/pages/playlist_view.dart';
+import 'package:Mussy/widgets/create_playlist.dart';
+import 'package:Mussy/widgets/edit_playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
