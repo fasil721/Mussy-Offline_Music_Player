@@ -55,7 +55,10 @@ void main() async {
       future: Init.instance.initialize(),
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const MaterialApp(home: Splash());
+          return const MaterialApp(
+            home: Splash(),
+            debugShowCheckedModeBanner: false,
+          );
         } else {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
