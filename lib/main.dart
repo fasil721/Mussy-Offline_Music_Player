@@ -91,7 +91,7 @@ class Splash extends StatelessWidget {
             Color(0xff0000000),
           ],
           begin: Alignment.topLeft,
-          end: FractionalOffset(0, 1.3),
+          end: FractionalOffset(0, 1),
         ),
       ),
       child: Scaffold(

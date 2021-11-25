@@ -37,7 +37,7 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
         gradient: LinearGradient(
           colors: [Color(0xff3a2d2d), Color(0xff0000000)],
           begin: Alignment.topLeft,
-          end: FractionalOffset(0, 1.3),
+          end: FractionalOffset(0, 1),
         ),
       ),
       child: Column(
