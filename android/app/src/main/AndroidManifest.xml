@@ -6,7 +6,8 @@
    <application
         android:label="Mussy"
         android:requestLegacyExternalStorage="true"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:exported="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

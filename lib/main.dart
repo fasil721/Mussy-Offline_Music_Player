@@ -25,8 +25,8 @@ void main() async {
   if (keys.isEmpty) {
     List<dynamic> favourites = [];
     await _box.put("favourites", favourites);
-    List<dynamic> recentsong = [];
-    await _box.put("recentsong", recentsong);
+    List<dynamic> recentSong = [];
+    await _box.put("recentsong", recentSong);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('notify', true);
   }
@@ -37,10 +37,10 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool? _notify = await prefs.getBool('notify');
 
-  List<dynamic> recentsongs = _box.get("recentsong");
-  if (recentsongs.isNotEmpty) {
+  List<dynamic> recentSongs = _box.get("recentsong");
+  if (recentSongs.isNotEmpty) {
     AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-    List<Audio> audios = Player().convertToAudios(recentsongs);
+    List<Audio> audios = Player().convertToAudios(recentSongs);
     _assetsAudioPlayer.open(
       Playlist(
         audios: audios,
@@ -103,7 +103,7 @@ class Splash extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image(
-              height: 180,
+              height: 150,
               image: AssetImage("assets/icons/icon.png"),
             ),
           ),

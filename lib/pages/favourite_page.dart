@@ -118,13 +118,13 @@ class _FavoritePageState extends State<FavoritePage> {
                             ),
                           ),
                           onTap: () {
+                            Player().openPlayer(index, audios);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => MusicView(audio: audios),
                               ),
                             );
-                            Player().openPlayer(index, audios);
                           },
                         ),
                       );
