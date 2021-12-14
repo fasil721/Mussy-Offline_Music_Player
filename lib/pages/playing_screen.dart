@@ -22,8 +22,8 @@ class MusicView extends StatefulWidget {
 }
 
 class _MusicViewState extends State<MusicView> {
-  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-  Box _box = Boxes.getInstance();
+  final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  final _box = Boxes.getInstance();
   bool nextDone = true;
   bool prevDone = true;
   Songs? music;
@@ -40,7 +40,7 @@ class _MusicViewState extends State<MusicView> {
   Widget popupMenu() {
     return PopupMenuButton(
       itemBuilder: (BuildContext bc) => [
-        PopupMenuItem(
+        const PopupMenuItem(
           child: Text("Add to playlist"),
           value: "1",
         ),
@@ -53,7 +53,7 @@ class _MusicViewState extends State<MusicView> {
           );
         }
       },
-      icon: Icon(
+      icon: const Icon(
         Icons.more_vert_outlined,
         color: Colors.white,
       ),
@@ -63,9 +63,9 @@ class _MusicViewState extends State<MusicView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          colors: [Color(0xff3a2d2d), Colors.black],
           begin: Alignment.topLeft,
           end: FractionalOffset(0, 0.5),
         ),
@@ -79,7 +79,7 @@ class _MusicViewState extends State<MusicView> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Image(
+              icon: const Image(
                 height: 25,
                 image: AssetImage("assets/icons/arrow.png"),
               ),
@@ -87,7 +87,7 @@ class _MusicViewState extends State<MusicView> {
           ),
           actions: [
             popupMenu(),
-            SizedBox(
+            const SizedBox(
               width: 15,
             )
           ],
@@ -114,7 +114,7 @@ class _MusicViewState extends State<MusicView> {
                       id: int.parse(myAudio.metas.id!),
                       nullArtworkWidget: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child: Image(
+                        child: const Image(
                           height: 300,
                           image: AssetImage("assets/icons/default.jpg"),
                         ),
@@ -132,7 +132,7 @@ class _MusicViewState extends State<MusicView> {
                       right: 15,
                     ),
                     child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(
+                      contentPadding: const EdgeInsets.symmetric(
                         vertical: 10.0,
                         horizontal: 16.0,
                       ),
@@ -168,7 +168,7 @@ class _MusicViewState extends State<MusicView> {
                   child: _assetsAudioPlayer.builderRealtimePlayingInfos(
                     builder: (context, RealtimePlayingInfos? infos) {
                       if (infos == null) {
-                        return SizedBox();
+                        return const SizedBox();
                       }
                       return ProgressBar(
                         timeLabelPadding: 8,
@@ -177,7 +177,8 @@ class _MusicViewState extends State<MusicView> {
                         baseBarColor: Colors.grey,
                         progress: infos.currentPosition,
                         total: Duration(milliseconds: music!.duration),
-                        timeLabelTextStyle: TextStyle(color: Colors.white),
+                        timeLabelTextStyle:
+                            const TextStyle(color: Colors.white),
                         onSeek: (duration) {
                           _assetsAudioPlayer.seek(duration);
                         },
@@ -193,7 +194,7 @@ class _MusicViewState extends State<MusicView> {
                       padding: const EdgeInsets.all(20),
                       child: Row(
                         children: [
-                          Expanded(
+                          const Expanded(
                             child: Shuffle(),
                           ),
                           Expanded(
@@ -205,7 +206,7 @@ class _MusicViewState extends State<MusicView> {
                                   prevDone = true;
                                 }
                               },
-                              icon: Image(
+                              icon: const Image(
                                 image: AssetImage("assets/icons/start.png"),
                               ),
                             ),
@@ -219,7 +220,7 @@ class _MusicViewState extends State<MusicView> {
                                         onPressed: () {
                                           _assetsAudioPlayer.playOrPause();
                                         },
-                                        icon: Image(
+                                        icon: const Image(
                                           height: 50,
                                           image: AssetImage(
                                               "assets/icons/pause.png"),
@@ -230,7 +231,7 @@ class _MusicViewState extends State<MusicView> {
                                         onPressed: () {
                                           _assetsAudioPlayer.playOrPause();
                                         },
-                                        icon: Image(
+                                        icon: const Image(
                                           height: 50,
                                           image: AssetImage(
                                               "assets/icons/play.png"),
@@ -248,12 +249,12 @@ class _MusicViewState extends State<MusicView> {
                                   nextDone = true;
                                 }
                               },
-                              icon: Image(
+                              icon: const Image(
                                 image: AssetImage("assets/icons/end.png"),
                               ),
                             ),
                           ),
-                          Expanded(
+                          const Expanded(
                             child: Repeat(),
                           )
                         ],
@@ -280,7 +281,7 @@ class Favourites extends StatefulWidget {
 }
 
 class _FavouritesState extends State<Favourites> {
-  Box _box = Boxes.getInstance();
+  final _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
     List<dynamic> favourites = _box.get("favourites");
@@ -295,7 +296,7 @@ class _FavouritesState extends State<Favourites> {
               await _box.put("favourites", favourites);
               setState(() {});
             },
-            icon: Image(
+            icon: const Image(
               height: 25,
               image: AssetImage("assets/icons/heart.png"),
             ),
@@ -307,7 +308,7 @@ class _FavouritesState extends State<Favourites> {
               await _box.put("favourites", favourites);
               setState(() {});
             },
-            icon: Image(
+            icon: const Image(
               height: 25,
               image: AssetImage("assets/icons/heartfill.png"),
             ),
@@ -333,7 +334,7 @@ class _ShuffleState extends State<Shuffle> {
                 _assetsAudioPlayer.toggleShuffle();
               });
             },
-            icon: Image(
+            icon: const Image(
               height: 25,
               image: AssetImage("assets/icons/shuffling.png"),
             ),
@@ -344,7 +345,7 @@ class _ShuffleState extends State<Shuffle> {
                 _assetsAudioPlayer.toggleShuffle();
               });
             },
-            icon: Image(
+            icon: const Image(
               height: 25,
               image: AssetImage("assets/icons/ishuffle.png"),
             ),

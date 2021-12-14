@@ -1,7 +1,6 @@
 import 'package:Mussy/databases/box_instance.dart';
 import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class AddSongsInPlaylist extends StatefulWidget {
@@ -16,7 +15,7 @@ class AddSongsInPlaylist extends StatefulWidget {
 }
 
 class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
-  Box _box = Boxes.getInstance();
+  final _box = Boxes.getInstance();
   String searchText = "";
 
   @override
@@ -33,9 +32,9 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
             )
             .toList();
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          colors: [Color(0xff3a2d2d), Colors.black],
           begin: Alignment.topLeft,
           end: FractionalOffset(0, 1),
         ),
@@ -43,9 +42,7 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(
-              10,
-            ),
+            padding: const EdgeInsets.all(10),
             child: TextField(
               cursorColor: Colors.black,
               decoration: InputDecoration(
@@ -56,14 +53,14 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 hintText: 'Search a song',
-                focusColor: Color(0xff3a2d2d),
-                hoverColor: Color(0xff3a2d2d),
-                prefixIcon: Icon(
+                focusColor: const Color(0xff3a2d2d),
+                hoverColor: const Color(0xff3a2d2d),
+                prefixIcon: const Icon(
                   Icons.search,
                   color: Color(0xff3a2d2d),
                 ),
               ),
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xff3a2d2d),
                 fontSize: 16,
               ),
@@ -82,7 +79,7 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                       return ListTile(
                         title: Text(
                           result[index].title,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white70,
                           ),
                           maxLines: 1,
@@ -92,7 +89,7 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                           type: ArtworkType.AUDIO,
                           nullArtworkWidget: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
-                            child: Image(
+                            child: const Image(
                               height: 50,
                               image: AssetImage("assets/icons/default.jpg"),
                             ),
@@ -105,14 +102,14 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(
+                      return const SizedBox(
                         height: 10,
                       );
                     },
                   ),
                 )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
+              : const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Text("Result not found"),
                 )
         ],
@@ -132,7 +129,7 @@ class AddAndRemove extends StatefulWidget {
 }
 
 class _AddAndRemoveState extends State<AddAndRemove> {
-  Box _box = Boxes.getInstance();
+  final _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
     List<dynamic> playlists = _box.get(widget.playlistName);

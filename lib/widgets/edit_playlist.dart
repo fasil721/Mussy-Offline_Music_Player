@@ -1,7 +1,6 @@
 import 'package:Mussy/databases/box_instance.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 
 class EditPlaylist extends StatefulWidget {
   const EditPlaylist({Key? key, required this.PlaylistName}) : super(key: key);
@@ -11,7 +10,7 @@ class EditPlaylist extends StatefulWidget {
 }
 
 class _EditPlaylistState extends State<EditPlaylist> {
-  Box _box = Boxes.getInstance();
+  final _box = Boxes.getInstance();
   String? _title;
   final formkey = GlobalKey<FormState>();
   @override
@@ -50,12 +49,12 @@ class _EditPlaylistState extends State<EditPlaylist> {
               child: TextFormField(
                 initialValue: widget.PlaylistName,
                 cursorHeight: 25,
-                decoration: InputDecoration(
+                decoration:const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                   ),
                 ),
-                style: TextStyle(
+                style:const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                 ),

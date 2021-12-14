@@ -3,17 +3,16 @@ import 'package:Mussy/databases/box_instance.dart';
 import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:Mussy/widgets/add_to_playlist.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
-class homepopup extends StatefulWidget {
-  const homepopup({Key? key, required this.audioId}) : super(key: key);
+class HomePopup extends StatefulWidget {
+  const HomePopup({Key? key, required this.audioId}) : super(key: key);
   final String audioId;
   @override
-  _homepopupState createState() => _homepopupState();
+  _HomePopupState createState() => _HomePopupState();
 }
 
-class _homepopupState extends State<homepopup> {
-  Box _box = Boxes.getInstance();
+class _HomePopupState extends State<HomePopup> {
+  final _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
     List<Songs> songs = _box.get("tracks");
@@ -34,7 +33,7 @@ class _homepopupState extends State<homepopup> {
                     ),
                   );
                 },
-                child: Text("Add to favourite"),
+                child: const Text("Add to favourite"),
               )
             : PopupMenuItem(
                 onTap: () async {
@@ -47,9 +46,9 @@ class _homepopupState extends State<homepopup> {
                     ),
                   );
                 },
-                child: Text("Remove from favourite"),
+                child: const Text("Remove from favourite"),
               ),
-        PopupMenuItem(
+        const PopupMenuItem(
           child: Text("Add to playlist"),
           value: "1",
         ),
@@ -62,7 +61,7 @@ class _homepopupState extends State<homepopup> {
           );
         }
       },
-      icon: Icon(
+      icon: const Icon(
         Icons.more_horiz,
         color: Colors.white,
       ),

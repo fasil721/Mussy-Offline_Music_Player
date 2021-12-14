@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage(this.audios);
+  const SearchPage(this.audios, {Key? key}) : super(key: key);
   final List<Audio> audios;
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -16,7 +16,7 @@ class _SearchPageState extends State<SearchPage> {
   String searchText = "";
   Future<String> debounce() async {
     await Future.delayed(
-      Duration(seconds: 1),
+      const Duration(seconds: 1),
     );
     return "Ok";
   }
@@ -31,9 +31,9 @@ class _SearchPageState extends State<SearchPage> {
         )
         .toList();
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          colors: [Color(0xff3a2d2d), Colors.black],
           begin: Alignment.topLeft,
           end: FractionalOffset(0, 1),
         ),
@@ -58,7 +58,7 @@ class _SearchPageState extends State<SearchPage> {
         body: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 left: 20,
                 right: 20,
               ),
@@ -72,14 +72,14 @@ class _SearchPageState extends State<SearchPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   hintText: 'Search a song',
-                  focusColor: Color(0xff3a2d2d),
-                  hoverColor: Color(0xff3a2d2d),
-                  prefixIcon: Icon(
+                  focusColor: const Color(0xff3a2d2d),
+                  hoverColor: const Color(0xff3a2d2d),
+                  prefixIcon: const Icon(
                     Icons.search,
                     color: Color(0xff3a2d2d),
                   ),
                 ),
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color(0xff3a2d2d),
                   fontSize: 16,
                 ),
@@ -97,7 +97,7 @@ class _SearchPageState extends State<SearchPage> {
                           padding: const EdgeInsets.only(bottom: 75),
                           child: ListView.builder(
                             shrinkWrap: true,
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             itemCount: result.length,
                             itemBuilder: (context, index) {
                               return FutureBuilder(
@@ -114,7 +114,7 @@ class _SearchPageState extends State<SearchPage> {
                                         onTap: () {
                                           Player().openPlayer(index, result);
                                         },
-                                        shape: RoundedRectangleBorder(
+                                        shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(5),
                                           ),
@@ -126,7 +126,7 @@ class _SearchPageState extends State<SearchPage> {
                                           nullArtworkWidget: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(50),
-                                            child: Image(
+                                            child: const Image(
                                               height: 50,
                                               image: AssetImage(
                                                   "assets/icons/default.jpg"),
@@ -149,7 +149,7 @@ class _SearchPageState extends State<SearchPage> {
                                           ),
                                           maxLines: 1,
                                         ),
-                                        trailing: homepopup(
+                                        trailing: HomePopup(
                                           audioId: result[index].metas.id!,
                                         ),
                                       ),
@@ -162,7 +162,7 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ),
                       )
-                    : Padding(
+                    : const Padding(
                         padding: EdgeInsets.all(30),
                         child: Text(
                           "No result found",
@@ -172,7 +172,7 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ),
                       )
-                : SizedBox(),
+                : const SizedBox(),
           ],
         ),
       ),

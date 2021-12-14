@@ -3,7 +3,6 @@ import 'package:Mussy/databases/box_instance.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +18,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(SongsAdapter());
   await Hive.openBox('songs');
-  Box _box = await Boxes.getInstance();
+  Box _box = Boxes.getInstance();
   WidgetsFlutterBinding.ensureInitialized();
   List<dynamic> keys = _box.keys.toList();
   if (keys.isEmpty) {
@@ -35,7 +34,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool? _notify = await prefs.getBool('notify');
+  bool? _notify = prefs.getBool('notify');
 
   List<dynamic> recentSongs = _box.get("recentsong");
   if (recentSongs.isNotEmpty) {
@@ -87,11 +86,11 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
             Color(0xff3a2d2d),
-            Color(0xff0000000),
+            Colors.black,
           ],
           begin: Alignment.topLeft,
           end: FractionalOffset(0, 1),
@@ -102,7 +101,7 @@ class Splash extends StatelessWidget {
         body: Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
-            child: Image(
+            child: const Image(
               height: 150,
               image: AssetImage("assets/icons/icon.png"),
             ),
@@ -114,7 +113,7 @@ class Splash extends StatelessWidget {
 }
 
 class MyApp extends StatefulWidget {
-  MyApp(this._notify);
+  const MyApp(this._notify, {Key? key}) : super(key: key);
   final bool _notify;
 
   @override
@@ -124,7 +123,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
   int currentIndex = 0;
-  Box _box = Boxes.getInstance();
+  final _box = Boxes.getInstance();
   List<SongModel> tracks = [];
   List<SongModel> musics = [];
   List<Songs> audio = [];
@@ -143,12 +142,11 @@ class _MyAppState extends State<MyApp> {
     }
     tracks = await _audioQuery.querySongs();
 
-    tracks.forEach((element) {
+    for (var element in tracks) {
       if (element.fileExtension == "mp3" || element.fileExtension == "opus") {
         musics.add(element);
       }
-    });
-    print(musics.length);
+    }
     audio = musics
         .map(
           (e) => Songs(
@@ -170,7 +168,7 @@ class _MyAppState extends State<MyApp> {
     final screens = [
       Homepage(songModels, widget._notify),
       SearchPage(songModels),
-      LibraryPage(),
+      const LibraryPage(),
     ];
     return Scaffold(
       backgroundColor: Colors.black,
@@ -180,7 +178,7 @@ class _MyAppState extends State<MyApp> {
             children: screens,
             index: currentIndex,
           ),
-          bottomPlating(audio: songModels),
+          BottomPlaying(audio: songModels),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -198,7 +196,7 @@ class _MyAppState extends State<MyApp> {
             currentIndex = index;
           },
         ),
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: ImageIcon(
               AssetImage("assets/icons/home.png"),

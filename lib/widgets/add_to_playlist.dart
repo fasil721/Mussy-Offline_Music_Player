@@ -12,7 +12,7 @@ class AddToPlaylist extends StatefulWidget {
 }
 
 class _AddToPlaylistState extends State<AddToPlaylist> {
-  Box _box = Boxes.getInstance();
+  final _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
     List<dynamic> playlistNames = _box.keys.toList();
@@ -21,9 +21,9 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
     playlistNames.remove("recentsong");
 
     return Container(
-      decoration: BoxDecoration(
+      decoration:const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          colors: [Color(0xff3a2d2d), Colors.black],
           begin: Alignment.topLeft,
           end: FractionalOffset(0, 1),
         ),
@@ -39,15 +39,15 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                   onPressed: () {
                     showDialog(
                       context: context,
-                      builder: (context) => CreatePlaylist(),
+                      builder: (context) =>const CreatePlaylist(),
                     );
                   },
-                  icon: Icon(
+                  icon:const Icon(
                     Icons.add,
                     color: Colors.white,
                   ),
                 ), 
-                title: Text(
+                title:const Text(
                   "Create a new Playlist",
                   style: TextStyle(
                     color: Colors.white,
@@ -56,7 +56,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
               ),
             ),
             ListView.builder(
-              physics: ScrollPhysics(),
+              physics:const ScrollPhysics(),
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
               itemCount: playlistNames.length,
@@ -68,10 +68,10 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                     right: 10,
                   ),
                   child: ListTile(
-                    onTap: () {
-                      print(widget.song);
-                    },
-                    leading: Icon(
+                    // onTap: () {
+                    //   print(widget.song);
+                    // },
+                    leading:const Icon(
                       Icons.queue_music_rounded,
                       color: Colors.white,
                       size: 30,
@@ -110,7 +110,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                                 ),
                               );
                             },
-                            child: Text(
+                            child:const Text(
                               "Add",
                               style: TextStyle(
                                 color: Color(0xff3a2d2d),
@@ -131,14 +131,14 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                                   playlistNames[index], songofPlaylist);
                               setState(() {});
                             },
-                            child: Text(
+                            child:const Text(
                               "Remove",
                               style: TextStyle(
                                 color: Color(0xff3a2d2d),
                               ),
                             ),
                           ),
-                    contentPadding: EdgeInsets.symmetric(
+                    contentPadding:const EdgeInsets.symmetric(
                       vertical: 3.0,
                       horizontal: 16.0,
                     ),

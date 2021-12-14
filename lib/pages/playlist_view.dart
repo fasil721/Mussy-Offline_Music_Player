@@ -5,7 +5,6 @@ import 'package:Mussy/widgets/add_songs.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -20,9 +19,9 @@ class _PlalistViewState extends State<PlalistView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          colors: [Color(0xff3a2d2d), Colors.black],
           begin: Alignment.topLeft,
           end: FractionalOffset(0, 1),
         ),
@@ -36,7 +35,7 @@ class _PlalistViewState extends State<PlalistView> {
           leading: Padding(
             padding: const EdgeInsets.only(left: 14),
             child: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
               ),
               onPressed: () {
@@ -58,12 +57,12 @@ class _PlalistViewState extends State<PlalistView> {
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
-                  builder: (Context) => AddSongsInPlaylist(
+                  builder: (context) => AddSongsInPlaylist(
                     playlistName: widget.playlistName,
                   ),
                 );
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.add,
                 size: 30,
               ),
@@ -82,7 +81,7 @@ class _PlalistViewState extends State<PlalistView> {
                 ? ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    physics: ScrollPhysics(),
+                    physics: const ScrollPhysics(),
                     itemCount: playlists.length,
                     itemBuilder: (context, index) {
                       return Padding(
@@ -92,7 +91,7 @@ class _PlalistViewState extends State<PlalistView> {
                         ),
                         child: ListTile(
                           // tileColor: Color(0xff4D3C3C),
-                          shape: RoundedRectangleBorder(
+                          shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(5),
                             ),
@@ -116,7 +115,7 @@ class _PlalistViewState extends State<PlalistView> {
                           ),
                           trailing: PopupMenuButton(
                             itemBuilder: (BuildContext bc) => [
-                              PopupMenuItem(
+                              const PopupMenuItem(
                                 value: "1",
                                 child: Text(
                                   "Remove song",
@@ -130,7 +129,7 @@ class _PlalistViewState extends State<PlalistView> {
                                 setState(() {});
                               }
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.more_horiz,
                               color: Colors.white,
                             ),
@@ -140,7 +139,7 @@ class _PlalistViewState extends State<PlalistView> {
                             type: ArtworkType.AUDIO,
                             nullArtworkWidget: ClipRRect(
                               borderRadius: BorderRadius.circular(50),
-                              child: Image(
+                              child: const Image(
                                 height: 50,
                                 image: AssetImage("assets/icons/default.jpg"),
                               ),
@@ -159,7 +158,7 @@ class _PlalistViewState extends State<PlalistView> {
                       );
                     },
                   )
-                : Center(
+                : const Center(
                     child: Text(
                       "No songs here",
                       style: TextStyle(

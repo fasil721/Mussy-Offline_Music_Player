@@ -7,8 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-class bottomPlating extends StatefulWidget {
-  const bottomPlating({
+class BottomPlaying extends StatefulWidget {
+  const BottomPlaying({
     required this.audio,
     Key? key,
   }) : super(key: key);
@@ -16,18 +16,18 @@ class bottomPlating extends StatefulWidget {
   final List<Audio> audio;
 
   @override
-  _bottomPlayingState createState() => _bottomPlayingState();
+  _BottomPlayingState createState() => _BottomPlayingState();
 }
 
-class _bottomPlayingState extends State<bottomPlating> {
-  AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+class _BottomPlayingState extends State<BottomPlaying> {
+  final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   bool nextDone = true;
   bool prevDone = true;
   Audio? myAudio;
 
-  Box _box = Boxes.getInstance();
+  final Box _box = Boxes.getInstance();
   find(List<Audio> source, String fromPath) {
-    if (source.length != 0) {
+    if (source.isNotEmpty) {
       myAudio = source.firstWhere((element) => element.path == fromPath);
       if (myAudio != null) {
         List<dynamic> songs = _box.get("tracks");
@@ -45,7 +45,7 @@ class _bottomPlayingState extends State<bottomPlating> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Color(0xff3a2d2d),
           borderRadius: BorderRadius.all(
             Radius.circular(5),
@@ -76,7 +76,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                       type: ArtworkType.AUDIO,
                       nullArtworkWidget: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child: Image(
+                        child: const Image(
                           height: 50,
                           image: AssetImage("assets/icons/default.jpg"),
                         ),
@@ -108,7 +108,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                               prevDone = true;
                             }
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.skip_previous,
                             color: Colors.white,
                             size: 25,
@@ -117,7 +117,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                         Container(
                           height: 37,
                           width: 37,
-                          margin: EdgeInsets.only(top: 5),
+                          margin: const EdgeInsets.only(top: 5),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
@@ -134,7 +134,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                                         onPressed: () {
                                           _assetsAudioPlayer.playOrPause();
                                         },
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.pause,
                                           color: Colors.white,
                                           size: 19,
@@ -147,7 +147,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                                         onPressed: () {
                                           _assetsAudioPlayer.playOrPause();
                                         },
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.play_arrow,
                                           color: Colors.white,
                                           size: 19,
@@ -165,7 +165,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                               nextDone = true;
                             }
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.skip_next,
                             color: Colors.white,
                             size: 25,
@@ -174,7 +174,7 @@ class _bottomPlayingState extends State<bottomPlating> {
                       ],
                     ),
                   )
-                : SizedBox();
+                : const SizedBox();
           },
         ),
       ),

@@ -1,5 +1,4 @@
 import 'package:Mussy/databases/box_instance.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -13,7 +12,7 @@ class CreatePlaylist extends StatefulWidget {
 
 class _CreatePlaylistState extends State<CreatePlaylist> {
   List<dynamic> playlists = [];
-  Box _box = Boxes.getInstance();
+  final _box = Boxes.getInstance();
   String? _title;
   final formkey = GlobalKey<FormState>();
   @override
@@ -51,12 +50,12 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
               key: formkey,
               child: TextFormField(
                 cursorHeight: 25,
-                decoration: InputDecoration(
+                decoration:const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                   ),
                 ),
-                style: TextStyle(
+                style:const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                 ),

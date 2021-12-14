@@ -9,7 +9,7 @@ import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Homepage extends StatefulWidget {
-  Homepage(this.audio, this._notify);
+  const Homepage(this.audio, this._notify, {Key? key}) : super(key: key);
   final List<Audio> audio;
   final bool _notify;
   @override
@@ -17,14 +17,14 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  Box _box = Boxes.getInstance();
+  final Box _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
     List<dynamic> recentsongs = _box.get("recentsong");
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          colors: [Color(0xff3a2d2d), Colors.black],
           begin: Alignment.topLeft,
           end: FractionalOffset(0, 1),
         ),
@@ -55,7 +55,7 @@ class _HomepageState extends State<Homepage> {
                   ),
                 );
               },
-              icon: Icon(Icons.settings),
+              icon: const Icon(Icons.settings),
             ),
             Container(
               width: 12,
@@ -65,11 +65,11 @@ class _HomepageState extends State<Homepage> {
         body: widget.audio.isNotEmpty
             ? Padding(
                 padding: recentsongs.isEmpty
-                    ? EdgeInsets.only(bottom: 0)
-                    : EdgeInsets.only(bottom: 75),
+                    ? const EdgeInsets.only(bottom: 0)
+                    : const EdgeInsets.only(bottom: 75),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: widget.audio.length,
                   itemBuilder: (context, index) {
@@ -84,7 +84,7 @@ class _HomepageState extends State<Homepage> {
                           }
                           Player().openPlayer(index, widget.audio);
                         },
-                        shape: RoundedRectangleBorder(
+                        shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(5),
                           ),
@@ -94,7 +94,7 @@ class _HomepageState extends State<Homepage> {
                           type: ArtworkType.AUDIO,
                           nullArtworkWidget: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
-                            child: Image(
+                            child: const Image(
                               height: 50,
                               image: AssetImage("assets/icons/default.jpg"),
                             ),
@@ -116,7 +116,7 @@ class _HomepageState extends State<Homepage> {
                           ),
                           maxLines: 1,
                         ),
-                        trailing: homepopup(
+                        trailing: HomePopup(
                           audioId: widget.audio[index].metas.id!,
                         ),
                       ),
@@ -124,7 +124,7 @@ class _HomepageState extends State<Homepage> {
                   },
                 ),
               )
-            : Center(
+            : const Center(
                 child: Text(
                   "No songs here",
                   style: TextStyle(

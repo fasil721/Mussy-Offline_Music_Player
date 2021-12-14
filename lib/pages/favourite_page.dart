@@ -4,11 +4,12 @@ import 'package:Mussy/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class FavoritePage extends StatefulWidget {
+  const FavoritePage({Key? key}) : super(key: key);
+
   @override
   State<FavoritePage> createState() => _FavoritePageState();
 }
@@ -17,9 +18,9 @@ class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          colors: [Color(0xff3a2d2d), Colors.black],
           begin: Alignment.topLeft,
           end: FractionalOffset(0, 1),
         ),
@@ -32,7 +33,7 @@ class _FavoritePageState extends State<FavoritePage> {
           leadingWidth: 70,
           toolbarHeight: 80,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -54,7 +55,7 @@ class _FavoritePageState extends State<FavoritePage> {
                 ? ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    physics: ScrollPhysics(),
+                    physics: const ScrollPhysics(),
                     itemCount: favourites.length,
                     itemBuilder: (context, index) {
                       return Padding(
@@ -63,7 +64,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           right: 10,
                         ),
                         child: ListTile(
-                          shape: RoundedRectangleBorder(
+                          shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(5),
                             ),
@@ -90,7 +91,7 @@ class _FavoritePageState extends State<FavoritePage> {
                             type: ArtworkType.AUDIO,
                             nullArtworkWidget: ClipRRect(
                               borderRadius: BorderRadius.circular(50),
-                              child: Image(
+                              child: const Image(
                                 height: 50,
                                 image: AssetImage("assets/icons/default.jpg"),
                               ),
@@ -98,7 +99,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           ),
                           trailing: PopupMenuButton(
                             itemBuilder: (BuildContext bc) => [
-                              PopupMenuItem(
+                              const PopupMenuItem(
                                 value: "1",
                                 child: Text(
                                   "Remove Song",
@@ -112,7 +113,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                 setState(() {});
                               }
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.more_horiz,
                               color: Colors.white,
                             ),
@@ -130,7 +131,7 @@ class _FavoritePageState extends State<FavoritePage> {
                       );
                     },
                   )
-                : Center(
+                : const Center(
                     child: Text(
                       "No songs here",
                       style: TextStyle(

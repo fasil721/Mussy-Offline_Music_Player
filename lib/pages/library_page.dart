@@ -49,10 +49,10 @@ class _LibraryPageState extends State<LibraryPage> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (Context) => CreatePlaylist(),
+                  builder: (context) => const CreatePlaylist(),
                 );
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.add,
                 size: 30,
               ),
@@ -76,20 +76,20 @@ class _LibraryPageState extends State<LibraryPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => FavoritePage(),
+                        builder: (context) => const FavoritePage(),
                       ),
                     );
                   },
-                  contentPadding: EdgeInsets.symmetric(
+                  contentPadding: const EdgeInsets.symmetric(
                     vertical: 3.0,
                     horizontal: 16.0,
                   ),
-                  shape: RoundedRectangleBorder(
+                  shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(5),
                     ),
                   ),
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.favorite,
                     color: Colors.white,
                   ),
@@ -114,7 +114,7 @@ class _LibraryPageState extends State<LibraryPage> {
                   return ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    physics: ScrollPhysics(),
+                    physics: const ScrollPhysics(),
                     itemCount: playlists.length,
                     itemBuilder: (context, index) {
                       return Padding(
@@ -123,12 +123,12 @@ class _LibraryPageState extends State<LibraryPage> {
                           right: 10,
                         ),
                         child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                             vertical: 3.0,
                             horizontal: 16.0,
                           ),
                           // tileColor: Color(0xff4D3C3C),
-                          shape: RoundedRectangleBorder(
+                          shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(5),
                             ),
@@ -142,18 +142,17 @@ class _LibraryPageState extends State<LibraryPage> {
                                 ),
                               ),
                             );
-                            print(playlists);
                           },
                           trailing: PopupMenuButton(
                             itemBuilder: (BuildContext bc) => [
-                              PopupMenuItem(
+                              const PopupMenuItem(
                                 value: "0",
                                 child: Text(
                                   "Edit playlist",
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ),
-                              PopupMenuItem(
+                              const PopupMenuItem(
                                 value: "1",
                                 child: Text(
                                   "Delete playlist",
@@ -168,18 +167,18 @@ class _LibraryPageState extends State<LibraryPage> {
                               if (value == "0") {
                                 showDialog(
                                   context: context,
-                                  builder: (Context) => EditPlaylist(
+                                  builder: (context) => EditPlaylist(
                                     PlaylistName: playlists[index],
                                   ),
                                 );
                               }
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.more_horiz,
                               color: Colors.white,
                             ),
                           ),
-                          leading: Icon(
+                          leading: const Icon(
                             Icons.queue_music_rounded,
                             color: Colors.white,
                             size: 30,
