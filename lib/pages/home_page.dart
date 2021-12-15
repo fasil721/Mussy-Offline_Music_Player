@@ -20,7 +20,7 @@ class _HomepageState extends State<Homepage> {
   final Box _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
-    List<dynamic> recentsongs = _box.get("recentsong");
+    List recentsongs = _box.get("recentsong");
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(

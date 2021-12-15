@@ -16,7 +16,7 @@ class _HomePopupState extends State<HomePopup> {
   @override
   Widget build(BuildContext context) {
     List<Songs> songs = _box.get("tracks");
-    List<dynamic> favourites = _box.get("favourites");
+    List favourites = _box.get("favourites");
     final temp = Player().findSongFromDatabase(songs, widget.audioId);
     return PopupMenuButton(
       itemBuilder: (BuildContext bc) => [
@@ -29,7 +29,7 @@ class _HomePopupState extends State<HomePopup> {
                   await _box.put("favourites", favourites);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(temp.title + " Added to Favourites"),
+                      content: Text(temp.title! + " Added to Favourites"),
                     ),
                   );
                 },
@@ -42,7 +42,7 @@ class _HomePopupState extends State<HomePopup> {
                   await _box.put("favourites", favourites);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(temp.title + " Removed from Favourites"),
+                      content: Text(temp.title! + " Removed from Favourites"),
                     ),
                   );
                 },

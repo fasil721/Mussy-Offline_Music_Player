@@ -20,11 +20,11 @@ void main() async {
   await Hive.openBox('songs');
   Box _box = Boxes.getInstance();
   WidgetsFlutterBinding.ensureInitialized();
-  List<dynamic> keys = _box.keys.toList();
+  List keys = _box.keys.toList();
   if (keys.isEmpty) {
-    List<dynamic> favourites = [];
+    List<Songs> favourites = [];
     await _box.put("favourites", favourites);
-    List<dynamic> recentSong = [];
+    List<Songs> recentSong = [];
     await _box.put("recentsong", recentSong);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('notify', true);
@@ -36,7 +36,7 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool? _notify = prefs.getBool('notify');
 
-  List<dynamic> recentSongs = _box.get("recentsong");
+  List recentSongs = _box.get("recentsong");
   if (recentSongs.isNotEmpty) {
     AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
     List<Audio> audios = Player().convertToAudios(recentSongs);
@@ -46,6 +46,7 @@ void main() async {
         startIndex: 0,
       ),
       autoStart: false,
+      loopMode: LoopMode.playlist,
     );
   }
 
@@ -72,7 +73,6 @@ void main() async {
 class Init {
   Init._();
   static final instance = Init._();
-
   Future initialize() async {
     await Future.delayed(
       const Duration(seconds: 3),

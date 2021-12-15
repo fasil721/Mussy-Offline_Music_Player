@@ -16,6 +16,7 @@ class PlalistView extends StatefulWidget {
 }
 
 class _PlalistViewState extends State<PlalistView> {
+  final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -75,7 +76,8 @@ class _PlalistViewState extends State<PlalistView> {
         body: ValueListenableBuilder(
           valueListenable: Boxes.getInstance().listenable(),
           builder: (context, Box _box, _) {
-            List<dynamic> playlists = _box.get(widget.playlistName);
+            List playlists = _box.get(widget.playlistName);
+
             List<Audio> audios = Player().convertToAudios(playlists);
             return playlists.isNotEmpty
                 ? ListView.builder(
@@ -97,7 +99,7 @@ class _PlalistViewState extends State<PlalistView> {
                             ),
                           ),
                           title: Text(
-                            playlists[index].title,
+                            playlists[index].title!,
                             maxLines: 1,
                             textAlign: TextAlign.justify,
                             style: GoogleFonts.rubik(
@@ -152,6 +154,7 @@ class _PlalistViewState extends State<PlalistView> {
                                 builder: (context) => MusicView(audio: audios),
                               ),
                             );
+                            _assetsAudioPlayer.stop();
                             Player().openPlayer(index, audios);
                           },
                         ),

@@ -18,7 +18,7 @@ class Player {
     );
   }
 
-  List<Audio> convertToAudios(List<dynamic> songs) {
+  List<Audio> convertToAudios(List songs) {
     List<Audio> audios = [];
     for (var element in songs) {
       audios.add(
@@ -35,7 +35,7 @@ class Player {
     return audios;
   }
 
-  Songs findSongFromDatabase(List<dynamic> songs, String id) {
+  Songs findSongFromDatabase(List<Songs> songs, String id) {
     return songs.firstWhere(
       (element) => element.id.toString().contains(id),
     );

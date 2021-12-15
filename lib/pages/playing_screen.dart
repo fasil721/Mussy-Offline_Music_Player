@@ -5,7 +5,6 @@ import 'package:Mussy/widgets/add_to_playlist.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
@@ -33,7 +32,7 @@ class _MusicViewState extends State<MusicView> {
   }
 
   find2(Audio myAudio) {
-    List<dynamic> songs = _box.get("tracks");
+    List<Songs> songs = _box.get("tracks");
     music = Player().findSongFromDatabase(songs, myAudio.metas.id.toString());
   }
 
@@ -176,7 +175,7 @@ class _MusicViewState extends State<MusicView> {
                         thumbColor: Colors.white,
                         baseBarColor: Colors.grey,
                         progress: infos.currentPosition,
-                        total: Duration(milliseconds: music!.duration),
+                        total: Duration(milliseconds: music!.duration!),
                         timeLabelTextStyle:
                             const TextStyle(color: Colors.white),
                         onSeek: (duration) {
@@ -284,7 +283,7 @@ class _FavouritesState extends State<Favourites> {
   final _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
-    List<dynamic> favourites = _box.get("favourites");
+    List favourites = _box.get("favourites");
 
     return favourites
             .where((element) =>

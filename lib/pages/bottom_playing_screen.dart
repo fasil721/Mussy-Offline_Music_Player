@@ -1,5 +1,6 @@
 import 'package:Mussy/audio_player/player.dart';
 import 'package:Mussy/databases/box_instance.dart';
+import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:Mussy/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -30,10 +31,10 @@ class _BottomPlayingState extends State<BottomPlaying> {
     if (source.isNotEmpty) {
       myAudio = source.firstWhere((element) => element.path == fromPath);
       if (myAudio != null) {
-        List<dynamic> songs = _box.get("tracks");
+        List<Songs> songs = _box.get("tracks");
         final temp =
             Player().findSongFromDatabase(songs, myAudio!.metas.id.toString());
-        List<dynamic> recentsong = [];
+        List<Songs> recentsong = [];
         recentsong.add(temp);
         _box.put("recentsong", recentsong);
       }

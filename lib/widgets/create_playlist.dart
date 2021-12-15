@@ -1,7 +1,7 @@
 import 'package:Mussy/databases/box_instance.dart';
+import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 
 class CreatePlaylist extends StatefulWidget {
   const CreatePlaylist({Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class CreatePlaylist extends StatefulWidget {
 }
 
 class _CreatePlaylistState extends State<CreatePlaylist> {
-  List<dynamic> playlists = [];
+  List<Songs> playlists = [];
   final _box = Boxes.getInstance();
   String? _title;
   final formkey = GlobalKey<FormState>();
@@ -63,7 +63,7 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                   _title = value;
                 },
                 validator: (value) {
-                  List<dynamic> keys = _box.keys.toList();
+                  List keys = _box.keys.toList();
                   if (value == "") {
                     return "Name required";
                   }

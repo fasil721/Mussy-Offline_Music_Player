@@ -1,4 +1,5 @@
 import 'package:Mussy/databases/box_instance.dart';
+import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:Mussy/widgets/create_playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,7 +16,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
   final _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
-    List<dynamic> playlistNames = _box.keys.toList();
+    List playlistNames = _box.keys.toList();
     playlistNames.remove("tracks");
     playlistNames.remove("favourites");
     playlistNames.remove("recentsong");
@@ -61,7 +62,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
               scrollDirection: Axis.vertical,
               itemCount: playlistNames.length,
               itemBuilder: (context, index) {
-                List<dynamic> songofPlaylist = _box.get(playlistNames[index]);
+                List songofPlaylist = _box.get(playlistNames[index]);
                 return Container(
                   margin: const EdgeInsets.only(
                     left: 10,
@@ -94,7 +95,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                               primary: Colors.grey,
                             ),
                             onPressed: () async {
-                              List<dynamic> songofPlaylist =
+                              List<Songs> songofPlaylist =
                                   _box.get(playlistNames[index]);
                               songofPlaylist.add(widget.song);
                               await _box.put(

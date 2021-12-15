@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditPlaylist extends StatefulWidget {
-  const EditPlaylist({Key? key, required this.PlaylistName}) : super(key: key);
-  final PlaylistName;
+  const EditPlaylist({Key? key, required this.playlistName}) : super(key: key);
+  final String playlistName;
   @override
   _EditPlaylistState createState() => _EditPlaylistState();
 }
@@ -47,14 +47,14 @@ class _EditPlaylistState extends State<EditPlaylist> {
             child: Form(
               key: formkey,
               child: TextFormField(
-                initialValue: widget.PlaylistName,
+                initialValue: widget.playlistName,
                 cursorHeight: 25,
-                decoration:const InputDecoration(
+                decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                   ),
                 ),
-                style:const TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                 ),
@@ -62,7 +62,7 @@ class _EditPlaylistState extends State<EditPlaylist> {
                   _title = value;
                 },
                 validator: (value) {
-                  List<dynamic> keys = _box.keys.toList();
+                  List keys = _box.keys.toList();
                   if (value == "") {
                     return "Name required";
                   }
@@ -108,10 +108,10 @@ class _EditPlaylistState extends State<EditPlaylist> {
                   child: TextButton(
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
-                        List<dynamic> playlists = _box.get(widget.PlaylistName);
+                        List playlists = _box.get(widget.playlistName);
                         setState(() {
                           _box.put(_title, playlists);
-                          _box.delete(widget.PlaylistName);
+                          _box.delete(widget.playlistName);
                           Navigator.pop(context);
                         });
                       }

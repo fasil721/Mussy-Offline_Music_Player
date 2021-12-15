@@ -3,7 +3,6 @@ import 'package:Mussy/widgets/create_playlist.dart';
 import 'package:Mussy/widgets/edit_playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'favourite_page.dart';
 
@@ -14,16 +13,16 @@ class LibraryPage extends StatefulWidget {
   _LibraryPageState createState() => _LibraryPageState();
 }
 
-List<dynamic> allKeys = [];
-List<dynamic> playlists = [];
+List allKeys = [];
+List playlists = [];
 
 class _LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff3a2d2d), Color(0xff0000000)],
+          colors: [Color(0xff3a2d2d), Colors.black],
           begin: Alignment.topLeft,
           end: FractionalOffset(0, 1),
         ),
@@ -168,7 +167,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                 showDialog(
                                   context: context,
                                   builder: (context) => EditPlaylist(
-                                    PlaylistName: playlists[index],
+                                    playlistName: playlists[index],
                                   ),
                                 );
                               }

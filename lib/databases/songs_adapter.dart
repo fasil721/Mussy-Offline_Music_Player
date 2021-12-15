@@ -5,15 +5,15 @@ part 'songs_adapter.g.dart';
 @HiveType(typeId: 1)
 class Songs extends HiveObject {
   @HiveField(0)
-  dynamic title;
+  String? title;
   @HiveField(1)
-  dynamic artist;
+  String? artist;
   @HiveField(2)
-  dynamic uri;
+  String? uri;
   @HiveField(3)
-  dynamic id;
+  int? id;
   @HiveField(4)
-  dynamic duration;
+  int? duration;
 
   Songs({
     required this.title,

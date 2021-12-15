@@ -26,7 +26,7 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
         ? allsongs.toList()
         : allsongs
             .where(
-              (element) => element.title
+              (element) => element.title!
                   .toLowerCase()
                   .contains(searchText.toLowerCase()),
             )
@@ -78,14 +78,14 @@ class _AddSongsInPlaylistState extends State<AddSongsInPlaylist> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         title: Text(
-                          result[index].title,
+                          result[index].title!,
                           style: const TextStyle(
                             color: Colors.white70,
                           ),
                           maxLines: 1,
                         ),
                         leading: QueryArtworkWidget(
-                          id: result[index].id,
+                          id: result[index].id!,
                           type: ArtworkType.AUDIO,
                           nullArtworkWidget: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
@@ -132,7 +132,7 @@ class _AddAndRemoveState extends State<AddAndRemove> {
   final _box = Boxes.getInstance();
   @override
   Widget build(BuildContext context) {
-    List<dynamic> playlists = _box.get(widget.playlistName);
+    List<Songs> playlists = _box.get(widget.playlistName);
     return playlists
             .where((element) =>
                 element.id.toString() == widget.result.id.toString())
