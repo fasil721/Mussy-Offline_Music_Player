@@ -1,19 +1,18 @@
 import 'package:Mussy/audio_player/player.dart';
+import 'package:Mussy/controller/song_controller.dart';
 import 'package:Mussy/widgets/home_popup_menu.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage(this.audios, {Key? key}) : super(key: key);
-  final List<Audio> audios;
-  @override
-  _SearchPageState createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchPage> {
+// ignore: must_be_immutable
+class SearchPage extends StatelessWidget {
+  SearchPage({Key? key}) : super(key: key);
   String searchText = "";
+  final songController = Get.find<SongController>();
+  final _player = Player();
   Future<String> debounce() async {
     await Future.delayed(
       const Duration(seconds: 1),
@@ -23,13 +22,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Audio> result = widget.audios
-        .where(
-          (element) => element.metas.title!
-              .toLowerCase()
-              .startsWith(searchText.toLowerCase()),
-        )
-        .toList();
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -84,95 +76,108 @@ class _SearchPageState extends State<SearchPage> {
                   fontSize: 16,
                 ),
                 onChanged: (value) {
-                  setState(() {
-                    searchText = value;
-                  });
+                  searchText = value;
+                  songController.update(["search"]);
                 },
               ),
             ),
-            searchText.isNotEmpty
-                ? result.isNotEmpty
-                    ? Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 75),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: result.length,
-                            itemBuilder: (context, index) {
-                              return FutureBuilder(
-                                future: debounce(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 10,
-                                        right: 10,
-                                      ),
-                                      child: ListTile(
-                                        onTap: () {
-                                          Player().openPlayer(index, result);
-                                        },
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5),
+            GetBuilder<SongController>(
+              id: "search",
+              builder: (_) {
+                List<Audio> result = searchText.isEmpty
+                    ? []
+                    : songController.songModels
+                        .where(
+                          (element) => element.metas.title!
+                              .toLowerCase()
+                              .startsWith(searchText.toLowerCase()),
+                        )
+                        .toList();
+                return searchText.isEmpty
+                    ? Container()
+                    : result.isNotEmpty
+                        ? Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 75),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: result.length,
+                                itemBuilder: (context, index) {
+                                  return FutureBuilder(
+                                    future: debounce(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
                                           ),
-                                        ),
-                                        leading: QueryArtworkWidget(
-                                          id: int.parse(
-                                              result[index].metas.id!),
-                                          type: ArtworkType.AUDIO,
-                                          nullArtworkWidget: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            child: const Image(
-                                              height: 50,
-                                              image: AssetImage(
-                                                  "assets/icons/default.jpg"),
+                                          child: ListTile(
+                                            onTap: () {
+                                              _player.openPlayer(index, result);
+                                            },
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(5),
+                                              ),
+                                            ),
+                                            leading: QueryArtworkWidget(
+                                              id: int.parse(
+                                                  result[index].metas.id!),
+                                              type: ArtworkType.AUDIO,
+                                              nullArtworkWidget: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                child: const Image(
+                                                  height: 50,
+                                                  image: AssetImage(
+                                                      "assets/icons/default.jpg"),
+                                                ),
+                                              ),
+                                            ),
+                                            title: Text(
+                                              result[index].metas.title!,
+                                              style: GoogleFonts.rubik(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                            subtitle: Text(
+                                              result[index].metas.artist!,
+                                              style: GoogleFonts.rubik(
+                                                fontSize: 13,
+                                                color: Colors.grey,
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                            trailing: HomePopup(
+                                              audioId: result[index].metas.id!,
                                             ),
                                           ),
-                                        ),
-                                        title: Text(
-                                          result[index].metas.title!,
-                                          style: GoogleFonts.rubik(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                          ),
-                                          maxLines: 1,
-                                        ),
-                                        subtitle: Text(
-                                          result[index].metas.artist!,
-                                          style: GoogleFonts.rubik(
-                                            fontSize: 13,
-                                            color: Colors.grey,
-                                          ),
-                                          maxLines: 1,
-                                        ),
-                                        trailing: HomePopup(
-                                          audioId: result[index].metas.id!,
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                  return Container();
+                                        );
+                                      }
+                                      return Container();
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                          ),
-                        ),
-                      )
-                    : const Padding(
-                        padding: EdgeInsets.all(30),
-                        child: Text(
-                          "No result found",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                : const SizedBox(),
+                              ),
+                            ),
+                          )
+                        : const Padding(
+                            padding: EdgeInsets.all(30),
+                            child: Text(
+                              "No result found",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+              },
+            )
           ],
         ),
       ),

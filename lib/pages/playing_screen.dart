@@ -23,6 +23,7 @@ class MusicView extends StatefulWidget {
 class _MusicViewState extends State<MusicView> {
   final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   final _box = Boxes.getInstance();
+  final _player = Player();
   bool nextDone = true;
   bool prevDone = true;
   Songs? music;
@@ -33,7 +34,7 @@ class _MusicViewState extends State<MusicView> {
 
   find2(Audio myAudio) {
     List<Songs> songs = _box.get("tracks");
-    music = Player().findSongFromDatabase(songs, myAudio.metas.id.toString());
+    music = _player.findSongFromDatabase(songs, myAudio.metas.id.toString());
   }
 
   Widget popupMenu() {

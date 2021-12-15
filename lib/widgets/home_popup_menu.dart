@@ -13,11 +13,12 @@ class HomePopup extends StatefulWidget {
 
 class _HomePopupState extends State<HomePopup> {
   final _box = Boxes.getInstance();
+  final _player = Player();
   @override
   Widget build(BuildContext context) {
     List<Songs> songs = _box.get("tracks");
     List favourites = _box.get("favourites");
-    final temp = Player().findSongFromDatabase(songs, widget.audioId);
+    final temp = _player.findSongFromDatabase(songs, widget.audioId);
     return PopupMenuButton(
       itemBuilder: (BuildContext bc) => [
         favourites

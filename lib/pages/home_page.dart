@@ -1,23 +1,20 @@
 import 'package:Mussy/audio_player/player.dart';
+import 'package:Mussy/controller/song_controller.dart';
 import 'package:Mussy/databases/box_instance.dart';
 import 'package:Mussy/pages/settins_page.dart';
 import 'package:Mussy/widgets/home_popup_menu.dart';
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage(this.audio, this._notify, {Key? key}) : super(key: key);
-  final List<Audio> audio;
+class Homepage extends StatelessWidget {
+  Homepage(this._notify, {Key? key}) : super(key: key);
+  // final List<Audio> audio;
   final bool _notify;
-  @override
-  State<Homepage> createState() => _HomepageState();
-}
-
-class _HomepageState extends State<Homepage> {
-  final Box _box = Boxes.getInstance();
+  final Box _box = Boxes.getInstance();  final _player = Player();
+  final songController = Get.find<SongController>();
   @override
   Widget build(BuildContext context) {
     List recentsongs = _box.get("recentsong");
@@ -51,7 +48,7 @@ class _HomepageState extends State<Homepage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SettingsPage(widget._notify),
+                    builder: (context) => SettingsPage(_notify),
                   ),
                 );
               },
@@ -62,77 +59,82 @@ class _HomepageState extends State<Homepage> {
             ),
           ],
         ),
-        body: widget.audio.isNotEmpty
-            ? Padding(
-                padding: recentsongs.isEmpty
-                    ? const EdgeInsets.only(bottom: 0)
-                    : const EdgeInsets.only(bottom: 75),
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: widget.audio.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        left: 5,
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          if (recentsongs.isEmpty) {
-                            setState(() {});
-                          }
-                          Player().openPlayer(index, widget.audio);
-                        },
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
+        body: GetBuilder<SongController>(
+          id: "home",
+          builder: (_) {
+            return songController.songModels.isNotEmpty
+                ? Padding(
+                    padding: recentsongs.isEmpty
+                        ? const EdgeInsets.only(bottom: 0)
+                        : const EdgeInsets.only(bottom: 75),
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: songController.songModels.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            left: 5,
                           ),
-                        ),
-                        leading: QueryArtworkWidget(
-                          id: int.parse(widget.audio[index].metas.id!),
-                          type: ArtworkType.AUDIO,
-                          nullArtworkWidget: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: const Image(
-                              height: 50,
-                              image: AssetImage("assets/icons/default.jpg"),
+                          child: ListTile(
+                            onTap: () {
+                            _player
+                                  .openPlayer(index, songController.songModels);
+                            },
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                            leading: QueryArtworkWidget(
+                              id: int.parse(
+                                  songController.songModels[index].metas.id!),
+                              type: ArtworkType.AUDIO,
+                              nullArtworkWidget: ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: const Image(
+                                  height: 50,
+                                  image: AssetImage("assets/icons/default.jpg"),
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              songController.songModels[index].metas.title!,
+                              style: GoogleFonts.rubik(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                              maxLines: 1,
+                            ),
+                            subtitle: Text(
+                              songController.songModels[index].metas.artist!,
+                              style: GoogleFonts.rubik(
+                                fontSize: 13,
+                                color: Colors.grey,
+                              ),
+                              maxLines: 1,
+                            ),
+                            trailing: HomePopup(
+                              audioId:
+                                  songController.songModels[index].metas.id!,
                             ),
                           ),
-                        ),
-                        title: Text(
-                          widget.audio[index].metas.title!,
-                          style: GoogleFonts.rubik(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                          maxLines: 1,
-                        ),
-                        subtitle: Text(
-                          widget.audio[index].metas.artist!,
-                          style: GoogleFonts.rubik(
-                            fontSize: 13,
-                            color: Colors.grey,
-                          ),
-                          maxLines: 1,
-                        ),
-                        trailing: HomePopup(
-                          audioId: widget.audio[index].metas.id!,
-                        ),
+                        );
+                      },
+                    ),
+                  )
+                : const Center(
+                    child: Text(
+                      "No songs here",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
                       ),
-                    );
-                  },
-                ),
-              )
-            : const Center(
-                child: Text(
-                  "No songs here",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                ),
-              ),
+                    ),
+                  );
+          },
+        ),
       ),
     );
   }

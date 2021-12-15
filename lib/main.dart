@@ -3,11 +3,13 @@ import 'package:Mussy/databases/box_instance.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'controller/song_controller.dart';
 import 'pages/home_page.dart';
 import 'pages/library_page.dart';
 import 'pages/search_page.dart';
@@ -21,25 +23,26 @@ void main() async {
   Box _box = Boxes.getInstance();
   WidgetsFlutterBinding.ensureInitialized();
   List keys = _box.keys.toList();
+  final prefs = await SharedPreferences.getInstance();
   if (keys.isEmpty) {
     List<Songs> favourites = [];
     await _box.put("favourites", favourites);
     List<Songs> recentSong = [];
     await _box.put("recentsong", recentSong);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('notify', true);
   }
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+
   bool? _notify = prefs.getBool('notify');
 
   List recentSongs = _box.get("recentsong");
+  final _player = Player();
   if (recentSongs.isNotEmpty) {
-    AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-    List<Audio> audios = Player().convertToAudios(recentSongs);
+    final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+    List<Audio> audios = _player.convertToAudios(recentSongs);
     _assetsAudioPlayer.open(
       Playlist(
         audios: audios,
@@ -60,9 +63,16 @@ void main() async {
             debugShowCheckedModeBanner: false,
           );
         } else {
-          return MaterialApp(
+          return GetMaterialApp(
+            getPages: [
+              GetPage(
+                name: "/main",
+                page: () => MyApp(_notify!),
+                binding: SongBinding(),
+              )
+            ],
             debugShowCheckedModeBanner: false,
-            home: MyApp(_notify!),
+            initialRoute: "/main",
           );
         }
       },
@@ -112,114 +122,88 @@ class Splash extends StatelessWidget {
   }
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp(this._notify, {Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class MyApp extends StatelessWidget {
+  MyApp(this._notify, {Key? key}) : super(key: key);
   final bool _notify;
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final OnAudioQuery _audioQuery = OnAudioQuery();
   int currentIndex = 0;
-  final _box = Boxes.getInstance();
-  List<SongModel> tracks = [];
-  List<SongModel> musics = [];
-  List<Songs> audio = [];
-  List<Audio> songModels = [];
+  final songController = Get.find<SongController>();
 
-  @override
-  void initState() {
-    requesrpermisson();
-    super.initState();
-  }
+  // final OnAudioQuery _audioQuery = OnAudioQuery();
+  // final _box = Boxes.getInstance();
+  // List<SongModel> tracks = [];
+  // List<SongModel> musics = [];
+  // List<Songs> audio = [];
+  // List<Audio> songModels = [];
 
-  requesrpermisson() async {
-    bool permissionStatus = await _audioQuery.permissionsStatus();
-    if (!permissionStatus) {
-      await _audioQuery.permissionsRequest();
-    }
-    tracks = await _audioQuery.querySongs();
-
-    for (var element in tracks) {
-      if (element.fileExtension == "mp3" || element.fileExtension == "opus") {
-        musics.add(element);
-      }
-    }
-    audio = musics
-        .map(
-          (e) => Songs(
-            title: e.title,
-            artist: e.artist,
-            uri: e.uri,
-            id: e.id,
-            duration: e.duration,
-          ),
-        )
-        .toList();
-    songModels = Player().convertToAudios(musics);
-    await _box.put("tracks", audio);
-    setState(() {});
-  }
+  // @override
+  // void initState() {
+  //   requesrpermisson();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final screens = [
-      Homepage(songModels, widget._notify),
-      SearchPage(songModels),
+      Homepage(_notify),
+      SearchPage(),
       const LibraryPage(),
     ];
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          IndexedStack(
-            children: screens,
-            index: currentIndex,
+    return GetBuilder<SongController>(
+      id: "navbar",
+      builder: (context) {
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: Stack(
+            children: [
+              IndexedStack(
+                children: screens,
+                index: currentIndex,
+              ),
+              BottomPlaying(),
+            ],
           ),
-          BottomPlaying(audio: songModels),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        iconSize: 25,
-        fixedColor: Colors.white,
-        unselectedItemColor: Colors.white,
-        selectedLabelStyle: GoogleFonts.poppins(fontSize: 14),
-        backgroundColor: Colors.black,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-        currentIndex: currentIndex,
-        onTap: (index) => setState(
-          () {
-            currentIndex = index;
-          },
-        ),
-        items: const [
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage("assets/icons/home.png"),
-              size: 25,
-            ),
-            label: 'Home',
+          bottomNavigationBar: BottomNavigationBar(
+            iconSize: 25,
+            fixedColor: Colors.white,
+            unselectedItemColor: Colors.white,
+            selectedLabelStyle: GoogleFonts.poppins(fontSize: 14),
+            backgroundColor: Colors.black,
+            showUnselectedLabels: false,
+            type: BottomNavigationBarType.fixed,
+            elevation: 0,
+            currentIndex: currentIndex,
+            onTap: (index) {
+              currentIndex = index;
+              songController.update(["navbar"]);
+            },
+            items: const [
+              BottomNavigationBarItem(
+                icon: ImageIcon(
+                  AssetImage("assets/icons/home.png"),
+                  size: 25,
+                ),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(
+                  AssetImage("assets/icons/search.png"),
+                  size: 25,
+                ),
+                label: 'Search',
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(
+                  AssetImage("assets/icons/library.png"),
+                  size: 25,
+                ),
+                label: 'Library',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage("assets/icons/search.png"),
-              size: 25,
-            ),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage("assets/icons/library.png"),
-              size: 25,
-            ),
-            label: 'Library',
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

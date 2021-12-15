@@ -17,6 +17,7 @@ class PlalistView extends StatefulWidget {
 
 class _PlalistViewState extends State<PlalistView> {
   final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  final _player = Player();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -78,7 +79,7 @@ class _PlalistViewState extends State<PlalistView> {
           builder: (context, Box _box, _) {
             List playlists = _box.get(widget.playlistName);
 
-            List<Audio> audios = Player().convertToAudios(playlists);
+            List<Audio> audios = _player.convertToAudios(playlists);
             return playlists.isNotEmpty
                 ? ListView.builder(
                     shrinkWrap: true,
@@ -155,7 +156,7 @@ class _PlalistViewState extends State<PlalistView> {
                               ),
                             );
                             _assetsAudioPlayer.stop();
-                            Player().openPlayer(index, audios);
+                            _player.openPlayer(index, audios);
                           },
                         ),
                       );
