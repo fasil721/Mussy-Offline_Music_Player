@@ -1,22 +1,18 @@
 import 'package:Mussy/audio_player/player.dart';
-import 'package:Mussy/databases/box_instance.dart';
+import 'package:Mussy/controller/song_controller.dart';
 import 'package:Mussy/pages/playing_screen.dart';
 import 'package:Mussy/widgets/add_songs.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-class PlalistView extends StatefulWidget {
-  const PlalistView({Key? key, required this.playlistName}) : super(key: key);
+class PlalistView extends StatelessWidget {
+  PlalistView({Key? key, required this.playlistName}) : super(key: key);
   final String playlistName;
-  @override
-  _PlalistViewState createState() => _PlalistViewState();
-}
-
-class _PlalistViewState extends State<PlalistView> {
   final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  final songController = Get.find<SongController>();
   final _player = Player();
   @override
   Widget build(BuildContext context) {
@@ -47,7 +43,7 @@ class _PlalistViewState extends State<PlalistView> {
           ),
           title: Center(
             child: Text(
-              widget.playlistName,
+              playlistName,
               style: GoogleFonts.rubik(
                 color: Colors.white,
                 fontSize: 27,
@@ -60,7 +56,7 @@ class _PlalistViewState extends State<PlalistView> {
                 showModalBottomSheet(
                   context: context,
                   builder: (context) => AddSongsInPlaylist(
-                    playlistName: widget.playlistName,
+                    playlistName: playlistName,
                   ),
                 );
               },
@@ -74,11 +70,10 @@ class _PlalistViewState extends State<PlalistView> {
             ),
           ],
         ),
-        body: ValueListenableBuilder(
-          valueListenable: Boxes.getInstance().listenable(),
-          builder: (context, Box _box, _) {
-            List playlists = _box.get(widget.playlistName);
-
+        body: GetBuilder<SongController>(
+          id: "playlist",
+          builder: (_) {
+            List playlists = songController.box.get(playlistName);
             List<Audio> audios = _player.convertToAudios(playlists);
             return playlists.isNotEmpty
                 ? ListView.builder(
@@ -129,7 +124,7 @@ class _PlalistViewState extends State<PlalistView> {
                             onSelected: (value) {
                               if (value == "1") {
                                 playlists.removeAt(index);
-                                setState(() {});
+                                songController.update(["playlist"]);
                               }
                             },
                             icon: const Icon(

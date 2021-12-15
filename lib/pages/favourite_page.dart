@@ -1,22 +1,17 @@
 import 'package:Mussy/audio_player/player.dart';
-import 'package:Mussy/databases/box_instance.dart';
+import 'package:Mussy/controller/song_controller.dart';
 import 'package:Mussy/pages/playing_screen.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:get/get.dart';
 
-class FavoritePage extends StatefulWidget {
-  const FavoritePage({Key? key}) : super(key: key);
-
-  @override
-  State<FavoritePage> createState() => _FavoritePageState();
-}
-
-class _FavoritePageState extends State<FavoritePage> {
+class FavoritePage extends StatelessWidget {
+  FavoritePage({Key? key}) : super(key: key);
   final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   final _player = Player();
+  final songController = Get.find<SongController>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,10 +43,10 @@ class _FavoritePageState extends State<FavoritePage> {
             ),
           ),
         ),
-        body: ValueListenableBuilder(
-          valueListenable: Boxes.getInstance().listenable(),
-          builder: (context, Box _box, _) {
-            List favourites = _box.get("favourites");
+        body: GetBuilder<SongController>(
+          id: "favs",
+          builder: (_) {
+            List favourites = songController.box.get("favourites");
             List<Audio> audios = _player.convertToAudios(favourites);
             return favourites.isNotEmpty
                 ? ListView.builder(
@@ -112,7 +107,7 @@ class _FavoritePageState extends State<FavoritePage> {
                             onSelected: (value) {
                               if (value == "1") {
                                 favourites.removeAt(index);
-                                setState(() {});
+                                songController.update(["favs"]);
                               }
                             },
                             icon: const Icon(

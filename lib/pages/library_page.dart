@@ -6,17 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'favourite_page.dart';
 
-class LibraryPage extends StatefulWidget {
-  const LibraryPage({Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class LibraryPage extends StatelessWidget {
+  LibraryPage({Key? key}) : super(key: key);
 
-  @override
-  _LibraryPageState createState() => _LibraryPageState();
-}
-
-List allKeys = [];
-List playlists = [];
-
-class _LibraryPageState extends State<LibraryPage> {
+  List allKeys = [];
+  List playlists = [];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -75,7 +70,7 @@ class _LibraryPageState extends State<LibraryPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const FavoritePage(),
+                        builder: (context) =>  FavoritePage(),
                       ),
                     );
                   },

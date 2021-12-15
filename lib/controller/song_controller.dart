@@ -14,7 +14,7 @@ class SongController extends GetxController {
 
   final OnAudioQuery _audioQuery = OnAudioQuery();
   int currentIndex = 0;
-  final _box = Boxes.getInstance();
+  final box = Boxes.getInstance();
   final _player = Player();
   List<SongModel> tracks = [];
   List<SongModel> musics = [];
@@ -44,7 +44,7 @@ class SongController extends GetxController {
         )
         .toList();
     songModels = _player.convertToAudios(musics);
-    await _box.put("tracks", audio);
+    await box.put("tracks", audio);
     update(["home", "navbar"]);
   }
 }

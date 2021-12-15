@@ -1,33 +1,31 @@
 import 'dart:async';
+import 'package:Mussy/controller/song_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage(this._notify, {Key? key}) : super(key: key);
+class SettingsPage extends StatelessWidget {
+  SettingsPage(this._notify, {Key? key}) : super(key: key);
   final bool _notify;
 
-  @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
+  final songController = Get.find<SongController>();
   bool? val;
   bool _enabled = true;
   restartNotify() {
     if (_enabled) {
-      setState(
-        () => _enabled = false,
+      _enabled = false;
+      // songController.update(["switch"]);
+      Get.snackbar(
+        "Mussy",
+        "App need restart to change the settings",
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
       );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("App need restart to change the settings"),
-        ),
-      );
-      Timer(
-        const Duration(seconds: 5),
-        () => setState(() => _enabled = true),
-      );
+      Timer(const Duration(seconds: 5), () {
+        _enabled = true;
+        // songController.update(["switch"]);
+      });
     }
   }
 
@@ -49,7 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon:const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -68,30 +66,33 @@ class _SettingsPageState extends State<SettingsPage> {
             Column(
               children: [
                 Padding(
-                  padding:const EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 20,
                     top: 15,
                     right: 0,
                   ),
                   child: ListTile(
-                    leading:const Icon(
+                    leading: const Icon(
                       Icons.notifications,
                       color: Colors.white,
                     ),
-                    trailing: Switch(
-                      activeColor: Colors.white,
-                      inactiveTrackColor: Colors.grey,
-                      value: val ?? widget._notify,
-                      onChanged: (bool) async {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        setState(() {
-                          val = bool;
-                          prefs.setBool("notify", bool);
-                        });
-                        restartNotify();
-                      },
-                    ),
+                    trailing: GetBuilder<SongController>(
+                        id: "switch",
+                        builder: (_) {
+                          return Switch(
+                            activeColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
+                            value: val ?? _notify,
+                            onChanged: (bool) async {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              val = bool;
+                              prefs.setBool("notify", bool);
+                              songController.update(["switch"]);
+                              restartNotify();
+                            },
+                          );
+                        }),
                     title: Text(
                       "Notification",
                       style: GoogleFonts.rubik(
@@ -102,14 +103,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 Padding(
-                  padding:const EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 20,
                     top: 5,
                     right: 0,
                   ),
                   child: ListTile(
                     onTap: () {},
-                    leading:const Icon(
+                    leading: const Icon(
                       Icons.share,
                       color: Colors.white,
                     ),
@@ -123,14 +124,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 Padding(
-                  padding:const  EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 20,
                     top: 5,
                     right: 0,
                   ),
                   child: ListTile(
                     onTap: () {},
-                    leading:const Icon(
+                    leading: const Icon(
                       Icons.lock,
                       color: Colors.white,
                     ),
@@ -144,14 +145,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 Padding(
-                  padding:const EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 20,
                     top: 5,
                     right: 0,
                   ),
                   child: ListTile(
                     onTap: () {},
-                    leading:const Icon(
+                    leading: const Icon(
                       Icons.receipt,
                       color: Colors.white,
                     ),
@@ -165,12 +166,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 Padding(
-                  padding:const EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 20,
                     top: 5,
                   ),
                   child: ListTile(
-                    leading:const Icon(
+                    leading: const Icon(
                       Icons.info,
                       color: Colors.white,
                     ),
@@ -187,14 +188,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         applicationName: 'Musify',
                         applicationIcon: ClipRRect(
                           borderRadius: BorderRadius.circular(50),
-                          child:const Image(
+                          child: const Image(
                             height: 50,
                             image: AssetImage("assets/icons/icon.png"),
                           ),
                         ),
                         applicationVersion: '1.0.0',
                         children: [
-                        const  Text('Offline music player'),
+                          const Text('Offline music player'),
                         ],
                       );
                     },

@@ -130,25 +130,12 @@ class MyApp extends StatelessWidget {
   int currentIndex = 0;
   final songController = Get.find<SongController>();
 
-  // final OnAudioQuery _audioQuery = OnAudioQuery();
-  // final _box = Boxes.getInstance();
-  // List<SongModel> tracks = [];
-  // List<SongModel> musics = [];
-  // List<Songs> audio = [];
-  // List<Audio> songModels = [];
-
-  // @override
-  // void initState() {
-  //   requesrpermisson();
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     final screens = [
       Homepage(_notify),
       SearchPage(),
-      const LibraryPage(),
+      LibraryPage(),
     ];
     return GetBuilder<SongController>(
       id: "navbar",

@@ -1,11 +1,13 @@
+import 'package:Mussy/controller/song_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:Mussy/audio_player/player.dart';
 import 'package:Mussy/databases/box_instance.dart';
 import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:Mussy/widgets/add_to_playlist.dart';
-import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
 class MusicView extends StatefulWidget {
@@ -21,7 +23,10 @@ class MusicView extends StatefulWidget {
 }
 
 class _MusicViewState extends State<MusicView> {
-  final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  bool isLooping = false;
+  String repeatIcon = "assets/icons/repeat.png";
+  final songController = Get.find<SongController>();
   final _box = Boxes.getInstance();
   final _player = Player();
   bool nextDone = true;
@@ -155,7 +160,42 @@ class _MusicViewState extends State<MusicView> {
                           ),
                         ),
                       ),
-                      trailing: Favourites(music: music!, myAudio: myAudio),
+                      trailing: GetBuilder<SongController>(
+                        id: "favbtn",
+                        builder: (_) {
+                          List favourites = _box.get("favourites");
+                          return favourites
+                                  .where((element) =>
+                                      element.id.toString() ==
+                                      myAudio.metas.id.toString())
+                                  .isEmpty
+                              ? IconButton(
+                                  onPressed: () async {
+                                    favourites.add(music);
+                                    await _box.put("favourites", favourites);
+                                    songController.update(["favbtn", "favs"]);
+                                  },
+                                  icon: const Image(
+                                    height: 25,
+                                    image: AssetImage("assets/icons/heart.png"),
+                                  ),
+                                )
+                              : IconButton(
+                                  onPressed: () async {
+                                    favourites.removeWhere((element) =>
+                                        element.id.toString() ==
+                                        myAudio.metas.id.toString());
+                                    await _box.put("favourites", favourites);
+                                    songController.update(["favbtn", "favs"]);
+                                  },
+                                  icon: const Image(
+                                    height: 25,
+                                    image: AssetImage(
+                                        "assets/icons/heartfill.png"),
+                                  ),
+                                );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -194,8 +234,34 @@ class _MusicViewState extends State<MusicView> {
                       padding: const EdgeInsets.all(20),
                       child: Row(
                         children: [
-                          const Expanded(
-                            child: Shuffle(),
+                          Expanded(
+                            child: GetBuilder<SongController>(
+                                id: "shuffle",
+                                builder: (_) {
+                                  return _assetsAudioPlayer.isShuffling.value
+                                      ? IconButton(
+                                          onPressed: () {
+                                            _assetsAudioPlayer.toggleShuffle();
+                                            songController.update(["shuffle"]);
+                                          },
+                                          icon: const Image(
+                                            height: 25,
+                                            image: AssetImage(
+                                                "assets/icons/shuffling.png"),
+                                          ),
+                                        )
+                                      : IconButton(
+                                          onPressed: () {
+                                            _assetsAudioPlayer.toggleShuffle();
+                                            songController.update(["shuffle"]);
+                                          },
+                                          icon: const Image(
+                                            height: 25,
+                                            image: AssetImage(
+                                                "assets/icons/ishuffle.png"),
+                                          ),
+                                        );
+                                }),
                           ),
                           Expanded(
                             child: IconButton(
@@ -254,8 +320,32 @@ class _MusicViewState extends State<MusicView> {
                               ),
                             ),
                           ),
-                          const Expanded(
-                            child: Repeat(),
+                          Expanded(
+                            child: GetBuilder<SongController>(
+                                id: "repeat",
+                                builder: (context) {
+                                  return IconButton(
+                                    onPressed: () {
+                                      if (!isLooping) {
+                                        isLooping = true;
+                                        _assetsAudioPlayer
+                                            .setLoopMode(LoopMode.single);
+                                        repeatIcon = "assets/icons/repeat1.png";
+                                        songController.update(["repeat"]);
+                                      } else {
+                                        isLooping = false;
+                                        _assetsAudioPlayer
+                                            .setLoopMode(LoopMode.playlist);
+                                        repeatIcon = "assets/icons/repeat.png";
+                                        songController.update(["repeat"]);
+                                      }
+                                    },
+                                    icon: Image(
+                                      height: 25,
+                                      image: AssetImage(repeatIcon),
+                                    ),
+                                  );
+                                }),
                           )
                         ],
                       ),
@@ -266,125 +356,6 @@ class _MusicViewState extends State<MusicView> {
             );
           },
         ),
-      ),
-    );
-  }
-}
-
-class Favourites extends StatefulWidget {
-  const Favourites({Key? key, required this.music, required this.myAudio})
-      : super(key: key);
-  final Songs music;
-  final Audio myAudio;
-  @override
-  _FavouritesState createState() => _FavouritesState();
-}
-
-class _FavouritesState extends State<Favourites> {
-  final _box = Boxes.getInstance();
-  @override
-  Widget build(BuildContext context) {
-    List favourites = _box.get("favourites");
-
-    return favourites
-            .where((element) =>
-                element.id.toString() == widget.myAudio.metas.id.toString())
-            .isEmpty
-        ? IconButton(
-            onPressed: () async {
-              favourites.add(widget.music);
-              await _box.put("favourites", favourites);
-              setState(() {});
-            },
-            icon: const Image(
-              height: 25,
-              image: AssetImage("assets/icons/heart.png"),
-            ),
-          )
-        : IconButton(
-            onPressed: () async {
-              favourites.removeWhere((element) =>
-                  element.id.toString() == widget.music.id.toString());
-              await _box.put("favourites", favourites);
-              setState(() {});
-            },
-            icon: const Image(
-              height: 25,
-              image: AssetImage("assets/icons/heartfill.png"),
-            ),
-          );
-  }
-}
-
-class Shuffle extends StatefulWidget {
-  const Shuffle({Key? key}) : super(key: key);
-
-  @override
-  _ShuffleState createState() => _ShuffleState();
-}
-
-class _ShuffleState extends State<Shuffle> {
-  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-  @override
-  Widget build(BuildContext context) {
-    return _assetsAudioPlayer.isShuffling.value
-        ? IconButton(
-            onPressed: () {
-              setState(() {
-                _assetsAudioPlayer.toggleShuffle();
-              });
-            },
-            icon: const Image(
-              height: 25,
-              image: AssetImage("assets/icons/shuffling.png"),
-            ),
-          )
-        : IconButton(
-            onPressed: () {
-              setState(() {
-                _assetsAudioPlayer.toggleShuffle();
-              });
-            },
-            icon: const Image(
-              height: 25,
-              image: AssetImage("assets/icons/ishuffle.png"),
-            ),
-          );
-  }
-}
-
-class Repeat extends StatefulWidget {
-  const Repeat({Key? key}) : super(key: key);
-
-  @override
-  _RepeatState createState() => _RepeatState();
-}
-
-class _RepeatState extends State<Repeat> {
-  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-  bool isLooping = false;
-  String repeatIcon = "assets/icons/repeat.png";
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        if (!isLooping) {
-          setState(() {
-            isLooping = true;
-            _assetsAudioPlayer.setLoopMode(LoopMode.single);
-            repeatIcon = "assets/icons/repeat1.png";
-          });
-        } else {
-          setState(() {
-            isLooping = false;
-            _assetsAudioPlayer.setLoopMode(LoopMode.playlist);
-            repeatIcon = "assets/icons/repeat.png";
-          });
-        }
-      },
-      icon: Image(
-        height: 25,
-        image: AssetImage(repeatIcon),
       ),
     );
   }
