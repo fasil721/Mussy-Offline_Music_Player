@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class SettingsPage extends StatelessWidget {
   SettingsPage(this._notify, {Key? key}) : super(key: key);
   final bool _notify;

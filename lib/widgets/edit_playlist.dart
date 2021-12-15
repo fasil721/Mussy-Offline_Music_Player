@@ -2,14 +2,10 @@ import 'package:Mussy/databases/box_instance.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class EditPlaylist extends StatefulWidget {
-  const EditPlaylist({Key? key, required this.playlistName}) : super(key: key);
+// ignore: must_be_immutable
+class EditPlaylist extends StatelessWidget {
+  EditPlaylist({Key? key, required this.playlistName}) : super(key: key);
   final String playlistName;
-  @override
-  _EditPlaylistState createState() => _EditPlaylistState();
-}
-
-class _EditPlaylistState extends State<EditPlaylist> {
   final _box = Boxes.getInstance();
   String? _title;
   final formkey = GlobalKey<FormState>();
@@ -47,7 +43,7 @@ class _EditPlaylistState extends State<EditPlaylist> {
             child: Form(
               key: formkey,
               child: TextFormField(
-                initialValue: widget.playlistName,
+                initialValue: playlistName,
                 cursorHeight: 25,
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
@@ -108,12 +104,10 @@ class _EditPlaylistState extends State<EditPlaylist> {
                   child: TextButton(
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
-                        List playlists = _box.get(widget.playlistName);
-                        setState(() {
-                          _box.put(_title, playlists);
-                          _box.delete(widget.playlistName);
-                          Navigator.pop(context);
-                        });
+                        List playlists = _box.get(playlistName);
+                        _box.put(_title, playlists);
+                        _box.delete(playlistName);
+                        Navigator.pop(context);
                       }
                     },
                     child: Center(

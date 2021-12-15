@@ -1,19 +1,16 @@
+import 'package:Mussy/controller/song_controller.dart';
 import 'package:Mussy/databases/box_instance.dart';
 import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:Mussy/widgets/create_playlist.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 
-class AddToPlaylist extends StatefulWidget {
-  const AddToPlaylist({Key? key, required this.song}) : super(key: key);
-  final song;
-  @override
-  _AddToPlaylistState createState() => _AddToPlaylistState();
-}
-
-class _AddToPlaylistState extends State<AddToPlaylist> {
+class AddToPlaylist extends StatelessWidget {
+  AddToPlaylist({Key? key, required this.song}) : super(key: key);
+  final Songs song;
   final _box = Boxes.getInstance();
+  final songController = Get.find<SongController>();
   @override
   Widget build(BuildContext context) {
     List playlistNames = _box.keys.toList();
@@ -22,7 +19,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
     playlistNames.remove("recentsong");
 
     return Container(
-      decoration:const BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xff3a2d2d), Colors.black],
           begin: Alignment.topLeft,
@@ -40,15 +37,15 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                   onPressed: () {
                     showDialog(
                       context: context,
-                      builder: (context) =>const CreatePlaylist(),
+                      builder: (context) =>  CreatePlaylist(),
                     );
                   },
-                  icon:const Icon(
+                  icon: const Icon(
                     Icons.add,
                     color: Colors.white,
                   ),
-                ), 
-                title:const Text(
+                ),
+                title: const Text(
                   "Create a new Playlist",
                   style: TextStyle(
                     color: Colors.white,
@@ -57,7 +54,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
               ),
             ),
             ListView.builder(
-              physics:const ScrollPhysics(),
+              physics: const ScrollPhysics(),
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
               itemCount: playlistNames.length,
@@ -69,10 +66,7 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                     right: 10,
                   ),
                   child: ListTile(
-                    // onTap: () {
-                    //   print(widget.song);
-                    // },
-                    leading:const Icon(
+                    leading: const Icon(
                       Icons.queue_music_rounded,
                       color: Colors.white,
                       size: 30,
@@ -85,61 +79,65 @@ class _AddToPlaylistState extends State<AddToPlaylist> {
                         color: Colors.white,
                       ),
                     ),
-                    trailing: songofPlaylist
-                            .where((element) =>
-                                element.id.toString() ==
-                                widget.song.id.toString())
-                            .isEmpty
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.grey,
-                            ),
-                            onPressed: () async {
-                              List<Songs> songofPlaylist =
-                                  _box.get(playlistNames[index]);
-                              songofPlaylist.add(widget.song);
-                              await _box.put(
-                                  playlistNames[index], songofPlaylist);
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    widget.song.title +
-                                        " added to Playlist " +
-                                        playlistNames[index],
+                    trailing: GetBuilder<SongController>(
+                      id: "addplay",
+                      builder: (_) {
+                        return songofPlaylist
+                                .where((element) =>
+                                    element.id.toString() == song.id.toString())
+                                .isEmpty
+                            ? ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey,
+                                ),
+                                onPressed: () async {
+                                  List songofPlaylist =
+                                      _box.get(playlistNames[index]);
+                                  songofPlaylist.add(song);
+                                  await _box.put(
+                                      playlistNames[index], songofPlaylist);
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        song.title! +
+                                            " added to Playlist " +
+                                            playlistNames[index],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  "Add",
+                                  style: TextStyle(
+                                    color: Color(0xff3a2d2d),
+                                  ),
+                                ),
+                              )
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey,
+                                ),
+                                onPressed: () async {
+                                  songofPlaylist.removeWhere(
+                                    (element) =>
+                                        element.id.toString() ==
+                                        song.id.toString(),
+                                  );
+                                  await _box.put(
+                                      playlistNames[index], songofPlaylist);
+                                  songController.update(["addplay"]);
+                                },
+                                child: const Text(
+                                  "Remove",
+                                  style: TextStyle(
+                                    color: Color(0xff3a2d2d),
                                   ),
                                 ),
                               );
-                            },
-                            child:const Text(
-                              "Add",
-                              style: TextStyle(
-                                color: Color(0xff3a2d2d),
-                              ),
-                            ),
-                          )
-                        : ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.grey,
-                            ),
-                            onPressed: () async {
-                              songofPlaylist.removeWhere(
-                                (element) =>
-                                    element.id.toString() ==
-                                    widget.song.id.toString(),
-                              );
-                              await _box.put(
-                                  playlistNames[index], songofPlaylist);
-                              setState(() {});
-                            },
-                            child:const Text(
-                              "Remove",
-                              style: TextStyle(
-                                color: Color(0xff3a2d2d),
-                              ),
-                            ),
-                          ),
-                    contentPadding:const EdgeInsets.symmetric(
+                      },
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
                       vertical: 3.0,
                       horizontal: 16.0,
                     ),

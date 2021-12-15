@@ -4,21 +4,17 @@ import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:Mussy/widgets/add_to_playlist.dart';
 import 'package:flutter/material.dart';
 
-class HomePopup extends StatefulWidget {
-  const HomePopup({Key? key, required this.audioId}) : super(key: key);
+class HomePopup extends StatelessWidget {
+  HomePopup({Key? key, required this.audioId}) : super(key: key);
   final String audioId;
-  @override
-  _HomePopupState createState() => _HomePopupState();
-}
 
-class _HomePopupState extends State<HomePopup> {
   final _box = Boxes.getInstance();
   final _player = Player();
   @override
   Widget build(BuildContext context) {
     List<Songs> songs = _box.get("tracks");
     List favourites = _box.get("favourites");
-    final temp = _player.findSongFromDatabase(songs, widget.audioId);
+    final temp = _player.findSongFromDatabase(songs, audioId);
     return PopupMenuButton(
       itemBuilder: (BuildContext bc) => [
         favourites

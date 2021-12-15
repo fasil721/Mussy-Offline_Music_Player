@@ -43,7 +43,7 @@ class LibraryPage extends StatelessWidget {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => const CreatePlaylist(),
+                  builder: (context) => CreatePlaylist(),
                 );
               },
               icon: const Icon(
@@ -70,7 +70,7 @@ class LibraryPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>  FavoritePage(),
+                        builder: (context) => FavoritePage(),
                       ),
                     );
                   },

@@ -3,14 +3,10 @@ import 'package:Mussy/databases/songs_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CreatePlaylist extends StatefulWidget {
-  const CreatePlaylist({Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class CreatePlaylist extends StatelessWidget {
+  CreatePlaylist({Key? key}) : super(key: key);
 
-  @override
-  _CreatePlaylistState createState() => _CreatePlaylistState();
-}
-
-class _CreatePlaylistState extends State<CreatePlaylist> {
   List<Songs> playlists = [];
   final _box = Boxes.getInstance();
   String? _title;
@@ -50,12 +46,12 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
               key: formkey,
               child: TextFormField(
                 cursorHeight: 25,
-                decoration:const InputDecoration(
+                decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                   ),
                 ),
-                style:const TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                 ),
@@ -109,10 +105,8 @@ class _CreatePlaylistState extends State<CreatePlaylist> {
                   child: TextButton(
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
-                        setState(() {
-                          _box.put(_title, playlists);
-                          Navigator.pop(context);
-                        });
+                        _box.put(_title, playlists);
+                        Navigator.pop(context);
                       }
                     },
                     child: Center(

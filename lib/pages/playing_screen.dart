@@ -10,20 +10,16 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
-class MusicView extends StatefulWidget {
-  const MusicView({
+// ignore: must_be_immutable
+class MusicView extends StatelessWidget {
+  MusicView({
     required this.audio,
     Key? key,
   }) : super(key: key);
 
   final List<Audio> audio;
 
-  @override
-  _MusicViewState createState() => _MusicViewState();
-}
-
-class _MusicViewState extends State<MusicView> {
-  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   bool isLooping = false;
   String repeatIcon = "assets/icons/repeat.png";
   final songController = Get.find<SongController>();
@@ -42,7 +38,7 @@ class _MusicViewState extends State<MusicView> {
     music = _player.findSongFromDatabase(songs, myAudio.metas.id.toString());
   }
 
-  Widget popupMenu() {
+  Widget popupMenu(BuildContext context) {
     return PopupMenuButton(
       itemBuilder: (BuildContext bc) => [
         const PopupMenuItem(
@@ -54,7 +50,7 @@ class _MusicViewState extends State<MusicView> {
         if (value == "1") {
           showModalBottomSheet(
             context: context,
-            builder: (context) => AddToPlaylist(song: music),
+            builder: (context) => AddToPlaylist(song: music!),
           );
         }
       },
@@ -91,7 +87,7 @@ class _MusicViewState extends State<MusicView> {
             ),
           ),
           actions: [
-            popupMenu(),
+            popupMenu(context),
             const SizedBox(
               width: 15,
             )
@@ -103,7 +99,7 @@ class _MusicViewState extends State<MusicView> {
         body: _assetsAudioPlayer.builderCurrent(
           builder: (BuildContext context, Playing? playing) {
             final myAudio = find(
-              widget.audio,
+              audio,
               playing!.audio.assetAudioPath,
             );
             find2(myAudio);
