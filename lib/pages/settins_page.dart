@@ -50,7 +50,7 @@ class SettingsPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Get.back();
             },
           ),
           title: Text(

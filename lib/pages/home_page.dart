@@ -13,7 +13,8 @@ class Homepage extends StatelessWidget {
   Homepage(this._notify, {Key? key}) : super(key: key);
   // final List<Audio> audio;
   final bool _notify;
-  final Box _box = Boxes.getInstance();  final _player = Player();
+  final Box _box = Boxes.getInstance();
+  final _player = Player();
   final songController = Get.find<SongController>();
   @override
   Widget build(BuildContext context) {
@@ -45,12 +46,7 @@ class Homepage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SettingsPage(_notify),
-                  ),
-                );
+                Get.to(() => SettingsPage(_notify));
               },
               icon: const Icon(Icons.settings),
             ),
@@ -79,8 +75,8 @@ class Homepage extends StatelessWidget {
                           ),
                           child: ListTile(
                             onTap: () {
-                            _player
-                                  .openPlayer(index, songController.songModels);
+                              _player.openPlayer(
+                                  index, songController.songModels);
                             },
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(

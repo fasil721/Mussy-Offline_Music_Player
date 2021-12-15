@@ -2,6 +2,7 @@ import 'package:Mussy/pages/playlist_view.dart';
 import 'package:Mussy/widgets/create_playlist.dart';
 import 'package:Mussy/widgets/edit_playlist.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'favourite_page.dart';
@@ -67,12 +68,7 @@ class LibraryPage extends StatelessWidget {
                 ),
                 child: ListTile(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FavoritePage(),
-                      ),
-                    );
+                    Get.to(() => FavoritePage());
                   },
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 3.0,
@@ -128,12 +124,9 @@ class LibraryPage extends StatelessWidget {
                             ),
                           ),
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PlalistView(
-                                  playlistName: playlists[index],
-                                ),
+                            Get.to(
+                              () => PlalistView(
+                                playlistName: playlists[index],
                               ),
                             );
                           },

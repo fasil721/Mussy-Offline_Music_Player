@@ -37,7 +37,7 @@ class AddToPlaylist extends StatelessWidget {
                   onPressed: () {
                     showDialog(
                       context: context,
-                      builder: (context) =>  CreatePlaylist(),
+                      builder: (context) => CreatePlaylist(),
                     );
                   },
                   icon: const Icon(
@@ -68,7 +68,7 @@ class AddToPlaylist extends StatelessWidget {
                   child: ListTile(
                     leading: const Icon(
                       Icons.queue_music_rounded,
-                      color: Colors.white,
+                      color: Colors.white, 
                       size: 30,
                     ),
                     title: Text(
@@ -96,7 +96,7 @@ class AddToPlaylist extends StatelessWidget {
                                   songofPlaylist.add(song);
                                   await _box.put(
                                       playlistNames[index], songofPlaylist);
-                                  Navigator.pop(context);
+                                  Get.back();
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(

@@ -32,7 +32,7 @@ class FavoritePage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Get.back();
             },
           ),
           title: Text(
@@ -119,12 +119,7 @@ class FavoritePage extends StatelessWidget {
                             // _assetsAudioPlayer.pause();
                             _assetsAudioPlayer.stop();
                             _player.openPlayer(index, audios);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MusicView(audio: audios),
-                              ),
-                            );
+                            Get.to(() => MusicView(audio: audios));
                           },
                         ),
                       );

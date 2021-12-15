@@ -78,7 +78,7 @@ class MusicView extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15),
             child: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+               Get.back();
               },
               icon: const Image(
                 height: 25,

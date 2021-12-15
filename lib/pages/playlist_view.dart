@@ -37,7 +37,7 @@ class PlalistView extends StatelessWidget {
                 Icons.arrow_back,
               ),
               onPressed: () {
-                Navigator.pop(context);
+                Get.back();
               },
             ),
           ),
@@ -144,12 +144,7 @@ class PlalistView extends StatelessWidget {
                             ),
                           ),
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MusicView(audio: audios),
-                              ),
-                            );
+                            Get.to(() => MusicView(audio: audios));
                             _assetsAudioPlayer.stop();
                             _player.openPlayer(index, audios);
                           },

@@ -137,60 +137,61 @@ class MyApp extends StatelessWidget {
       SearchPage(),
       LibraryPage(),
     ];
-    return GetBuilder<SongController>(
-      id: "navbar",
-      builder: (context) {
-        return Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          GetBuilder<SongController>(
+            id: "navbar",
+            builder: (context) => IndexedStack(
+              children: screens,
+              index: currentIndex,
+            ),
+          ),
+          BottomPlaying(),
+        ],
+      ),
+      bottomNavigationBar: GetBuilder<SongController>(
+        id: "navbar",
+        builder: (context) => BottomNavigationBar(
+          iconSize: 25,
+          fixedColor: Colors.white,
+          unselectedItemColor: Colors.white,
+          selectedLabelStyle: GoogleFonts.poppins(fontSize: 14),
           backgroundColor: Colors.black,
-          body: Stack(
-            children: [
-              IndexedStack(
-                children: screens,
-                index: currentIndex,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          elevation: 0,
+          currentIndex: currentIndex,
+          onTap: (index) {
+            currentIndex = index;
+            songController.update(["navbar"]);
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: ImageIcon(
+                AssetImage("assets/icons/home.png"),
+                size: 25,
               ),
-              BottomPlaying(),
-            ],
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            iconSize: 25,
-            fixedColor: Colors.white,
-            unselectedItemColor: Colors.white,
-            selectedLabelStyle: GoogleFonts.poppins(fontSize: 14),
-            backgroundColor: Colors.black,
-            showUnselectedLabels: false,
-            type: BottomNavigationBarType.fixed,
-            elevation: 0,
-            currentIndex: currentIndex,
-            onTap: (index) {
-              currentIndex = index;
-              songController.update(["navbar"]);
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage("assets/icons/home.png"),
-                  size: 25,
-                ),
-                label: 'Home',
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(
+                AssetImage("assets/icons/search.png"),
+                size: 25,
               ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage("assets/icons/search.png"),
-                  size: 25,
-                ),
-                label: 'Search',
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(
+                AssetImage("assets/icons/library.png"),
+                size: 25,
               ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage("assets/icons/library.png"),
-                  size: 25,
-                ),
-                label: 'Library',
-              ),
-            ],
-          ),
-        );
-      },
+              label: 'Library',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:Mussy/databases/box_instance.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
@@ -80,7 +81,7 @@ class EditPlaylist extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Get.back();
                     },
                     child: Center(
                       child: Text(
@@ -107,7 +108,7 @@ class EditPlaylist extends StatelessWidget {
                         List playlists = _box.get(playlistName);
                         _box.put(_title, playlists);
                         _box.delete(playlistName);
-                        Navigator.pop(context);
+                        Get.back();
                       }
                     },
                     child: Center(
