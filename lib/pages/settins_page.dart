@@ -3,7 +3,9 @@ import 'package:Mussy/controller/song_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
 class SettingsPage extends StatelessWidget {
@@ -13,6 +15,13 @@ class SettingsPage extends StatelessWidget {
   final songController = Get.find<SongController>();
   bool? val;
   bool _enabled = true;
+  _launchURL() async {
+    const url = 'https://sites.google.com/view/mussy/home';
+    if (!await canLaunch(url)) {
+      await launch(url);
+    }
+  }
+
   restartNotify() {
     if (_enabled) {
       _enabled = false;
@@ -84,11 +93,11 @@ class SettingsPage extends StatelessWidget {
                             activeColor: Colors.white,
                             inactiveTrackColor: Colors.grey,
                             value: val ?? _notify,
-                            onChanged: (bool) async {
+                            onChanged: (value) async {
                               final prefs =
                                   await SharedPreferences.getInstance();
-                              val = bool;
-                              prefs.setBool("notify", bool);
+                              val = value;
+                              prefs.setBool("notify", value);
                               songController.update(["switch"]);
                               restartNotify();
                             },
@@ -107,10 +116,12 @@ class SettingsPage extends StatelessWidget {
                   padding: const EdgeInsets.only(
                     left: 20,
                     top: 5,
-                    right: 0,
+                    right: 20,
                   ),
                   child: ListTile(
-                    onTap: () {},
+                    onTap: () => Share.share(
+                      'check out my application :- https://play.google.com/store/apps/details?id=com.fasil.Mussy',
+                    ),
                     leading: const Icon(
                       Icons.share,
                       color: Colors.white,
@@ -128,10 +139,10 @@ class SettingsPage extends StatelessWidget {
                   padding: const EdgeInsets.only(
                     left: 20,
                     top: 5,
-                    right: 0,
+                    right: 20,
                   ),
                   child: ListTile(
-                    onTap: () {},
+                    onTap: () => _launchURL(),
                     leading: const Icon(
                       Icons.lock,
                       color: Colors.white,
@@ -149,7 +160,7 @@ class SettingsPage extends StatelessWidget {
                   padding: const EdgeInsets.only(
                     left: 20,
                     top: 5,
-                    right: 0,
+                    right: 20,
                   ),
                   child: ListTile(
                     onTap: () {},
@@ -170,6 +181,7 @@ class SettingsPage extends StatelessWidget {
                   padding: const EdgeInsets.only(
                     left: 20,
                     top: 5,
+                    right: 20,
                   ),
                   child: ListTile(
                     leading: const Icon(

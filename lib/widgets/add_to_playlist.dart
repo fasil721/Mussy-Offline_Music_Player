@@ -17,7 +17,6 @@ class AddToPlaylist extends StatelessWidget {
     playlistNames.remove("tracks");
     playlistNames.remove("favourites");
     playlistNames.remove("recentsong");
-
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(

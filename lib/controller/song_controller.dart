@@ -45,7 +45,7 @@ class SongController extends GetxController {
         .toList();
     songModels = _player.convertToAudios(musics);
     await box.put("tracks", audio);
-    update(["home", "navbar"]);
+    update(["home", "bottom"]);
   }
 }
 
