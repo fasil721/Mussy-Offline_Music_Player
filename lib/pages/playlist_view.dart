@@ -12,7 +12,6 @@ class PlalistView extends StatelessWidget {
   PlalistView({Key? key, required this.playlistName}) : super(key: key);
   final String playlistName;
   final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-  final songController = Get.find<SongController>();
   final _player = Player();
   @override
   Widget build(BuildContext context) {
@@ -72,8 +71,8 @@ class PlalistView extends StatelessWidget {
         ),
         body: GetBuilder<SongController>(
           id: "playlist",
-          builder: (_) {
-            List playlists = songController.box.get(playlistName);
+          builder: (_controller) {
+            List playlists = _controller.box.get(playlistName);
             List<Audio> audios = _player.convertToAudios(playlists);
             return playlists.isNotEmpty
                 ? ListView.builder(
@@ -124,7 +123,7 @@ class PlalistView extends StatelessWidget {
                             onSelected: (value) {
                               if (value == "1") {
                                 playlists.removeAt(index);
-                                songController.update(["playlist"]);
+                                _controller.update(["playlist"]);
                               }
                             },
                             icon: const Icon(

@@ -83,10 +83,10 @@ class SearchPage extends StatelessWidget {
             ),
             GetBuilder<SongController>(
               id: "search",
-              builder: (_) {
+              builder: (_controller) {
                 List<Audio> result = searchText.isEmpty
                     ? []
-                    : songController.songModels
+                    : _controller.songModels
                         .where(
                           (element) => element.metas.title!
                               .toLowerCase()

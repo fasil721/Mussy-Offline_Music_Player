@@ -15,7 +15,6 @@ class Homepage extends StatelessWidget {
   final bool _notify;
   final Box _box = Boxes.getInstance();
   final _player = Player();
-  final songController = Get.find<SongController>();
   @override
   Widget build(BuildContext context) {
     List recentsongs = _box.get("recentsong");
@@ -57,8 +56,8 @@ class Homepage extends StatelessWidget {
         ),
         body: GetBuilder<SongController>(
           id: "home",
-          builder: (_) {
-            return songController.songModels.isNotEmpty
+          builder: (_controller) {
+            return _controller.songModels.isNotEmpty
                 ? Padding(
                     padding: recentsongs.isEmpty
                         ? const EdgeInsets.only(bottom: 0)
@@ -67,7 +66,7 @@ class Homepage extends StatelessWidget {
                       scrollDirection: Axis.vertical,
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: songController.songModels.length,
+                      itemCount: _controller.songModels.length,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(
@@ -76,7 +75,7 @@ class Homepage extends StatelessWidget {
                           child: ListTile(
                             onTap: () {
                               _player.openPlayer(
-                                  index, songController.songModels);
+                                  index, _controller.songModels);
                             },
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
@@ -85,7 +84,7 @@ class Homepage extends StatelessWidget {
                             ),
                             leading: QueryArtworkWidget(
                               id: int.parse(
-                                  songController.songModels[index].metas.id!),
+                                  _controller.songModels[index].metas.id!),
                               type: ArtworkType.AUDIO,
                               nullArtworkWidget: ClipRRect(
                                 borderRadius: BorderRadius.circular(50),
@@ -96,7 +95,7 @@ class Homepage extends StatelessWidget {
                               ),
                             ),
                             title: Text(
-                              songController.songModels[index].metas.title!,
+                              _controller.songModels[index].metas.title!,
                               style: GoogleFonts.rubik(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -104,7 +103,7 @@ class Homepage extends StatelessWidget {
                               maxLines: 1,
                             ),
                             subtitle: Text(
-                              songController.songModels[index].metas.artist!,
+                              _controller.songModels[index].metas.artist!,
                               style: GoogleFonts.rubik(
                                 fontSize: 13,
                                 color: Colors.grey,
@@ -113,7 +112,7 @@ class Homepage extends StatelessWidget {
                             ),
                             trailing: HomePopup(
                               audioId:
-                                  songController.songModels[index].metas.id!,
+                                  _controller.songModels[index].metas.id!,
                             ),
                           ),
                         );

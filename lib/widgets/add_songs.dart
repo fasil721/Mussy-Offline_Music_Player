@@ -96,7 +96,7 @@ class AddSongsInPlaylist extends StatelessWidget {
                             ),
                             trailing: GetBuilder<SongController>(
                               id: "add",
-                              builder: (context) {
+                              builder: (_controller) {
                                 List playlists =
                                     _box.get(playlistName);
                                 return playlists
@@ -109,7 +109,7 @@ class AddSongsInPlaylist extends StatelessWidget {
                                           playlists.add(result[index]);
                                           await _box.put(
                                             playlistName, playlists);
-                                          songController
+                                          _controller
                                               .update(["playlist", "add"]);
                                         },
                                         icon: const Icon(
@@ -124,7 +124,7 @@ class AddSongsInPlaylist extends StatelessWidget {
                                               result[index].id.toString());
                                           await _box.put(
                                             playlistName, playlists);
-                                          songController
+                                          _controller
                                               .update(["playlist", "add"]);
                                         },
                                         icon: const Icon(

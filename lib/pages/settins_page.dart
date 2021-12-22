@@ -12,7 +12,6 @@ class SettingsPage extends StatelessWidget {
   SettingsPage(this._notify, {Key? key}) : super(key: key);
   final bool _notify;
 
-  final songController = Get.find<SongController>();
   bool? val;
   bool _enabled = true;
   _launchURL() async {
@@ -25,7 +24,6 @@ class SettingsPage extends StatelessWidget {
   restartNotify() {
     if (_enabled) {
       _enabled = false;
-      // songController.update(["switch"]);
       Get.snackbar(
         "Mussy",
         "App need restart to change the settings",
@@ -34,7 +32,6 @@ class SettingsPage extends StatelessWidget {
       );
       Timer(const Duration(seconds: 5), () {
         _enabled = true;
-        // songController.update(["switch"]);
       });
     }
   }
@@ -87,22 +84,22 @@ class SettingsPage extends StatelessWidget {
                       color: Colors.white,
                     ),
                     trailing: GetBuilder<SongController>(
-                        id: "switch",
-                        builder: (_) {
-                          return Switch(
-                            activeColor: Colors.white,
-                            inactiveTrackColor: Colors.grey,
-                            value: val ?? _notify,
-                            onChanged: (value) async {
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-                              val = value;
-                              prefs.setBool("notify", value);
-                              songController.update(["switch"]);
-                              restartNotify();
-                            },
-                          );
-                        }),
+                      id: "switch",
+                      builder: (_controller) {
+                        return Switch(
+                          activeColor: Colors.white,
+                          inactiveTrackColor: Colors.grey,
+                          value: val ?? _notify,
+                          onChanged: (value) async {
+                            final prefs = await SharedPreferences.getInstance();
+                            val = value;
+                            prefs.setBool("notify", value);
+                            _controller.update(["switch"]);
+                            restartNotify();
+                          },
+                        );
+                      },
+                    ),
                     title: Text(
                       "Notification",
                       style: GoogleFonts.rubik(
@@ -206,7 +203,7 @@ class SettingsPage extends StatelessWidget {
                             image: AssetImage("assets/icons/icon.png"),
                           ),
                         ),
-                        applicationVersion: '1.0.0',
+                        applicationVersion: '2.0.0',
                         children: [
                           const Text('Offline music player'),
                         ],
@@ -233,7 +230,7 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "1.0.0",
+                    "2.0.0",
                     style: GoogleFonts.rubik(
                       fontStyle: FontStyle.normal,
                       fontWeight: FontWeight.w400,

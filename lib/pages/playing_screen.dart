@@ -22,7 +22,6 @@ class MusicView extends StatelessWidget {
   final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   bool isLooping = false;
   String repeatIcon = "assets/icons/repeat.png";
-  final songController = Get.find<SongController>();
   final _box = Boxes.getInstance();
   final _player = Player();
   bool nextDone = true;
@@ -158,7 +157,7 @@ class MusicView extends StatelessWidget {
                       ),
                       trailing: GetBuilder<SongController>(
                         id: "favbtn",
-                        builder: (_) {
+                        builder: (_controller) {
                           List favourites = _box.get("favourites");
                           return favourites
                                   .where((element) =>
@@ -169,7 +168,7 @@ class MusicView extends StatelessWidget {
                                   onPressed: () async {
                                     favourites.add(music);
                                     await _box.put("favourites", favourites);
-                                    songController.update(["favbtn", "favs"]);
+                                    _controller.update(["favbtn", "favs"]);
                                   },
                                   icon: const Image(
                                     height: 25,
@@ -182,7 +181,7 @@ class MusicView extends StatelessWidget {
                                         element.id.toString() ==
                                         myAudio.metas.id.toString());
                                     await _box.put("favourites", favourites);
-                                    songController.update(["favbtn", "favs"]);
+                                    _controller.update(["favbtn", "favs"]);
                                   },
                                   icon: const Image(
                                     height: 25,
@@ -233,12 +232,12 @@ class MusicView extends StatelessWidget {
                           Expanded(
                             child: GetBuilder<SongController>(
                                 id: "shuffle",
-                                builder: (_) {
+                                builder: (_controller) {
                                   return _assetsAudioPlayer.isShuffling.value
                                       ? IconButton(
                                           onPressed: () {
                                             _assetsAudioPlayer.toggleShuffle();
-                                            songController.update(["shuffle"]);
+                                            _controller.update(["shuffle"]);
                                           },
                                           icon: const Image(
                                             height: 25,
@@ -249,7 +248,7 @@ class MusicView extends StatelessWidget {
                                       : IconButton(
                                           onPressed: () {
                                             _assetsAudioPlayer.toggleShuffle();
-                                            songController.update(["shuffle"]);
+                                            _controller.update(["shuffle"]);
                                           },
                                           icon: const Image(
                                             height: 25,
@@ -319,7 +318,7 @@ class MusicView extends StatelessWidget {
                           Expanded(
                             child: GetBuilder<SongController>(
                                 id: "repeat",
-                                builder: (context) {
+                                builder: (_controller) {
                                   return IconButton(
                                     onPressed: () {
                                       if (!isLooping) {
@@ -327,13 +326,13 @@ class MusicView extends StatelessWidget {
                                         _assetsAudioPlayer
                                             .setLoopMode(LoopMode.single);
                                         repeatIcon = "assets/icons/repeat1.png";
-                                        songController.update(["repeat"]);
+                                        _controller.update(["repeat"]);
                                       } else {
                                         isLooping = false;
                                         _assetsAudioPlayer
                                             .setLoopMode(LoopMode.playlist);
                                         repeatIcon = "assets/icons/repeat.png";
-                                        songController.update(["repeat"]);
+                                        _controller.update(["repeat"]);
                                       }
                                     },
                                     icon: Image(

@@ -11,7 +11,6 @@ class FavoritePage extends StatelessWidget {
   FavoritePage({Key? key}) : super(key: key);
   final _assetsAudioPlayer = AssetsAudioPlayer.withId("0");
   final _player = Player();
-  final songController = Get.find<SongController>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,8 +44,8 @@ class FavoritePage extends StatelessWidget {
         ),
         body: GetBuilder<SongController>(
           id: "favs",
-          builder: (_) {
-            List favourites = songController.box.get("favourites");
+          builder: (_controller) {
+            List favourites = _controller.box.get("favourites");
             List<Audio> audios = _player.convertToAudios(favourites);
             return favourites.isNotEmpty
                 ? ListView.builder(
@@ -107,7 +106,7 @@ class FavoritePage extends StatelessWidget {
                             onSelected: (value) {
                               if (value == "1") {
                                 favourites.removeAt(index);
-                                songController.update(["favs"]);
+                                _controller.update(["favs"]);
                               }
                             },
                             icon: const Icon(

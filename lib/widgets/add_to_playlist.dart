@@ -10,7 +10,6 @@ class AddToPlaylist extends StatelessWidget {
   AddToPlaylist({Key? key, required this.song}) : super(key: key);
   final Songs song;
   final _box = Boxes.getInstance();
-  final songController = Get.find<SongController>();
   @override
   Widget build(BuildContext context) {
     List playlistNames = _box.keys.toList();
@@ -80,7 +79,7 @@ class AddToPlaylist extends StatelessWidget {
                     ),
                     trailing: GetBuilder<SongController>(
                       id: "addplay",
-                      builder: (_) {
+                      builder: (_controller) {
                         return songofPlaylist
                                 .where((element) =>
                                     element.id.toString() == song.id.toString())
@@ -125,7 +124,7 @@ class AddToPlaylist extends StatelessWidget {
                                   );
                                   await _box.put(
                                       playlistNames[index], songofPlaylist);
-                                  songController.update(["addplay"]);
+                                  _controller.update(["addplay"]);
                                 },
                                 child: const Text(
                                   "Remove",

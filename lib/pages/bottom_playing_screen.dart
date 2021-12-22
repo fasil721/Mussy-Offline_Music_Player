@@ -61,11 +61,11 @@ class BottomPlaying extends StatelessWidget {
             return myAudio != null
                 ? GetBuilder<SongController>(
                     id: "bottom",
-                    builder: (_) {
+                    builder: (_controller) {
                       return ListTile(
                         onTap: () {
                           Get.to(() =>
-                              MusicView(audio: songController.songModels));
+                              MusicView(audio: _controller.songModels));
                         },
                         leading: QueryArtworkWidget(
                           id: int.parse(myAudio!.metas.id!),
